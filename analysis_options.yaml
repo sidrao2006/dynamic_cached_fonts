@@ -1,4 +1,10 @@
+---
 include: package:lint/analysis_options.yaml
+
+analyzer:
+  exclude:
+    - example/lib/src/**
+    - example/lib/main.dart
 
 linter:
   rules:
