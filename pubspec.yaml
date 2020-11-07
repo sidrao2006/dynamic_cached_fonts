@@ -11,6 +11,7 @@ dependencies:
     sdk: flutter
   firebase_storage: ^5.0.0
   flutter_cache_manager: ^2.0.0
+  logger: ^0.9.4
 
 dev_dependencies:
   flutter_test:

@@ -177,6 +177,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.3-nullsafety.3"
+  logger:
+    dependency: transitive
+    description:
+      name: logger
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.9.4"
   matcher:
     dependency: transitive
     description:
@@ -286,7 +293,7 @@ packages:
       name: source_span
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.8.0-nullsafety.3"
+    version: "1.8.0-nullsafety.4"
   sqflite:
     dependency: transitive
     description:
@@ -342,7 +349,7 @@ packages:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.19-nullsafety.5"
+    version: "0.2.19-nullsafety.6"
   typed_data:
     dependency: transitive
     description:
@@ -379,5 +386,5 @@ packages:
     source: hosted
     version: "0.1.2"
 sdks:
-  dart: ">=2.12.0-0 <=2.12.0-17.0.dev"
+  dart: ">=2.12.0-0.0 <3.0.0"
   flutter: ">=1.17.0 <2.0.0"
