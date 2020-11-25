@@ -1,4 +1,4 @@
-# dynamic_cached_font
+# dynamic_cached_fonts
 
 
 #### Perks
