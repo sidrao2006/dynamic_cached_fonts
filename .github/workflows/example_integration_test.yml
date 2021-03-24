@@ -6,7 +6,7 @@ jobs:
     name: Web Integration Test
     environment: integration_tests
     runs-on: ubuntu-latest
-    
+
     defaults:
       run:
         working-directory: example
@@ -35,7 +35,7 @@ jobs:
         run: flutter pub get
 
       - name: Run integration tests
-      - run: flutter driver --driver test_driver/integration_test.dart \
+        run: flutter driver --driver test_driver/integration_test.dart \
           --target ./integration_test/dynamic_cached_fonts_example_test.dart \
           --browser-name chrome \
           --dart-define FIREBASE_STORAGE_FONT_URL=$FIREBASE_STORAGE_FONT_URL \
