@@ -26,7 +26,7 @@ jobs:
 
       - name: Release package
         if: success()
-        uses: .github/actions/release_pub_package
+        uses: ./.github/actions/release_pub_package
         with:
           should-run-pub-score-test: true
           pub-score-min-points: 90
