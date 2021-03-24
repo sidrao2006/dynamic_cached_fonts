@@ -178,11 +178,11 @@ To contribute to the package, fork the repository and open a [pull request]!
 [platforms]: https://img.shields.io/badge/Platforms-Android%20%7C%20iOS%20%7C%20Web%20%7C%20Windows%20%7C%20Linux%20%7C%20MacOS-blue?style=for-the-badge
 
 <!-- GIFs -->
-[Demo 1]: https://raw.githubusercontent.com/sidrao2006/dynamic_cached_fonts/main/assets/demo1.gif
-[Demo 2]: https://raw.githubusercontent.com/sidrao2006/dynamic_cached_fonts/main/assets/demo2.gif
-[Demo 3]: https://raw.githubusercontent.com/sidrao2006/dynamic_cached_fonts/main/assets/demo3.gif
-[Demo 4]: https://raw.githubusercontent.com/sidrao2006/dynamic_cached_fonts/main/assets/demo4.gif
-[Demo 5]: https://raw.githubusercontent.com/sidrao2006/dynamic_cached_fonts/main/assets/demo5.gif
+[Demo 1]: https://raw.githubusercontent.com/sidrao2006/dynamic_cached_fonts/main/doc/images/demo1.gif
+[Demo 2]: https://raw.githubusercontent.com/sidrao2006/dynamic_cached_fonts/main/doc/images/demo2.gif
+[Demo 3]: https://raw.githubusercontent.com/sidrao2006/dynamic_cached_fonts/main/doc/images/demo3.gif
+[Demo 4]: https://raw.githubusercontent.com/sidrao2006/dynamic_cached_fonts/main/doc/images/demo4.gif
+[Demo 5]: https://raw.githubusercontent.com/sidrao2006/dynamic_cached_fonts/main/doc/images/demo5.gif
 
 
 [install]: https://pub.dev/packages/dynamic_cached_fonts/install
