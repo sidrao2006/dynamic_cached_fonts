@@ -19,7 +19,8 @@ jobs:
         with:
           channel: beta
       
-      - run: flutter pub get
+      - name: Get flutter packages
+        run: flutter pub get
 
       - name: Run unit tests
         run: flutter test

@@ -31,7 +31,8 @@ jobs:
       - name: Start Chrome Driver
         run: chromedriver --port=4444
 
-      - run: flutter pub get
+      - name: Get flutter packages
+        run: flutter pub get
 
       - name: Run integration tests
       - run: flutter driver --driver test_driver/integration_test.dart \

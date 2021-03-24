@@ -18,10 +18,12 @@ jobs:
       - name: Checkout repository code
         uses: actions/checkout@v2
 
-      - id: files
+      - name: Get Changed Files
+        id: files
         uses: jitterbit/get-changed-files@v1
 
-      - run: |
+      - name: Check if CHANGELOG was changed
+        run: |
           echo ${{ steps.files.outputs.all }} | grep CHANGELOG.md || exit 0 && echo 'CHANGELOG was modified'
 
       - name: Release package
