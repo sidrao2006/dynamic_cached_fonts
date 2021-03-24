@@ -1,0 +1,40 @@
+name: Release and publish package
+on:
+  workflow_run:
+    workflows:
+      - "Unit Tests"
+      - "Integration Tests"
+      - "Documentation Analysis"
+      - "Code Analysis"
+    branches: [main]
+    types: [completed]
+
+jobs:
+  release:
+    name: Release and Publish Package
+    environment: Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v2
+
+      - id: files
+        uses: jitterbit/get-changed-files@v1
+
+      - run: |
+          echo ${{ steps.files.outputs.all }} | grep CHANGELOG.md || exit 0 && echo 'CHANGELOG was modified'
+
+      - name: Release package
+        if: success()
+        uses: .github/actions/release_pub_package
+        with:
+          should-run-pub-score-test: true
+          pub-score-min-points: 90
+          pre-publish: flutter format
+          access-token: ${{ secrets.PUB_CREDENTIALS_ACCESS_TOKEN }}
+          refresh-token: ${{ secrets.PUB_CREDENTIALS_REFRESH_TOKEN }}
+          id-token: ${{ secrets.PUB_CREDENTIALS_ID_TOKEN }}
+          token-endpoint: ${{ secrets.PUB_CREDENTIALS_TOKEN_ENDPOINT }}
+          expiration: ${{ secrets.PUB_CREDENTIALS_EXPIRATION }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

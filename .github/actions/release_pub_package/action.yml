@@ -1,0 +1,65 @@
+name: Release Pub Package
+description: Release a flutter/dart package to pub and on Github
+
+runs:
+  using: node12
+  main: index.js
+
+inputs:
+  previous-version:
+    description: 'The latest active version released'
+    required: false
+  
+  changelog-file:
+    description: 'The path to the changelog file. Defaults to $GITHUB_WORKSPACE/CHANGELOG.md'
+    required: false
+  
+  is-draft:
+    description: 'Whether the release is a draft'
+    required: false
+    default: false
+  
+  pre-release-script:
+    description: 'Commands to run before publishing the release on Github'
+    required: false
+
+  post-release-script:
+    description: 'Commands to run after publishing the release on Github'
+    required: false
+
+  pre-publish-script:
+    description: 'Commands to run before publishing to pub.dev'
+    required: false
+
+  post-publish-script:
+    description: 'Commands to run after publishing to pub.dev'
+    required: false
+  
+  should-run-pub-score-test:
+    description: 'Whether to run pana tests, used by pub.dev to determine package score'
+    required: false
+    default: false
+
+  pub-score-min-points:
+    description: 'Minimum required points (out of 100) to pass the pub score test'
+    required: false
+  
+  access-token:
+    description: 'The access token required to authenticate with the pub tool'
+    required: true
+  
+  refresh-token:
+    description: 'The refresh token required to authenticate with the pub tool'
+    required: true
+  
+  id-token:
+    description: 'The id token required to authenticate with the pub tool'
+    required: true
+  
+  token-endpoint:
+    description: 'The token endpoint required to authenticate with the pub tool'
+    required: true
+  
+  expiration:
+    description: 'The expiration value required to authenticate with the pub tool'
+    required: true

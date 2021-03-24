@@ -1,11 +1,6 @@
 ---
 include: package:lint/analysis_options.yaml
 
-analyzer:
-  exclude:
-    - example/lib/src/**
-    - example/lib/main.dart
-
 linter:
   rules:
     always_specify_types: true
@@ -14,3 +9,4 @@ linter:
     sort_constructors_first: true
     sort_pub_dependencies: false
     public_member_api_docs: true
+    curly_braces_in_flow_control_structures: false
