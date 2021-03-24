@@ -20,7 +20,7 @@ jobs:
           channel: beta
       
       - run: flutter pub get
-        
+
       - name: Run unit tests
-      - run: flutter test
+        run: flutter test
    
