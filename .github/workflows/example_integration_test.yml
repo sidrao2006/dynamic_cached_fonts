@@ -30,7 +30,7 @@ jobs:
         uses: browser-actions/setup-chrome@latest
 
       - name: Setup Chrome Driver
-        uses: nanasess/setup-chromedriver@main
+        uses: nanasess/setup-chromedriver@master
 
       - name: Get flutter packages
         run: flutter pub get
