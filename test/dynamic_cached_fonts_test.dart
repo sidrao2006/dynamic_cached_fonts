@@ -11,7 +11,7 @@ void main() {
         DynamicCachedFonts(url: mockUrl, fontFamily: mockFontFamily);
 
     expect(fontLoader.urls.length, 1);
-    expect(fontLoader.maxCacheObjects, 1);
+    expect(fontLoader.maxCacheObjects, 200);
     expect(fontLoader.cacheStalePeriod, const Duration(days: 365));
   });
 
@@ -22,7 +22,7 @@ void main() {
     );
 
     expect(fontLoader.urls.length, 1);
-    expect(fontLoader.maxCacheObjects, 1);
+    expect(fontLoader.maxCacheObjects, 200);
     expect(fontLoader.cacheStalePeriod, const Duration(days: 365));
   });
 }
