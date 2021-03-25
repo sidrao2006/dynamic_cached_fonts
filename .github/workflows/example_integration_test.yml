@@ -28,14 +28,14 @@ jobs:
       - name: Setup Chrome Driver
         uses: nanasess/setup-chromedriver@master
 
-      - name: Start Chrome Driver
-        run: chromedriver --port=4444
-
       - name: Get flutter packages
         run: flutter pub get
 
       - name: Run integration tests
-        run: flutter driver --driver test_driver/integration_test.dart \
+        run: |
+          chromedriver --port=4444 &
+
+          flutter driver --driver test_driver/integration_test.dart \
           --target ./integration_test/dynamic_cached_fonts_example_test.dart \
           --browser-name chrome \
           --dart-define FIREBASE_STORAGE_FONT_URL=$FIREBASE_STORAGE_FONT_URL \
