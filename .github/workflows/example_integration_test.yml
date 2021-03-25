@@ -2,49 +2,49 @@ name: Integration Tests
 on: [push, pull_request]
 
 jobs:
-  chrome_integration_test:
-    name: Web Integration Test
-    environment: integration_tests
-    runs-on: ubuntu-latest
+  # chrome_integration_test:
+  #   name: Web Integration Test
+  #   environment: integration_tests
+  #   runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: example
+  #   defaults:
+  #     run:
+  #       working-directory: example
 
-    steps:
-      - name: Checkout repository code
-        uses: actions/checkout@v2
+  #   steps:
+  #     - name: Checkout repository code
+  #       uses: actions/checkout@v2
 
-      - name: Setup JDK
-        uses: actions/setup-java@v1
-        with:
-          java-version: '12.x'
+  #     - name: Setup JDK
+  #       uses: actions/setup-java@v1
+  #       with:
+  #         java-version: '12.x'
 
-      - name: Setup Flutter SDK
-        uses: subosito/flutter-action@v1
-        with:
-          channel: beta
+  #     - name: Setup Flutter SDK
+  #       uses: subosito/flutter-action@v1
+  #       with:
+  #         channel: beta
       
-      - name: Setup Google Chrome
-        uses: browser-actions/setup-chrome@latest
+  #     - name: Setup Google Chrome
+  #       uses: browser-actions/setup-chrome@latest
 
-      - name: Setup Chrome Driver
-        uses: nanasess/setup-chromedriver@master
+  #     - name: Setup Chrome Driver
+  #       uses: nanasess/setup-chromedriver@master
 
-      - name: Get flutter packages
-        run: flutter pub get
+  #     - name: Get flutter packages
+  #       run: flutter pub get
 
-      - name: Run integration tests
-        run: |
-          chromedriver --port=4444 &
+  #     - name: Run integration tests
+  #       run: |
+  #         chromedriver --port=4444 &
 
-          flutter driver --driver test_driver/integration_test.dart \
-          --target ./integration_test/dynamic_cached_fonts_example_test.dart \
-          --browser-name chrome \
-          --dart-define FIREBASE_STORAGE_FONT_URL=$FIREBASE_STORAGE_FONT_URL \
-          --release
-        env:
-          FIREBASE_STORAGE_FONT_URL: ${{ secrets.FIREBASE_STORAGE_FONT_URL }}
+  #         flutter driver --driver test_driver/integration_test.dart \
+  #         --target ./integration_test/dynamic_cached_fonts_example_test.dart \
+  #         --browser-name chrome \
+  #         --dart-define FIREBASE_STORAGE_FONT_URL=$FIREBASE_STORAGE_FONT_URL \
+  #         --release
+  #       env:
+  #         FIREBASE_STORAGE_FONT_URL: ${{ secrets.FIREBASE_STORAGE_FONT_URL }}
 
   firebase_test_lab_android_integration_test:
     name: Firebase Test Lab Android Integration Test
