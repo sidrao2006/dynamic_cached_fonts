@@ -40,10 +40,10 @@ jobs:
         uses: actions/github-script@v3
         with:
           script: |
-            const panaReport = JSON.parse(process.env.PANA_RESULT_JSON).report
+            const panaOutput = JSON.parse(process.env.PANA_RESULT_JSON)
 
-            if (panaReport.scores.grantedPoints < Number.parseInt(process.env.PUB_SCORE_MIN_POINTS)) {
-               for (const test in panaReport.sections) {
+            if (panaOutput.scores.grantedPoints < Number.parseInt(process.env.PUB_SCORE_MIN_POINTS)) {
+               for (const test in panaOutput.result.sections) {
                   if (test.status !== 'passed') core.warning(test.title + '\n\n\n' + test.summary)
                }
                core.error('Pub score test failed')
