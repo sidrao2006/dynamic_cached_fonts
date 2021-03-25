@@ -47,12 +47,14 @@ jobs:
     name: Firebase Test Lab Android Integration Test
     environment: integration_tests
     runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: example
+
     steps:
       - name: Checkout repository code
         uses: actions/checkout@v2
-
-      - name: Enter into example directory
-        run: cd example
 
       - name: Setup JDK
         uses: actions/setup-java@v1
