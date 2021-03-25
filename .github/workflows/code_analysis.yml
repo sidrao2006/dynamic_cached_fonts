@@ -40,6 +40,9 @@ jobs:
         uses: actions/github-script@v3
         with:
           script: |
+            console.log(process.env)
+            console.log(process.env.PANA_RESULT_JSON)
+            console.log(process.env.PANA_RESULT_JSON.split(/\r?\n/))
             const resultArr = process.env.PANA_RESULT_JSON.split(/\r?\n/)
 
             const panaReport = JSON.parse(resultArr[resultArr.length - 1]).report
