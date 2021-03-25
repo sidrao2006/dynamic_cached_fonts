@@ -34,7 +34,7 @@ jobs:
           flutter pub global run pana . --json --no-warning >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
 
-      - name: Run pana
+      - name: Calculate Result
         env:
           PUB_SCORE_MIN_POINTS: 90
         uses: actions/github-script@v3
