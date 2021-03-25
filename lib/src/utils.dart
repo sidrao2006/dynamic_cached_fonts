@@ -22,6 +22,8 @@ void devLog(List<String> messageList, {@required bool verboseLog}) {
 /// A class for [DynamicCachedFonts] which performs actions
 /// which are not exposed as APIs.
 class Utils {
+  Utils._();
+
   /// Checks whether the received [url] is a Cloud Storage url or an https url.
   /// If the url points to a Cloud Storage bucket, then a download url
   /// is generated using the Firebase SDK.
