@@ -24,12 +24,6 @@ jobs:
         uses: subosito/flutter-action@v1
         with:
           channel: beta
-      
-      - name: Setup Google Chrome
-        uses: browser-actions/setup-chrome@latest
-
-      - name: Setup Chrome Driver
-        uses: nanasess/setup-chromedriver@master
 
       - name: Get flutter packages
         run: flutter pub get
@@ -42,7 +36,7 @@ jobs:
           --target ./integration_test/dynamic_cached_fonts_example_test.dart \
           --browser-name chrome \
           --dart-define FIREBASE_STORAGE_FONT_URL=$FIREBASE_STORAGE_FONT_URL \
-          --release --verbose
+          --release --headless --verbose
         env:
           FIREBASE_STORAGE_FONT_URL: ${{ secrets.FIREBASE_STORAGE_FONT_URL }}
 
