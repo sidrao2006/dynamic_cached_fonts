@@ -42,7 +42,7 @@ jobs:
           script: |
             const resultArr = process.env.PANA_RESULT_JSON.split(/\r?\n/)
 
-            const panaReport = JSON.parse(resultArr[resultArr - 1]).report
+            const panaReport = JSON.parse(resultArr[resultArr.length - 1]).report
 
             if (panaReport.scores.grantedPoints < Number.parseInt(process.env.PUB_SCORE_MIN_POINTS)) {
                for (const test in panaReport.sections) {
