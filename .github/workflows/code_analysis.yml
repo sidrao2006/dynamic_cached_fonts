@@ -24,6 +24,29 @@ jobs:
 
       - name: Activate pana
         run: flutter pub global activate pana
+      
+      - name: Format code for tests
+        run: flutter format .
+      
+      - name: Run pana tests
+        run: |
+          echo 'PANA_RESULT_JSON<<EOF' >> $GITHUB_ENV
+          flutter pub global run pana . --json --no-warning >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
 
       - name: Run pana
-        run: flutter pub global run pana . --no-warning
+        env:
+          PUB_SCORE_MIN_POINTS: 90
+        uses: actions/github-script@v3
+        with:
+          script: |
+            const resultArr = process.env.PANA_RESULT_JSON.split(/\r?\n/)
+
+            const panaReport = JSON.parse(resultArr[resultArr - 1]).report
+
+            if (panaReport.scores.grantedPoints < Number.parseInt(process.env.PUB_SCORE_MIN_POINTS)) {
+               for (const test in panaReport.sections) {
+                  if (test.status !== 'passed') core.warning(test.title + '\n\n\n' + test.summary)
+               }
+               core.error('Pub score test failed')
+            }

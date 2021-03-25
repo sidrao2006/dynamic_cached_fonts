@@ -30,7 +30,7 @@ jobs:
         with:
           should-run-pub-score-test: true
           pub-score-min-points: 90
-          pre-publish: flutter format
+          pre-publish: flutter format .
           access-token: ${{ secrets.PUB_CREDENTIALS_ACCESS_TOKEN }}
           refresh-token: ${{ secrets.PUB_CREDENTIALS_REFRESH_TOKEN }}
           id-token: ${{ secrets.PUB_CREDENTIALS_ID_TOKEN }}
