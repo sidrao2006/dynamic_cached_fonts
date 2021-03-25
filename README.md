@@ -1,9 +1,15 @@
 # Dynamic Cached Fonts
 
-[![GitHub license](https://img.shields.io/github/license/sidrao2006/dynamic_cached_fonts?style=for-the-badge)][LICENSE-badge]
-![Supported Platforms][platforms]
+[![GitHub license][license-badge]][license]
+[![Pub Version][pub-version-badge]][pub-package]
+![Supported Platforms][supported-platforms-badge]
 
 <!-- CI badges -->
+[![Code Analysis][code-analysis-badge]][code-analysis]
+[![Documentation Analysis][doc-analysis-badge]][doc-analysis]
+[![Unit Tests][unit-tests-badge]][unit-tests]
+[![Integration Tests][integration-tests-badge]][integration-tests]
+[![Release and publish package][release-package-badge]][release-package]
 
 A customizable dynamic font loader for flutter with caching enabled. Supports Firebase Cloud Storage too!
 
@@ -174,8 +180,23 @@ To contribute to the package, fork the repository and open a [pull request]!
 ![GitHub forks]
 
 <!-- Badges -->
-[LICENSE-badge]: https://github.com/sidrao2006/dynamic_cached_fonts/blob/main/LICENSE
-[platforms]: https://img.shields.io/badge/Platforms-Android%20%7C%20iOS%20%7C%20Web%20%7C%20Windows%20%7C%20Linux%20%7C%20MacOS-blue?style=for-the-badge
+[license-badge]: https://img.shields.io/github/license/sidrao2006/dynamic_cached_fonts?style=for-the-badge
+[supported-platforms-badge]: https://img.shields.io/badge/Platforms-Android%20%7C%20iOS%20%7C%20Web%20%7C%20Windows%20%7C%20Linux%20%7C%20MacOS-blue?style=for-the-badge
+[pub-version-badge]: https://img.shields.io/pub/v/dynamic_cached_fonts?label=Pub%20%28Latest%20Stable%29&style=for-the-badge
+[code-analysis-badge]: https://github.com/sidrao2006/dynamic_cached_fonts/actions/workflows/code_analysis.yml/badge.svg
+[doc-analysis-badge]: https://github.com/sidrao2006/dynamic_cached_fonts/actions/workflows/dartdoc.yml/badge.svg
+[unit-tests-badge]:https://github.com/sidrao2006/dynamic_cached_fonts/actions/workflows/package_unit_test.yml/badge.svg
+[integration-tests-badge]: https://github.com/sidrao2006/dynamic_cached_fonts/actions/workflows/example_integration_test.yml/badge.svg
+[release-package-badge]: https://github.com/sidrao2006/dynamic_cached_fonts/actions/workflows/release.yml/badge.svg
+
+<!-- Badge Follow Up Links -->
+[license]: https://github.com/sidrao2006/dynamic_cached_fonts/blob/main/LICENSE
+[pub-package]: https://pub.dev/packages/dynamic_cached_fonts
+[code-analysis]: https://github.com/sidrao2006/dynamic_cached_fonts/actions/workflows/code_analysis.yml
+[doc-analysis]: https://github.com/sidrao2006/dynamic_cached_fonts/actions/workflows/dartdoc.yml
+[unit-tests]:https://github.com/sidrao2006/dynamic_cached_fonts/actions/workflows/package_unit_test.yml
+[integration-tests]: https://github.com/sidrao2006/dynamic_cached_fonts/actions/workflows/example_integration_test.yml
+[release-package]: https://github.com/sidrao2006/dynamic_cached_fonts/actions/workflows/release.yml
 
 <!-- GIFs -->
 [Demo 1]: https://raw.githubusercontent.com/sidrao2006/dynamic_cached_fonts/main/doc/images/demo1.gif
