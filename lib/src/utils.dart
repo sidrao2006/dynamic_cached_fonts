@@ -8,20 +8,6 @@ import 'package:flutter/material.dart' show required;
 /// The name for for [dev.log].
 const String kLoggerName = 'DynamicCachedFonts';
 
-List<String> _storageUnits = <String>['Bytes', 'KiloBytes', 'MegaBytes', 'GigaBytes'];
-
-/// Converts bytes to kilobytes
-String simplifyBytes(int bytes) {
-  int storageIndex = 0;
-  int calculatedBytes = bytes;
-  while (calculatedBytes > 1000) {
-    calculatedBytes ~/= 1000;
-
-    storageIndex++;
-  }
-  return '$calculatedBytes ${_storageUnits[storageIndex]}';
-}
-
 /// Logs a message to the console
 void devLog(List<String> messageList, {@required bool verboseLog}) {
   if (verboseLog) {
