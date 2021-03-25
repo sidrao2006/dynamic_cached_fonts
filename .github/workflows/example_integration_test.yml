@@ -42,7 +42,7 @@ jobs:
           --target ./integration_test/dynamic_cached_fonts_example_test.dart \
           --browser-name chrome \
           --dart-define FIREBASE_STORAGE_FONT_URL=$FIREBASE_STORAGE_FONT_URL \
-          --release
+          --release --verbose
         env:
           FIREBASE_STORAGE_FONT_URL: ${{ secrets.FIREBASE_STORAGE_FONT_URL }}
 
