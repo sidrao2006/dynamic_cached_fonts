@@ -320,7 +320,7 @@ class DynamicCachedFonts {
   /// Uses [CacheManager.getSingleFile] to either download the file
   /// if it isn't in the cache, or returns the file (as bytes) from cache.
   Future<ByteData> _handleCache(String url) async {
-    final String cacheKey = url.replaceAll(RegExp(r'\/|:'), '');
+    final String cacheKey = Utils.sanitizeUrl(url);
 
     final Config cacheconfig = Config(
       cacheKey,

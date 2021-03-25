@@ -79,4 +79,6 @@ class Utils {
       return false;
     }
   }
+
+  static String sanitizeUrl(String url) => url.replaceAll(RegExp(r'\/|:'), '');
 }

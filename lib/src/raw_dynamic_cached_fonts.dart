@@ -55,7 +55,7 @@ abstract class RawDynamicCachedFonts {
         'Invalid url. Unsupported file format. Supported file formats - otf and ttf',
       );
     }
-    final String cacheKey = url.replaceAll(RegExp(r'\/|:'), '');
+    final String cacheKey = Utils.sanitizeUrl(url);
 
     final Config cacheconfig = Config(
       cacheKey,
@@ -97,7 +97,7 @@ abstract class RawDynamicCachedFonts {
 
     WidgetsFlutterBinding.ensureInitialized();
 
-    final String cacheKey = url.replaceAll(RegExp(r'\/|:'), '');
+    final String cacheKey = Utils.sanitizeUrl(url);
 
     FileInfo font;
 
@@ -149,7 +149,7 @@ abstract class RawDynamicCachedFonts {
 
     WidgetsFlutterBinding.ensureInitialized();
 
-    final String cacheKey = url.replaceAll(RegExp(r'\/|:'), '');
+    final String cacheKey = Utils.sanitizeUrl(url);
 
     final FileInfo font = await CacheManager(Config(cacheKey)).getFileFromCache(cacheKey);
 
@@ -203,7 +203,7 @@ abstract class RawDynamicCachedFonts {
     WidgetsFlutterBinding.ensureInitialized();
 
     final Iterable<Future<ByteData>> cachedFontBytes = urls.map((String url) async {
-      final String cacheKey = url.replaceAll(RegExp(r'\/|:'), '');
+      final String cacheKey = Utils.sanitizeUrl(url);
 
       final FileInfo font = await CacheManager(Config(cacheKey)).getFileFromCache(cacheKey);
 
@@ -235,7 +235,7 @@ abstract class RawDynamicCachedFonts {
   static Future<void> removeCachedFont(String url) async {
     WidgetsFlutterBinding.ensureInitialized();
 
-    final String cacheKey = url.replaceAll(RegExp(r'\/|:'), '');
+    final String cacheKey = Utils.sanitizeUrl(url);
 
     return CacheManager(Config(cacheKey)).removeFile(cacheKey);
   }
