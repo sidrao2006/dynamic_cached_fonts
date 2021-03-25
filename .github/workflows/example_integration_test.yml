@@ -76,7 +76,7 @@ jobs:
           # flutter build generates files in android/ for building the app
           flutter build apk
           ./gradlew app:assembleAndroidTest
-          ./gradlew app:assembleDebug -Ptarget=../integration_test/dynamic_cached_fonts_example_test.dart
+          ./gradlew app:assembleDebug -Ptarget=$GITHUB_WORKSPACE/example/integration_test/dynamic_cached_fonts_example_test.dart
           popd
       
       - name: Set up Google Cloud SDK for Firebase
