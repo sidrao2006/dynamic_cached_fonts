@@ -6,6 +6,7 @@ jobs:
     name: Web Integration Test
     environment: integration_tests
     runs-on: ubuntu-latest
+    container: browserless/chrome:latest
 
     defaults:
       run:
@@ -24,9 +25,12 @@ jobs:
         uses: subosito/flutter-action@v1
         with:
           channel: beta
+      
+      - name: Setup Google Chrome
+        uses: browser-actions/setup-chrome@latest
 
       - name: Setup Chrome Driver
-        uses: nanasess/setup-chromedriver@master
+        uses: nanasess/setup-chromedriver@main
 
       - name: Get flutter packages
         run: flutter pub get
