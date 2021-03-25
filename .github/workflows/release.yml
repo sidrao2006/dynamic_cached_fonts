@@ -1,13 +1,10 @@
 name: Release and publish package
 on:
-  workflow_run:
-    workflows:
-      - "Unit Tests"
-      - "Integration Tests"
-      - "Documentation Analysis"
-      - "Code Analysis"
+  push:
     branches: [main]
-    types: [completed]
+    paths:
+      - 'CHANGELOG.md'
+      - 'pubspec.yaml'
 
 jobs:
   release:
@@ -18,13 +15,14 @@ jobs:
       - name: Checkout repository code
         uses: actions/checkout@v2
 
-      - name: Get Changed Files
-        id: files
-        uses: jitterbit/get-changed-files@v1
-
-      - name: Check if CHANGELOG was changed
-        run: |
-          echo ${{ steps.files.outputs.all }} | grep CHANGELOG.md || exit 0 && echo 'CHANGELOG was modified'
+      - name: Wait on tests
+        uses: lewagon/wait-on-check-action@master
+        with:
+          ref: ${{ github.ref }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 10
+          running-workflow-name: 'release'
+          allowed-conclusions: success,skipped,cancelled
 
       - name: Release package
         if: success()
@@ -40,3 +38,7 @@ jobs:
           expiration: ${{ secrets.PUB_CREDENTIALS_EXPIRATION }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Notify test failure
+        if: failure()
+        run: echo "::warning::Tests failed or Github API limit was reached"
