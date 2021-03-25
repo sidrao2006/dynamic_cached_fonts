@@ -34,18 +34,16 @@ jobs:
           flutter pub global run pana . --json --no-warning >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
 
-      - name: Run pana
+      - name: Calculate Result
         env:
           PUB_SCORE_MIN_POINTS: 90
         uses: actions/github-script@v3
         with:
           script: |
-            const resultArr = process.env.PANA_RESULT_JSON.split(/\r?\n/)
+            const panaOutput = JSON.parse(process.env.PANA_RESULT_JSON)
 
-            const panaReport = JSON.parse(resultArr[resultArr.length - 1]).report
-
-            if (panaReport.scores.grantedPoints < Number.parseInt(process.env.PUB_SCORE_MIN_POINTS)) {
-               for (const test in panaReport.sections) {
+            if (panaOutput.scores.grantedPoints < Number.parseInt(process.env.PUB_SCORE_MIN_POINTS)) {
+               for (const test in panaOutput.result.sections) {
                   if (test.status !== 'passed') core.warning(test.title + '\n\n\n' + test.summary)
                }
                core.error('Pub score test failed')
