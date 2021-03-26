@@ -31,8 +31,17 @@ jobs:
       - name: Get flutter packages
         run: flutter pub get
       
+      - name: Browser pre launch Setup
+        run: |
+          sudo apt-get install -y xvfb
+          sudo apt-get -y install xorg xvfb gtk2-engines-pixbuf
+          sudo apt-get -y install dbus-x11 xfonts-base xfonts-100dpi xfonts-75dpi xfonts-cyrillic xfonts-scalable
+          sudo apt-get -y install imagemagick x11-apps
+
       - name: Run integration tests
         run: |
+          Xvfb -ac :99 -screen 0 1280x1024x16 & export DISPLAY=:99
+
           echo 'Google Chrome Version -'
           google-chrome --version
 
