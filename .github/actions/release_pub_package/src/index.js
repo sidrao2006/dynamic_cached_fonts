@@ -2,8 +2,7 @@ import core from '@actions/core'
 import exec from '@actions/exec'
 import github from '@actions/github'
 import tc from '@actions/tool-cache'
-// import auth from '@octokit/auth-action'
-import rest from '@octokit/rest'
+import { Octokit } from '@octokit/action'
 import parseChangelog from 'changelog-parser'
 import fs from 'fs'
 
@@ -14,7 +13,7 @@ const flutterMacOSDownloadUrl = 'https://storage.googleapis.com/flutter_infra/re
 const flutterLinuxDownloadUrl = 'https://storage.googleapis.com/flutter_infra/releases/stable/linux/flutter_linux_2.0.3-stable.tar.xz'
 
 async function run() {
-   const octokit = await setUpGithubAuth()
+   const octokit = new Octokit()
 
    // Get inputs from workflow
 
@@ -80,14 +79,6 @@ async function run() {
 run()
 
 // Helper functions
-
-async function setUpGithubAuth() {
-   // const authentication = await auth.createActionAuth()()
-
-   return new rest.Octokit({
-      auth: process.env.GITHUB_TOKEN
-   })
-}
 
 async function getActionInputs(octokit) {
    const inputs = {}
@@ -161,7 +152,7 @@ async function createRelease(octokit, {
 
    await exec.exec(preReleaseCommand.commandLine, preReleaseCommand.args)
 
-   await (await octokit).repos.createRelease({
+   await octokit.repos.createRelease({
       owner: repo.owner,
       repo: repo.repo,
       tag_name: `v${version}`,
