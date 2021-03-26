@@ -1,5 +1,5 @@
 name: Integration Tests
-on: [push, pull_request]
+on: [push, pull_request, workflow_dispatch]
 
 jobs:
   # chrome_integration_test:
