@@ -21,7 +21,7 @@ getActionInputs()
 
 // Get Changelog file path
 
-const changelogFile = inputs.changelogFilePath ?? `${process.env.GITHUB_WORKSPACE}/CHANGELOG.md`
+const changelogFile = inputs.changelogFilePath || `${process.env.GITHUB_WORKSPACE}/CHANGELOG.md`
 
 // Get latest version and release notes from changelog
 

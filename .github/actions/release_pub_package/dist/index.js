@@ -24,7 +24,7 @@ __nccwpck_require__.r(__webpack_exports__);
 
 
 
-// Latest Stable Version (at the time of release) that support all required features.
+// Latest Stable Flutter Version (at the time of release) that support all required features.
 
 const flutterWinDownloadUrl = 'https://storage.googleapis.com/flutter_infra/releases/stable/windows/flutter_windows_2.0.3-stable.zip'
 const flutterMacOSDownloadUrl = 'https://storage.googleapis.com/flutter_infra/releases/stable/macos/flutter_macos_2.0.3-stable.zip'
@@ -36,9 +36,9 @@ let inputs
 
 getActionInputs()
 
-// Setup Github Rest API
+// Get Changelog file path
 
-const changelogFile = inputs.changelogFilePath ?? `${process.env.GITHUB_WORKSPACE}/CHANGELOG.md`
+const changelogFile = inputs.changelogFilePath || `${process.env.GITHUB_WORKSPACE}/CHANGELOG.md`
 
 // Get latest version and release notes from changelog
 
@@ -119,7 +119,7 @@ async function getLatestReleaseVersion() {
 
    const releases = await (await octokit).repos.listReleases({
       owner: repo.owner,
-      repo: repo
+      repo: repo.repo
    })
 
    return releases.data[0].tag_name.replace('v', '')
@@ -155,7 +155,7 @@ async function createRelease() {
 
    await (await octokit).repos.createRelease({
       owner: repo.owner,
-      repo: repo,
+      repo: repo.repo,
       tag_name: `v${version}`,
       target_commitish: _actions_github__WEBPACK_IMPORTED_MODULE_2__.context.sha,
       body: body,
@@ -244,8 +244,8 @@ function setUpPubAuth() {
       expiration: inputs.expiration
    }
 
-   if (process.platform === 'win32') fs__WEBPACK_IMPORTED_MODULE_5__.writeFile(`${process.env.APPDATA}/Pub/Cache/credentials.json`, credentials)
-   else fs__WEBPACK_IMPORTED_MODULE_5__.writeFile(`${process.env.HOME}/.pub-cache/credentials.json`, credentials)
+   if (process.platform === 'win32') fs__WEBPACK_IMPORTED_MODULE_5__.writeFileSync(`${process.env.APPDATA}/Pub/Cache/credentials.json`, credentials)
+   else fs__WEBPACK_IMPORTED_MODULE_5__.writeFileSync(`${process.env.HOME}/.pub-cache/credentials.json`, credentials)
 }
 
 
