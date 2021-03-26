@@ -102,7 +102,7 @@ async function getLatestReleaseVersion() {
 
    const releases = await (await octokit).repos.listReleases({
       owner: repo.owner,
-      repo: repo
+      repo: repo.repo
    })
 
    return releases.data[0].tag_name.replace('v', '')
@@ -138,7 +138,7 @@ async function createRelease() {
 
    await (await octokit).repos.createRelease({
       owner: repo.owner,
-      repo: repo,
+      repo: repo.repo,
       tag_name: `v${version}`,
       target_commitish: github.context.sha,
       body: body,
