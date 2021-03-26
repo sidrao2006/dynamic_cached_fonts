@@ -11293,7 +11293,7 @@ async function run() {
    // Check if latest version in changelog has already been released
 
    if (version === inputs.previousVersion) {
-      _actions_core__WEBPACK_IMPORTED_MODULE_0___default().setFailed(
+      _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(
          `No new version found. Latest version in Changelog (${version}) is the same as the previous version.`
       )
    }
@@ -11340,35 +11340,35 @@ async function getActionInputs(octokit) {
    const inputs = {}
 
    try {
-      inputs.previousVersion = _actions_core__WEBPACK_IMPORTED_MODULE_0___default().getInput('previous-version') || await getLatestReleaseVersion(octokit)
+      inputs.previousVersion = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('previous-version') || await getLatestReleaseVersion(octokit)
 
-      inputs.changelogFilePath = _actions_core__WEBPACK_IMPORTED_MODULE_0___default().getInput('changelog-file')
+      inputs.changelogFilePath = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('changelog-file')
 
-      inputs.isDraft = _actions_core__WEBPACK_IMPORTED_MODULE_0___default().getInput('is-draft').toUpperCase() === 'TRUE'
+      inputs.isDraft = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('is-draft').toUpperCase() === 'TRUE'
 
-      inputs.preReleaseScript = _actions_core__WEBPACK_IMPORTED_MODULE_0___default().getInput('pre-release-script')
-      inputs.postReleaseScript = _actions_core__WEBPACK_IMPORTED_MODULE_0___default().getInput('post-release-script')
+      inputs.preReleaseScript = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('pre-release-script')
+      inputs.postReleaseScript = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('post-release-script')
 
-      inputs.prePublishScript = _actions_core__WEBPACK_IMPORTED_MODULE_0___default().getInput('pre-publish-script')
-      inputs.postPublishScript = _actions_core__WEBPACK_IMPORTED_MODULE_0___default().getInput('post-publish-script')
+      inputs.prePublishScript = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('pre-publish-script')
+      inputs.postPublishScript = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('post-publish-script')
 
-      inputs.shouldRunPubScoreTest = _actions_core__WEBPACK_IMPORTED_MODULE_0___default().getInput('should-run-pub-score-test').toUpperCase() === 'TRUE'
-      inputs.pubScoreMinPoints = Number.parseInt(_actions_core__WEBPACK_IMPORTED_MODULE_0___default().getInput('pub-score-min-points'))
+      inputs.shouldRunPubScoreTest = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('should-run-pub-score-test').toUpperCase() === 'TRUE'
+      inputs.pubScoreMinPoints = Number.parseInt(_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('pub-score-min-points'))
 
-      inputs.accessToken = _actions_core__WEBPACK_IMPORTED_MODULE_0___default().getInput('access-token', { required: true })
-      inputs.refreshToken = _actions_core__WEBPACK_IMPORTED_MODULE_0___default().getInput('refresh-token', { required: true })
-      inputs.idToken = _actions_core__WEBPACK_IMPORTED_MODULE_0___default().getInput('id-token', { required: true })
-      inputs.tokenEndpoint = _actions_core__WEBPACK_IMPORTED_MODULE_0___default().getInput('token-endpoint', { required: true })
-      inputs.expiration = _actions_core__WEBPACK_IMPORTED_MODULE_0___default().getInput('expiration', { required: true })
+      inputs.accessToken = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('access-token', { required: true })
+      inputs.refreshToken = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('refresh-token', { required: true })
+      inputs.idToken = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('id-token', { required: true })
+      inputs.tokenEndpoint = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('token-endpoint', { required: true })
+      inputs.expiration = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('expiration', { required: true })
    } catch (err) {
-      _actions_core__WEBPACK_IMPORTED_MODULE_0___default().setFailed(err)
+      _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(err)
    }
 
    return inputs
 }
 
 async function getLatestReleaseVersion(octokit) {
-   const repo = (_actions_github__WEBPACK_IMPORTED_MODULE_2___default().context.repo)
+   const repo = _actions_github__WEBPACK_IMPORTED_MODULE_2__.context.repo
 
    const releases = await octokit.repos.listReleases({
       owner: repo.owner,
@@ -11404,46 +11404,46 @@ async function createRelease(octokit, {
 }) {
    const preReleaseCommand = getCommand(preReleaseScript)
    const postReleaseCommand = getCommand(postReleaseScript)
-   const repo = (_actions_github__WEBPACK_IMPORTED_MODULE_2___default().context.repo)
+   const repo = _actions_github__WEBPACK_IMPORTED_MODULE_2__.context.repo
 
-   await _actions_exec__WEBPACK_IMPORTED_MODULE_1___default().exec(preReleaseCommand.commandLine, preReleaseCommand.args)
+   await _actions_exec__WEBPACK_IMPORTED_MODULE_1__.exec(preReleaseCommand.commandLine, preReleaseCommand.args)
 
    await octokit.repos.createRelease({
       owner: repo.owner,
       repo: repo.repo,
       tag_name: `v${version}`,
-      target_commitish: (_actions_github__WEBPACK_IMPORTED_MODULE_2___default().context.sha),
+      target_commitish: _actions_github__WEBPACK_IMPORTED_MODULE_2__.context.sha,
       body: body,
       draft: isDraft,
       prerelease: version.contains('-')
    })
 
-   await _actions_exec__WEBPACK_IMPORTED_MODULE_1___default().exec(postReleaseCommand.commandLine, postReleaseCommand.args)
+   await _actions_exec__WEBPACK_IMPORTED_MODULE_1__.exec(postReleaseCommand.commandLine, postReleaseCommand.args)
 }
 
 async function setUpFlutterSDK() {
-   _actions_core__WEBPACK_IMPORTED_MODULE_0___default().exportVariable('FLUTTER_ROOT', `${process.env.HOME}/flutter`)
+   _actions_core__WEBPACK_IMPORTED_MODULE_0__.exportVariable('FLUTTER_ROOT', `${process.env.HOME}/flutter`)
 
-   const toolLocation = _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3___default().find('flutter', '2.x') || process.env.FLUTTER_ROOT
+   const toolLocation = _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.find('flutter', '2.x') || process.env.FLUTTER_ROOT
 
    if (process.platform === 'win32') {
-      const flutterPath = await _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3___default().downloadTool(flutterWinDownloadUrl)
-      await _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3___default().extractZip(flutterPath, process.env.FLUTTER_ROOT)
+      const flutterPath = await _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.downloadTool(flutterWinDownloadUrl)
+      await _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.extractZip(flutterPath, process.env.FLUTTER_ROOT)
 
-      _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3___default().cacheDir(process.env.FLUTTER_ROOT, 'flutter', '2.0.3')
+      _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.cacheDir(process.env.FLUTTER_ROOT, 'flutter', '2.0.3')
    } else if (process.platform === 'darwin') {
-      const flutterPath = await _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3___default().downloadTool(flutterMacOSDownloadUrl)
-      await _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3___default().extractZip(flutterPath, process.env.FLUTTER_ROOT)
+      const flutterPath = await _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.downloadTool(flutterMacOSDownloadUrl)
+      await _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.extractZip(flutterPath, process.env.FLUTTER_ROOT)
 
-      _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3___default().cacheDir(process.env.FLUTTER_ROOT, 'flutter', '2.0.3')
+      _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.cacheDir(process.env.FLUTTER_ROOT, 'flutter', '2.0.3')
    } else {
-      const flutterPath = await _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3___default().downloadTool(flutterLinuxDownloadUrl)
-      await _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3___default().extractTar(flutterPath, process.env.FLUTTER_ROOT)
+      const flutterPath = await _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.downloadTool(flutterLinuxDownloadUrl)
+      await _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.extractTar(flutterPath, process.env.FLUTTER_ROOT)
 
-      _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3___default().cacheDir(process.env.FLUTTER_ROOT, 'flutter', '2.0.3')
+      _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.cacheDir(process.env.FLUTTER_ROOT, 'flutter', '2.0.3')
    }
 
-   _actions_core__WEBPACK_IMPORTED_MODULE_0___default().addPath(`${toolLocation}/bin/flutter`)
+   _actions_core__WEBPACK_IMPORTED_MODULE_0__.addPath(`${toolLocation}/bin/flutter`)
 }
 
 async function publishPackageToPub({
@@ -11455,22 +11455,22 @@ async function publishPackageToPub({
    const prePublishCommand = getCommand(prePublishScript)
    const postPublishCommand = getCommand(postPublishScript)
 
-   await _actions_exec__WEBPACK_IMPORTED_MODULE_1___default().exec(prePublishCommand.commandLine, prePublishCommand.args)
+   await _actions_exec__WEBPACK_IMPORTED_MODULE_1__.exec(prePublishCommand.commandLine, prePublishCommand.args)
 
    await runPanaTest({ shouldRunPubScoreTest: shouldRunPubScoreTest, pubScoreMinPoints: pubScoreMinPoints })
 
-   await _actions_exec__WEBPACK_IMPORTED_MODULE_1___default().exec('flutter', ['pub', 'publish', '--force'])
+   await _actions_exec__WEBPACK_IMPORTED_MODULE_1__.exec('flutter', ['pub', 'publish', '--force'])
 
-   await _actions_exec__WEBPACK_IMPORTED_MODULE_1___default().exec(postPublishCommand.commandLine, postPublishCommand.args)
+   await _actions_exec__WEBPACK_IMPORTED_MODULE_1__.exec(postPublishCommand.commandLine, postPublishCommand.args)
 }
 
 async function runPanaTest({ shouldRunPubScoreTest, pubScoreMinPoints }) {
    if (shouldRunPubScoreTest) {
       let panaOutput
 
-      await _actions_exec__WEBPACK_IMPORTED_MODULE_1___default().exec('flutter', ['pub', 'global', 'activate', 'pana'])
+      await _actions_exec__WEBPACK_IMPORTED_MODULE_1__.exec('flutter', ['pub', 'global', 'activate', 'pana'])
 
-      await _actions_exec__WEBPACK_IMPORTED_MODULE_1___default().exec('flutter', ['pub', 'global', 'run', 'pana', process.env.GITHUB_WORKSPACE, '--json', '--no-warning'], {
+      await _actions_exec__WEBPACK_IMPORTED_MODULE_1__.exec('flutter', ['pub', 'global', 'run', 'pana', process.env.GITHUB_WORKSPACE, '--json', '--no-warning'], {
          listeners: {
             stdout: data => { panaOutput += data.toString() }
          }
@@ -11480,13 +11480,13 @@ async function runPanaTest({ shouldRunPubScoreTest, pubScoreMinPoints }) {
 
       const panaResult = JSON.parse(resultArr[resultArr.length - 1])
 
-      if (isNaN(pubScoreMinPoints)) _actions_core__WEBPACK_IMPORTED_MODULE_0___default().setFailed('run-pub-score-test was set to true but no value for pub-score-min-points was provided')
+      if (isNaN(pubScoreMinPoints)) _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed('run-pub-score-test was set to true but no value for pub-score-min-points was provided')
 
       if (panaResult.scores.grantedPoints < pubScoreMinPoints) {
          for (const test in panaResult.report.sections) {
-            if (test.status !== 'passed') _actions_core__WEBPACK_IMPORTED_MODULE_0___default().warning(test.title + '\n\n\n' + test.summary)
+            if (test.status !== 'passed') _actions_core__WEBPACK_IMPORTED_MODULE_0__.warning(test.title + '\n\n\n' + test.summary)
          }
-         _actions_core__WEBPACK_IMPORTED_MODULE_0___default().error('Pub score test failed')
+         _actions_core__WEBPACK_IMPORTED_MODULE_0__.error('Pub score test failed')
       }
    }
 }
