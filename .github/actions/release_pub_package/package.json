@@ -7,7 +7,6 @@
     "start": "node index.js",
     "prepare": "ncc build src/index.js -o dist --source-map --license licenses.txt"
   },
-  "type": "module",
   "author": "sidrao2006",
   "license": "BSD-3-Clause",
   "dependencies": {
