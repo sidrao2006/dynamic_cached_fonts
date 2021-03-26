@@ -3,7 +3,7 @@ description: Release a flutter/dart package to pub and on Github
 
 runs:
   using: node12
-  main: index.js
+  main: dist/index.js
 
 inputs:
   previous-version:

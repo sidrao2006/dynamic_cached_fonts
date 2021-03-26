@@ -1,11 +1,11 @@
-import * as core from '@actions/core'
-import { exec } from '@actions/exec'
-import * as github from '@actions/github'
-import * as tc from '@actions/tool-cache'
-import * as auth from '@octokit/auth-action'
-import * as rest from '@octokit/rest'
+import core from '@actions/core'
+import exec from '@actions/exec'
+import github from '@actions/github'
+import tc from '@actions/tool-cache'
+import auth from '@octokit/auth-action'
+import rest from '@octokit/rest'
 import parseChangelog from 'changelog-parser'
-import * as fs from 'fs'
+import fs from 'fs'
 
 // Latest Stable Version (at the time of release) that support all required features.
 
@@ -134,7 +134,7 @@ async function createRelease() {
    const postReleaseCommand = getCommand(inputs.postReleaseScript)
    const repo = github.context.repo
 
-   await exec(preReleaseCommand.commandLine, preReleaseCommand.args)
+   await exec.exec(preReleaseCommand.commandLine, preReleaseCommand.args)
 
    await (await octokit).repos.createRelease({
       owner: repo.owner,
@@ -146,7 +146,7 @@ async function createRelease() {
       prerelease: version.contains('-')
    })
 
-   await exec(postReleaseCommand.commandLine, postReleaseCommand.args)
+   await exec.exec(postReleaseCommand.commandLine, postReleaseCommand.args)
 }
 
 async function setUpFlutterSDK() {
@@ -178,22 +178,22 @@ async function publishPackageToPub() {
    const prePublishCommand = getCommand(inputs.prePublishScript)
    const postPublishCommand = getCommand(inputs.postPublishScript)
 
-   await exec(prePublishCommand.commandLine, prePublishCommand.args)
+   await exec.exec(prePublishCommand.commandLine, prePublishCommand.args)
 
    await runPanaTest()
 
-   await exec('flutter', ['pub', 'publish', '--force'])
+   await exec.exec('flutter', ['pub', 'publish', '--force'])
 
-   await exec(postPublishCommand.commandLine, postPublishCommand.args)
+   await exec.exec(postPublishCommand.commandLine, postPublishCommand.args)
 }
 
 async function runPanaTest() {
    if (inputs.shouldRunPubScoreTest) {
       let panaOutput
 
-      await exec('flutter', ['pub', 'global', 'activate', 'pana'])
+      await exec.exec('flutter', ['pub', 'global', 'activate', 'pana'])
 
-      await exec('flutter', ['pub', 'global', 'run', 'pana', process.env.GITHUB_WORKSPACE, '--json', '--no-warning'], {
+      await exec.exec('flutter', ['pub', 'global', 'run', 'pana', process.env.GITHUB_WORKSPACE, '--json', '--no-warning'], {
          listeners: {
             stdout: data => { panaOutput += data.toString() },
          }
