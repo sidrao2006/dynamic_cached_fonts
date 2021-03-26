@@ -7,7 +7,7 @@ import rest from '@octokit/rest'
 import parseChangelog from 'changelog-parser'
 import fs from 'fs'
 
-// Latest Stable Version (at the time of release) that support all required features.
+// Latest Stable Flutter Version (at the time of release) that support all required features.
 
 const flutterWinDownloadUrl = 'https://storage.googleapis.com/flutter_infra/releases/stable/windows/flutter_windows_2.0.3-stable.zip'
 const flutterMacOSDownloadUrl = 'https://storage.googleapis.com/flutter_infra/releases/stable/macos/flutter_macos_2.0.3-stable.zip'
@@ -19,7 +19,7 @@ let inputs
 
 getActionInputs()
 
-// Setup Github Rest API
+// Get Changelog file path
 
 const changelogFile = inputs.changelogFilePath ?? `${process.env.GITHUB_WORKSPACE}/CHANGELOG.md`
 
