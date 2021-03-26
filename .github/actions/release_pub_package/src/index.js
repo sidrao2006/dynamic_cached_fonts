@@ -82,10 +82,10 @@ run()
 // Helper functions
 
 async function setUpGithubAuth() {
-   const authentication = auth.createActionAuth()
+   const authentication = await auth.createActionAuth()()
 
    return new rest.Octokit({
-      auth: await authentication()
+      auth: authentication.token
    })
 }
 
