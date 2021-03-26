@@ -11249,14 +11249,11 @@ __nccwpck_require__.r(__webpack_exports__);
 /* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__nccwpck_require__.n(_actions_github__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__ = __nccwpck_require__(7784);
 /* harmony import */ var _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__nccwpck_require__.n(_actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _octokit_action__WEBPACK_IMPORTED_MODULE_7__ = __nccwpck_require__(1231);
+/* harmony import */ var _octokit_action__WEBPACK_IMPORTED_MODULE_6__ = __nccwpck_require__(1231);
 /* harmony import */ var changelog_parser__WEBPACK_IMPORTED_MODULE_4__ = __nccwpck_require__(6352);
 /* harmony import */ var changelog_parser__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__nccwpck_require__.n(changelog_parser__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_5__ = __nccwpck_require__(5747);
 /* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__nccwpck_require__.n(fs__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var os__WEBPACK_IMPORTED_MODULE_6__ = __nccwpck_require__(2087);
-/* harmony import */ var os__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__nccwpck_require__.n(os__WEBPACK_IMPORTED_MODULE_6__);
-
 
 
 
@@ -11272,7 +11269,7 @@ const flutterMacOSDownloadUrl = 'https://storage.googleapis.com/flutter_infra/re
 const flutterLinuxDownloadUrl = 'https://storage.googleapis.com/flutter_infra/releases/stable/linux/flutter_linux_2.0.3-stable.tar.xz'
 
 async function run() {
-   const octokit = new _octokit_action__WEBPACK_IMPORTED_MODULE_7__/* .Octokit */ .v()
+   const octokit = new _octokit_action__WEBPACK_IMPORTED_MODULE_6__/* .Octokit */ .v()
 
    // Get inputs from workflow
 
@@ -11379,7 +11376,7 @@ async function getLatestReleaseVersion(octokit) {
       repo: repo.repo
    })
 
-   return os__WEBPACK_IMPORTED_MODULE_6__.release.data.length > 0
+   return releases.data.length > 0
       ? releases.data[0].tag_name.replace('v', '')
       : '0.0.0' // undefined or null can also be returned from this step
 }

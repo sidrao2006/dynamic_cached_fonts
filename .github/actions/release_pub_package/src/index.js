@@ -5,7 +5,6 @@ import * as tc from '@actions/tool-cache'
 import { Octokit } from '@octokit/action'
 import parseChangelog from 'changelog-parser'
 import fs from 'fs'
-import { release } from 'os'
 
 // Latest Stable Flutter Version (at the time of release) that support all required features.
 
@@ -121,7 +120,7 @@ async function getLatestReleaseVersion(octokit) {
       repo: repo.repo
    })
 
-   return release.data.length > 0
+   return releases.data.length > 0
       ? releases.data[0].tag_name.replace('v', '')
       : '0.0.0' // undefined or null can also be returned from this step
 }
