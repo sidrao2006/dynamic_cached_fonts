@@ -2,7 +2,7 @@ import core from '@actions/core'
 import exec from '@actions/exec'
 import github from '@actions/github'
 import tc from '@actions/tool-cache'
-import auth from '@octokit/auth-action'
+// import auth from '@octokit/auth-action'
 import rest from '@octokit/rest'
 import parseChangelog from 'changelog-parser'
 import fs from 'fs'
@@ -82,10 +82,10 @@ run()
 // Helper functions
 
 async function setUpGithubAuth() {
-   const authentication = await auth.createActionAuth()()
+   // const authentication = await auth.createActionAuth()()
 
    return new rest.Octokit({
-      auth: authentication.token
+      auth: process.env.GITHUB_TOKEN
    })
 }
 
