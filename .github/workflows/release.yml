@@ -5,6 +5,7 @@ on:
     paths:
       - 'CHANGELOG.md'
       - 'pubspec.yaml'
+  workflow_dispatch:
 
 jobs:
   release:
