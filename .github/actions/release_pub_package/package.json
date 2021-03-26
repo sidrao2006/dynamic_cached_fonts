@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "prepare": "ncc build index.js -o dist --source-map --license licenses.txt"
+    "prepare": "ncc build src/index.js -o dist --source-map --license licenses.txt"
   },
   "type": "module",
   "author": "sidrao2006",
