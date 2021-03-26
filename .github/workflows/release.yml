@@ -37,8 +37,7 @@ jobs:
           id-token: ${{ secrets.PUB_CREDENTIALS_ID_TOKEN }}
           token-endpoint: ${{ secrets.PUB_CREDENTIALS_TOKEN_ENDPOINT }}
           expiration: ${{ secrets.PUB_CREDENTIALS_EXPIRATION }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Notify test failure
         if: failure()
