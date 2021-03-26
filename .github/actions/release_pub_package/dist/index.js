@@ -11375,13 +11375,15 @@ async function getLatestReleaseVersion(octokit) {
       repo: repo.repo
    })
 
+   console.log(_actions_github__WEBPACK_IMPORTED_MODULE_2__.context.repo, releases.data)
+
    return releases.data[0].tag_name.replace('v', '')
 }
 
 function addFakeChangelogHeading(changelogFile) {
    const data = fs__WEBPACK_IMPORTED_MODULE_5___default().readFileSync(changelogFile)
    const fd = fs__WEBPACK_IMPORTED_MODULE_5___default().openSync(changelogFile, 'w+')
-   const buffer = Buffer.from('# Fake Heading\n\n')
+   const buffer = new Buffer.from('# Fake Heading\n\n')
 
    fs__WEBPACK_IMPORTED_MODULE_5___default().writeSync(fd, buffer, 0, buffer.length, 0) // write new data
 
@@ -11391,11 +11393,13 @@ function addFakeChangelogHeading(changelogFile) {
 }
 
 function getCommand(commandScript) {
-   const commandAndArgs = commandScript.split(' ')
+   if (commandScript) {
+      const commandAndArgs = commandScript.split(' ')
 
-   return {
-      commandLine: commandAndArgs[0],
-      args: commandAndArgs.slice(1)
+      return {
+         commandLine: commandAndArgs[0],
+         args: commandAndArgs.slice(1)
+      }
    }
 }
 

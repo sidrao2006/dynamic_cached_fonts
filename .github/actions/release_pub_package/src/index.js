@@ -119,13 +119,15 @@ async function getLatestReleaseVersion(octokit) {
       repo: repo.repo
    })
 
+   console.log(github.context.repo, releases.data)
+
    return releases.data[0].tag_name.replace('v', '')
 }
 
 function addFakeChangelogHeading(changelogFile) {
    const data = fs.readFileSync(changelogFile)
    const fd = fs.openSync(changelogFile, 'w+')
-   const buffer = Buffer.from('# Fake Heading\n\n')
+   const buffer = new Buffer.from('# Fake Heading\n\n')
 
    fs.writeSync(fd, buffer, 0, buffer.length, 0) // write new data
 
@@ -135,11 +137,13 @@ function addFakeChangelogHeading(changelogFile) {
 }
 
 function getCommand(commandScript) {
-   const commandAndArgs = commandScript.split(' ')
+   if (commandScript) {
+      const commandAndArgs = commandScript.split(' ')
 
-   return {
-      commandLine: commandAndArgs[0],
-      args: commandAndArgs.slice(1)
+      return {
+         commandLine: commandAndArgs[0],
+         args: commandAndArgs.slice(1)
+      }
    }
 }
 
