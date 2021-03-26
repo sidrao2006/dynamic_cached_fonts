@@ -227,6 +227,6 @@ function setUpPubAuth() {
       expiration: inputs.expiration
    }
 
-   if (process.platform === 'win32') fs.writeFile(`${process.env.APPDATA}/Pub/Cache/credentials.json`, credentials)
-   else fs.writeFile(`${process.env.HOME}/.pub-cache/credentials.json`, credentials)
+   if (process.platform === 'win32') fs.writeFileSync(`${process.env.APPDATA}/Pub/Cache/credentials.json`, credentials)
+   else fs.writeFileSync(`${process.env.HOME}/.pub-cache/credentials.json`, credentials)
 }
