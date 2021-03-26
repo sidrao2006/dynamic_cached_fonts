@@ -38,11 +38,11 @@ parseChangelog(changelogFile, (_, changelog) => {
 
 if (version === inputs.previousVersion) {
    core.setFailed(
-      `No new version found .Latest version in Changelog (${version}) is the same as the previous version.`
+      `No new version found. Latest version in Changelog (${version}) is the same as the previous version.`
    )
 }
 
-const octokit = setUpAuth()
+const octokit = setUpGithubAuth()
 
 // Create a release
 
@@ -62,7 +62,7 @@ publishPackageToPub()
 
 // Helper functions
 
-async function setUpAuth() {
+async function setUpGithubAuth() {
    const authentication = auth.createActionAuth()
 
    return new rest.Octokit({
@@ -189,25 +189,24 @@ async function publishPackageToPub() {
 
 async function runPanaTest() {
    if (inputs.shouldRunPubScoreTest) {
-      let panaResult
+      let panaOutput
 
       await exec('flutter', ['pub', 'global', 'activate', 'pana'])
 
       await exec('flutter', ['pub', 'global', 'run', 'pana', process.env.GITHUB_WORKSPACE, '--json', '--no-warning'], {
          listeners: {
-            stdout: data => { panaResult += data.toString() },
-            stderr: data => { panaResult += data.toString() }
+            stdout: data => { panaOutput += data.toString() },
          }
       })
 
-      const resultArr = panaResult.split(/\r?\n/)
+      const resultArr = panaOutput.split(/\r?\n/)
 
-      const panaReport = JSON.parse(resultArr[resultArr - 1]).report
+      const panaResult = JSON.parse(resultArr[resultArr.length - 1])
 
       if (isNaN(inputs.pubScoreMinPoints)) core.setFailed('run-pub-score-test was set to true but no value for pub-score-min-points was provided')
 
-      if (panaReport.scores.grantedPoints < inputs.pubScoreMinPoints) {
-         for (const test in panaReport.sections) {
+      if (panaResult.scores.grantedPoints < inputs.pubScoreMinPoints) {
+         for (const test in panaResult.report.sections) {
             if (test.status !== 'passed') core.warning(test.title + '\n\n\n' + test.summary)
          }
          core.error('Pub score test failed')
