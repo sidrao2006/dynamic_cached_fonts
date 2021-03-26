@@ -100,12 +100,12 @@ async function getActionInputs() {
 async function getLatestReleaseVersion() {
    const repo = github.context.repo
 
-   const latestRelease = (await octokit).repos.getLatestRelease({
+   const releases = await (await octokit).repos.listReleases({
       owner: repo.owner,
       repo: repo
    })
 
-   return (await latestRelease).data.tag_name.replace('v', '')
+   return releases.data[0].tag_name.replace('v', '')
 }
 
 function addFakeChangelogHeading() {
