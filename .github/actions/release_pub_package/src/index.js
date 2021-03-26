@@ -5,6 +5,7 @@ import * as tc from '@actions/tool-cache'
 import { Octokit } from '@octokit/action'
 import parseChangelog from 'changelog-parser'
 import fs from 'fs'
+import { release } from 'os'
 
 // Latest Stable Flutter Version (at the time of release) that support all required features.
 
@@ -37,9 +38,10 @@ async function run() {
    // Check if latest version in changelog has already been released
 
    if (version === inputs.previousVersion) {
-      core.setFailed(
+      core.warning(
          `No new version found. Latest version in Changelog (${version}) is the same as the previous version.`
       )
+      process.exit(0)
    }
 
    // Create a release
@@ -119,9 +121,9 @@ async function getLatestReleaseVersion(octokit) {
       repo: repo.repo
    })
 
-   console.log(github.context.repo, releases.data)
-
-   return releases.data[0].tag_name.replace('v', '')
+   return release.data.length > 0
+      ? releases.data[0].tag_name.replace('v', '')
+      : '0.0.0' // undefined or null can also be returned from this step
 }
 
 function addFakeChangelogHeading(changelogFile) {
