@@ -30,52 +30,71 @@ const flutterWinDownloadUrl = 'https://storage.googleapis.com/flutter_infra/rele
 const flutterMacOSDownloadUrl = 'https://storage.googleapis.com/flutter_infra/releases/stable/macos/flutter_macos_2.0.3-stable.zip'
 const flutterLinuxDownloadUrl = 'https://storage.googleapis.com/flutter_infra/releases/stable/linux/flutter_linux_2.0.3-stable.tar.xz'
 
-// Get inputs from workflow
+async function run() {
+   const octokit = await setUpGithubAuth()
 
-let inputs
+   // Get inputs from workflow
 
-getActionInputs()
+   const inputs = await getActionInputs(octokit)
 
-// Get Changelog file path
+   // Get Changelog file path
 
-const changelogFile = inputs.changelogFilePath || `${process.env.GITHUB_WORKSPACE}/CHANGELOG.md`
+   const changelogFile = inputs.changelogFilePath || `${process.env.GITHUB_WORKSPACE}/CHANGELOG.md`
 
-// Get latest version and release notes from changelog
+   // Get latest version and release notes from changelog
 
-addFakeChangelogHeading()
+   addFakeChangelogHeading(changelogFile)
 
-let version, body
+   let version, body
 
-changelog_parser__WEBPACK_IMPORTED_MODULE_4__(changelogFile, (_, changelog) => {
-   version = changelog.versions[0].version
-   body = changelog.versions[0].body
-})
+   changelog_parser__WEBPACK_IMPORTED_MODULE_4__(changelogFile, (_, changelog) => {
+      version = changelog.versions[0].version
+      body = changelog.versions[0].body
+   })
 
-// Check if latest version in changelog has already been released
+   // Check if latest version in changelog has already been released
 
-if (version === inputs.previousVersion) {
-   _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(
-      `No new version found. Latest version in Changelog (${version}) is the same as the previous version.`
-   )
+   if (version === inputs.previousVersion) {
+      _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(
+         `No new version found. Latest version in Changelog (${version}) is the same as the previous version.`
+      )
+   }
+
+   // Create a release
+
+   await createRelease(octokit, {
+      preReleaseScript: inputs.preReleaseScript,
+      postReleaseScript: inputs.postReleaseScript,
+      isDraft: inputs.isDraft,
+      version: version,
+      body: body
+   })
+
+   // Set up the Flutter SDK
+
+   await setUpFlutterSDK()
+
+   // Setup auth for pub
+
+   setUpPubAuth({
+      accessToken: inputs.accessToken,
+      refreshToken: inputs.refreshToken,
+      idToken: inputs.idToken,
+      tokenEndpoint: inputs.tokenEndpoint,
+      expiration: inputs.expiration
+   })
+
+   // Publish package
+
+   await publishPackageToPub({
+      prePublishScript: inputs.prePublishScript,
+      postPublishScript: inputs.postPublishScript,
+      shouldRunPubScoreTest: inputs.shouldRunPubScoreTest,
+      pubScoreMinPoints: inputs.pubScoreMinPoints
+   })
 }
 
-const octokit = setUpGithubAuth()
-
-// Create a release
-
-createRelease()
-
-// Set up the Flutter SDK
-
-setUpFlutterSDK()
-
-// Setup auth for pub
-
-setUpPubAuth()
-
-// Publish package
-
-publishPackageToPub()
+run()
 
 // Helper functions
 
@@ -87,9 +106,11 @@ async function setUpGithubAuth() {
    })
 }
 
-async function getActionInputs() {
+async function getActionInputs(octokit) {
+   const inputs = {}
+
    try {
-      inputs.previousVersion = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('previous-version') || await getLatestReleaseVersion()
+      inputs.previousVersion = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('previous-version') || await getLatestReleaseVersion(octokit)
 
       inputs.changelogFilePath = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('changelog-file')
 
@@ -112,12 +133,14 @@ async function getActionInputs() {
    } catch (err) {
       _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(err)
    }
+
+   return inputs
 }
 
-async function getLatestReleaseVersion() {
+async function getLatestReleaseVersion(octokit) {
    const repo = _actions_github__WEBPACK_IMPORTED_MODULE_2__.context.repo
 
-   const releases = await (await octokit).repos.listReleases({
+   const releases = await octokit.repos.listReleases({
       owner: repo.owner,
       repo: repo.repo
    })
@@ -125,10 +148,10 @@ async function getLatestReleaseVersion() {
    return releases.data[0].tag_name.replace('v', '')
 }
 
-function addFakeChangelogHeading() {
+function addFakeChangelogHeading(changelogFile) {
    const data = fs__WEBPACK_IMPORTED_MODULE_5__.readFileSync(changelogFile)
    const fd = fs__WEBPACK_IMPORTED_MODULE_5__.openSync(changelogFile, 'w+')
-   const buffer = new Buffer.from('# Fake Heading\n\n')
+   const buffer = Buffer.from('# Fake Heading\n\n')
 
    fs__WEBPACK_IMPORTED_MODULE_5__.writeSync(fd, buffer, 0, buffer.length, 0) // write new data
 
@@ -146,9 +169,11 @@ function getCommand(commandScript) {
    }
 }
 
-async function createRelease() {
-   const preReleaseCommand = getCommand(inputs.preReleaseScript)
-   const postReleaseCommand = getCommand(inputs.postReleaseScript)
+async function createRelease(octokit, {
+   preReleaseScript, postReleaseScript, isDraft, version, body
+}) {
+   const preReleaseCommand = getCommand(preReleaseScript)
+   const postReleaseCommand = getCommand(postReleaseScript)
    const repo = _actions_github__WEBPACK_IMPORTED_MODULE_2__.context.repo
 
    await _actions_exec__WEBPACK_IMPORTED_MODULE_1__.exec(preReleaseCommand.commandLine, preReleaseCommand.args)
@@ -159,7 +184,7 @@ async function createRelease() {
       tag_name: `v${version}`,
       target_commitish: _actions_github__WEBPACK_IMPORTED_MODULE_2__.context.sha,
       body: body,
-      draft: inputs.isDraft,
+      draft: isDraft,
       prerelease: version.contains('-')
    })
 
@@ -191,28 +216,33 @@ async function setUpFlutterSDK() {
    _actions_core__WEBPACK_IMPORTED_MODULE_0__.addPath(`${toolLocation}/bin/flutter`)
 }
 
-async function publishPackageToPub() {
-   const prePublishCommand = getCommand(inputs.prePublishScript)
-   const postPublishCommand = getCommand(inputs.postPublishScript)
+async function publishPackageToPub({
+   prePublishScript,
+   postPublishScript,
+   shouldRunPubScoreTest,
+   pubScoreMinPoints
+}) {
+   const prePublishCommand = getCommand(prePublishScript)
+   const postPublishCommand = getCommand(postPublishScript)
 
    await _actions_exec__WEBPACK_IMPORTED_MODULE_1__.exec(prePublishCommand.commandLine, prePublishCommand.args)
 
-   await runPanaTest()
+   await runPanaTest({ shouldRunPubScoreTest: shouldRunPubScoreTest, pubScoreMinPoints: pubScoreMinPoints })
 
    await _actions_exec__WEBPACK_IMPORTED_MODULE_1__.exec('flutter', ['pub', 'publish', '--force'])
 
    await _actions_exec__WEBPACK_IMPORTED_MODULE_1__.exec(postPublishCommand.commandLine, postPublishCommand.args)
 }
 
-async function runPanaTest() {
-   if (inputs.shouldRunPubScoreTest) {
+async function runPanaTest({ shouldRunPubScoreTest, pubScoreMinPoints }) {
+   if (shouldRunPubScoreTest) {
       let panaOutput
 
       await _actions_exec__WEBPACK_IMPORTED_MODULE_1__.exec('flutter', ['pub', 'global', 'activate', 'pana'])
 
       await _actions_exec__WEBPACK_IMPORTED_MODULE_1__.exec('flutter', ['pub', 'global', 'run', 'pana', process.env.GITHUB_WORKSPACE, '--json', '--no-warning'], {
          listeners: {
-            stdout: data => { panaOutput += data.toString() },
+            stdout: data => { panaOutput += data.toString() }
          }
       })
 
@@ -220,9 +250,9 @@ async function runPanaTest() {
 
       const panaResult = JSON.parse(resultArr[resultArr.length - 1])
 
-      if (isNaN(inputs.pubScoreMinPoints)) _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed('run-pub-score-test was set to true but no value for pub-score-min-points was provided')
+      if (isNaN(pubScoreMinPoints)) _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed('run-pub-score-test was set to true but no value for pub-score-min-points was provided')
 
-      if (panaResult.scores.grantedPoints < inputs.pubScoreMinPoints) {
+      if (panaResult.scores.grantedPoints < pubScoreMinPoints) {
          for (const test in panaResult.report.sections) {
             if (test.status !== 'passed') _actions_core__WEBPACK_IMPORTED_MODULE_0__.warning(test.title + '\n\n\n' + test.summary)
          }
@@ -231,21 +261,27 @@ async function runPanaTest() {
    }
 }
 
-function setUpPubAuth() {
+function setUpPubAuth({
+   accessToken,
+   refreshToken,
+   idToken,
+   tokenEndpoint,
+   expiration
+}) {
    const credentials = {
-      accessToken: inputs.accessToken,
-      refreshToken: inputs.refreshToken,
-      idToken: inputs.idToken,
-      tokenEndpoint: inputs.tokenEndpoint,
+      accessToken: accessToken,
+      refreshToken: refreshToken,
+      idToken: idToken,
+      tokenEndpoint: tokenEndpoint,
       scopes: [
          'https://www.googleapis.com/auth/userinfo.email',
          'openid'
       ],
-      expiration: inputs.expiration
+      expiration: expiration
    }
 
    if (process.platform === 'win32') fs__WEBPACK_IMPORTED_MODULE_5__.writeFileSync(`${process.env.APPDATA}/Pub/Cache/credentials.json`, credentials)
-   else fs__WEBPACK_IMPORTED_MODULE_5__.writeFileSync(`${process.env.HOME}/.pub-cache/credentials.json`, credentials)
+   else fs__WEBPACK_IMPORTED_MODULE_5__.writeFileSync(`${process.env.HOME}/.pub-cache/credentials.json`, JSON.stringify(credentials))
 }
 
 
