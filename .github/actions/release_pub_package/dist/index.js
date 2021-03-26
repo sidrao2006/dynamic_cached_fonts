@@ -11285,7 +11285,7 @@ async function run() {
 
    let version, body
 
-   changelog_parser__WEBPACK_IMPORTED_MODULE_4___default()(changelogFile, (_, changelog) => {
+   await changelog_parser__WEBPACK_IMPORTED_MODULE_4___default()(changelogFile, (_, changelog) => {
       version = changelog.versions[0].version
       body = changelog.versions[0].body
    })
@@ -11370,7 +11370,7 @@ async function getActionInputs(octokit) {
 async function getLatestReleaseVersion(octokit) {
    const repo = _actions_github__WEBPACK_IMPORTED_MODULE_2__.context.repo
 
-   const releases = await octokit.repos.listReleases({
+   const releases = await octokit.rest.repos.listReleases({
       owner: repo.owner,
       repo: repo.repo
    })
@@ -11408,7 +11408,7 @@ async function createRelease(octokit, {
 
    await _actions_exec__WEBPACK_IMPORTED_MODULE_1__.exec(preReleaseCommand.commandLine, preReleaseCommand.args)
 
-   await octokit.repos.createRelease({
+   await octokit.rest.repos.createRelease({
       owner: repo.owner,
       repo: repo.repo,
       tag_name: `v${version}`,

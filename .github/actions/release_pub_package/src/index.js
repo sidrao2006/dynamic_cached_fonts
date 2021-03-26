@@ -29,7 +29,7 @@ async function run() {
 
    let version, body
 
-   parseChangelog(changelogFile, (_, changelog) => {
+   await parseChangelog(changelogFile, (_, changelog) => {
       version = changelog.versions[0].version
       body = changelog.versions[0].body
    })
@@ -114,7 +114,7 @@ async function getActionInputs(octokit) {
 async function getLatestReleaseVersion(octokit) {
    const repo = github.context.repo
 
-   const releases = await octokit.repos.listReleases({
+   const releases = await octokit.rest.repos.listReleases({
       owner: repo.owner,
       repo: repo.repo
    })
@@ -152,7 +152,7 @@ async function createRelease(octokit, {
 
    await exec.exec(preReleaseCommand.commandLine, preReleaseCommand.args)
 
-   await octokit.repos.createRelease({
+   await octokit.rest.repos.createRelease({
       owner: repo.owner,
       repo: repo.repo,
       tag_name: `v${version}`,
