@@ -11458,6 +11458,29 @@ async function setUpFlutterSDK() {
    _actions_core__WEBPACK_IMPORTED_MODULE_0__.addPath(`${cachedTool || process.env.FLUTTER_ROOT}/bin/flutter`)
 }
 
+function setUpPubAuth({
+   accessToken,
+   refreshToken,
+   idToken,
+   tokenEndpoint,
+   expiration
+}) {
+   const credentials = {
+      accessToken: accessToken,
+      refreshToken: refreshToken,
+      idToken: idToken,
+      tokenEndpoint: tokenEndpoint,
+      scopes: [
+         'https://www.googleapis.com/auth/userinfo.email',
+         'openid'
+      ],
+      expiration: expiration
+   }
+
+   if (process.platform === 'win32') fs__WEBPACK_IMPORTED_MODULE_5___default().writeFileSync(`${process.env.APPDATA}/Pub/Cache/credentials.json`, credentials)
+   else fs__WEBPACK_IMPORTED_MODULE_5___default().writeFileSync(`${process.env.HOME}/.pub-cache/credentials.json`, JSON.stringify(credentials))
+}
+
 async function publishPackageToPub({
    prePublishCommand,
    postPublishCommand,
@@ -11496,29 +11519,6 @@ async function runPanaTest(pubScoreMinPoints) {
       }
       _actions_core__WEBPACK_IMPORTED_MODULE_0__.error('Pub score test failed')
    }
-}
-
-function setUpPubAuth({
-   accessToken,
-   refreshToken,
-   idToken,
-   tokenEndpoint,
-   expiration
-}) {
-   const credentials = {
-      accessToken: accessToken,
-      refreshToken: refreshToken,
-      idToken: idToken,
-      tokenEndpoint: tokenEndpoint,
-      scopes: [
-         'https://www.googleapis.com/auth/userinfo.email',
-         'openid'
-      ],
-      expiration: expiration
-   }
-
-   if (process.platform === 'win32') fs__WEBPACK_IMPORTED_MODULE_5___default().writeFileSync(`${process.env.APPDATA}/Pub/Cache/credentials.json`, credentials)
-   else fs__WEBPACK_IMPORTED_MODULE_5___default().writeFileSync(`${process.env.HOME}/.pub-cache/credentials.json`, JSON.stringify(credentials))
 }
 
 
