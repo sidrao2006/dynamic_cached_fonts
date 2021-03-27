@@ -11440,7 +11440,9 @@ async function setUpFlutterSDK() {
       }
    }
 
-   _actions_core__WEBPACK_IMPORTED_MODULE_0__.addPath(`${cachedTool || process.env.FLUTTER_ROOT}/bin/flutter`)
+   _actions_core__WEBPACK_IMPORTED_MODULE_0__.addPath(`${cachedTool || process.env.FLUTTER_ROOT}/bin`)
+
+   console.log(process.env)
 }
 
 async function publishPackageToPub(inputs) {

@@ -184,7 +184,9 @@ async function setUpFlutterSDK() {
       }
    }
 
-   core.addPath(`${cachedTool || process.env.FLUTTER_ROOT}/bin/flutter`)
+   core.addPath(`${cachedTool || process.env.FLUTTER_ROOT}/bin`)
+
+   console.log(process.env)
 }
 
 async function publishPackageToPub(inputs) {
