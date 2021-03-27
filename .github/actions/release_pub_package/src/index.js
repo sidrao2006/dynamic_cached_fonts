@@ -224,7 +224,7 @@ function setUpPubAuth({
          'https://www.googleapis.com/auth/userinfo.email',
          'openid'
       ],
-      expiration: expiration
+      expiration: Number.parseInt(expiration)
    }
 
    if (process.platform === 'win32') {
