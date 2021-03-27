@@ -253,11 +253,7 @@ async function runPanaTest(pubScoreMinPoints) {
       }
    })
 
-   const resultArr = panaOutput.split(/\r?\n/)
-
-   console.log(resultArr)
-
-   const panaResult = JSON.parse(resultArr[resultArr.length - 1])
+   const panaResult = JSON.parse(panaOutput)
 
    if (isNaN(pubScoreMinPoints)) core.setFailed('run-pub-score-test was set to true but no value for pub-score-min-points was provided')
 
