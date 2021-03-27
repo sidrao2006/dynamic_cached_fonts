@@ -11448,7 +11448,7 @@ async function setUpFlutterSDK() {
       _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.cacheDir(process.env.FLUTTER_ROOT, 'flutter', '2.0.3')
    } else {
       const flutterPath = await _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.downloadTool(flutterLinuxDownloadUrl)
-      await _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.extractTar(flutterPath, process.env.FLUTTER_ROOT)
+      await _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.extractTar(flutterPath, process.env.FLUTTER_ROOT, 'xf')
 
       _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.cacheDir(process.env.FLUTTER_ROOT, 'flutter', '2.0.3')
    }

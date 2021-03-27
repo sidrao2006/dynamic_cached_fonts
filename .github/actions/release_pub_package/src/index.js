@@ -192,7 +192,7 @@ async function setUpFlutterSDK() {
       tc.cacheDir(process.env.FLUTTER_ROOT, 'flutter', '2.0.3')
    } else {
       const flutterPath = await tc.downloadTool(flutterLinuxDownloadUrl)
-      await tc.extractTar(flutterPath, process.env.FLUTTER_ROOT)
+      await tc.extractTar(flutterPath, process.env.FLUTTER_ROOT, 'xf')
 
       tc.cacheDir(process.env.FLUTTER_ROOT, 'flutter', '2.0.3')
    }
