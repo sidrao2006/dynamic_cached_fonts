@@ -11393,7 +11393,7 @@ async function execCommand(command) {
    }
 }
 
-async function createRelease(octokit, {
+async function createRelease(octokit = new _octokit_action__WEBPACK_IMPORTED_MODULE_6__/* .Octokit */ .v(), {
    preReleaseCommand,
    postReleaseCommand,
    isDraft,
@@ -11406,6 +11406,7 @@ async function createRelease(octokit, {
    await octokit.rest.repos.createRelease({
       owner: repo.owner,
       repo: repo.repo,
+      name: `v${version}`,
       tag_name: `v${version}`,
       target_commitish: _actions_github__WEBPACK_IMPORTED_MODULE_2__.context.sha,
       body: body,

@@ -137,7 +137,7 @@ async function execCommand(command) {
    }
 }
 
-async function createRelease(octokit, {
+async function createRelease(octokit = new Octokit(), {
    preReleaseCommand,
    postReleaseCommand,
    isDraft,
@@ -150,6 +150,7 @@ async function createRelease(octokit, {
    await octokit.rest.repos.createRelease({
       owner: repo.owner,
       repo: repo.repo,
+      name: `v${version}`,
       tag_name: `v${version}`,
       target_commitish: github.context.sha,
       body: body,
