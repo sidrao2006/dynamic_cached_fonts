@@ -10,9 +10,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  file: ^6.1.0
+  file: ^6.0.0
   firebase_storage: ^8.0.0
-  flutter_cache_manager: ^3.0.0
+  flutter_cache_manager: ^2.1.2
 
 dev_dependencies:
   flutter_test:
