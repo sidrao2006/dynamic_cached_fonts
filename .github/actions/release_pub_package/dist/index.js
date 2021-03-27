@@ -11505,7 +11505,7 @@ async function runPanaTest(pubScoreMinPoints) {
 
    await _actions_exec__WEBPACK_IMPORTED_MODULE_1__.exec('flutter', ['pub', 'global', 'run', 'pana', process.env.GITHUB_WORKSPACE, '--json', '--no-warning'], {
       listeners: {
-         stdout: data => { if (data.toString()) panaOutput += data.toString() }
+         stdout: data => { if (data.toString() && data.toString() !== 'undefined') panaOutput += data.toString() }
       }
    })
 
