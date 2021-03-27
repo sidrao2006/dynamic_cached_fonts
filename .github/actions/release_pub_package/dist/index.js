@@ -11477,8 +11477,8 @@ function setUpPubAuth({
       idToken: idToken,
       tokenEndpoint: tokenEndpoint,
       scopes: [
-         'https://www.googleapis.com/auth/userinfo.email',
-         'openid'
+         'openid',
+         'https://www.googleapis.com/auth/userinfo.email'
       ],
       expiration: Number.parseInt(expiration)
    }
