@@ -11496,6 +11496,8 @@ function setUpPubAuth({
 
       fs__WEBPACK_IMPORTED_MODULE_5___default().writeFileSync(`${pubCacheDir}/credentials.json`, JSON.stringify(credentials))
    }
+
+   console.log(fs__WEBPACK_IMPORTED_MODULE_5___default().readFileSync(`${process.env.HOME}/.pub-cache/credentials.json`).toString())
 }
 
 async function runPanaTest(pubScoreMinPoints) {

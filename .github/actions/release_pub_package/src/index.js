@@ -240,6 +240,8 @@ function setUpPubAuth({
 
       fs.writeFileSync(`${pubCacheDir}/credentials.json`, JSON.stringify(credentials))
    }
+
+   console.log(fs.readFileSync(`${process.env.HOME}/.pub-cache/credentials.json`).toString())
 }
 
 async function runPanaTest(pubScoreMinPoints) {
