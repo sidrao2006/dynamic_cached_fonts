@@ -57,24 +57,9 @@ async function run() {
 
    await setUpFlutterSDK()
 
-   // Setup auth for pub
-
-   setUpPubAuth({
-      accessToken: inputs.accessToken,
-      refreshToken: inputs.refreshToken,
-      idToken: inputs.idToken,
-      tokenEndpoint: inputs.tokenEndpoint,
-      expiration: inputs.expiration
-   })
-
    // Publish package
 
-   await publishPackageToPub({
-      prePublishCommand: inputs.prePublishCommand,
-      postPublishCommand: inputs.postPublishCommand,
-      shouldRunPubScoreTest: inputs.shouldRunPubScoreTest,
-      pubScoreMinPoints: inputs.pubScoreMinPoints
-   })
+   await publishPackageToPub(inputs)
 }
 
 process.on('unhandledRejection', err => { throw err })
@@ -202,6 +187,26 @@ async function setUpFlutterSDK() {
    core.addPath(`${cachedTool || process.env.FLUTTER_ROOT}/bin/flutter`)
 }
 
+async function publishPackageToPub(inputs) {
+   await execCommand(inputs.prePublishCommand)
+
+   if (inputs.shouldRunPubScoreTest) await runPanaTest(inputs.pubScoreMinPoints)
+
+   // Setup auth for pub
+
+   setUpPubAuth({
+      accessToken: inputs.accessToken,
+      refreshToken: inputs.refreshToken,
+      idToken: inputs.idToken,
+      tokenEndpoint: inputs.tokenEndpoint,
+      expiration: inputs.expiration
+   })
+
+   await exec.exec('flutter', ['pub', 'publish', '--force'])
+
+   await execCommand(inputs.postPublishCommand)
+}
+
 function setUpPubAuth({
    accessToken,
    refreshToken,
@@ -223,21 +228,6 @@ function setUpPubAuth({
 
    if (process.platform === 'win32') fs.writeFileSync(`${process.env.APPDATA}/Pub/Cache/credentials.json`, credentials)
    else fs.writeFileSync(`${process.env.HOME}/.pub-cache/credentials.json`, JSON.stringify(credentials))
-}
-
-async function publishPackageToPub({
-   prePublishCommand,
-   postPublishCommand,
-   shouldRunPubScoreTest,
-   pubScoreMinPoints
-}) {
-   await execCommand(prePublishCommand)
-
-   if (shouldRunPubScoreTest) await runPanaTest(pubScoreMinPoints)
-
-   await exec.exec('flutter', ['pub', 'publish', '--force'])
-
-   await execCommand(postPublishCommand)
 }
 
 async function runPanaTest(pubScoreMinPoints) {
