@@ -11485,7 +11485,6 @@ function setUpPubAuth({
    if (process.platform === 'win32') {
       const pubCacheDir = `${process.env.APPDATA}/Pub/Cache`
 
-<<<<<<< HEAD
       if (!fs__WEBPACK_IMPORTED_MODULE_5___default().existsSync(pubCacheDir)) fs__WEBPACK_IMPORTED_MODULE_5___default().mkdirSync(pubCacheDir)
 
       fs__WEBPACK_IMPORTED_MODULE_5___default().writeFileSync(`${pubCacheDir}/credentials.json`, JSON.stringify(credentials))
@@ -11498,8 +11497,6 @@ function setUpPubAuth({
    }
 }
 
-=======
->>>>>>> 5eb3a0b3291d18b1493f867f57713eeaca1db95c
 async function runPanaTest(pubScoreMinPoints) {
    let panaOutput
 
