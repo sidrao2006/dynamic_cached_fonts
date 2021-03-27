@@ -39,7 +39,4 @@ jobs:
           expiration: ${{ secrets.PUB_CREDENTIALS_EXPIRATION }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: Notify test failure
-        if: failure()
-        run: echo "::warning::Tests failed or Github API limit was reached"
+
