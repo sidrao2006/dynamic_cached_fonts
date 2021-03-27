@@ -243,15 +243,17 @@ function setUpPubAuth({
 }
 
 async function runPanaTest(pubScoreMinPoints) {
-   let panaOutput
+   let panaOutput = ''
 
    await exec.exec('flutter', ['pub', 'global', 'activate', 'pana'])
 
    await exec.exec('flutter', ['pub', 'global', 'run', 'pana', process.env.GITHUB_WORKSPACE, '--json', '--no-warning'], {
       listeners: {
-         stdout: data => { if (data.toString() && data.toString() !== 'undefined') panaOutput += data.toString() }
+         stdout: data => { if (data.toString()) panaOutput += data.toString() }
       }
    })
+
+   if (panaOutput.includes('undefined')) panaOutput = panaOutput.replace('undefined', '')
 
    const panaResult = JSON.parse(panaOutput)
 
