@@ -77,6 +77,8 @@ async function run() {
    })
 }
 
+process.on('unhandledRejection', err => { throw err })
+
 run()
 
 // Helper functions
