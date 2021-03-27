@@ -19,19 +19,19 @@ inputs:
     required: false
     default: false
   
-  pre-release-script:
+  pre-release-command:
     description: 'Commands to run before publishing the release on Github'
     required: false
 
-  post-release-script:
+  post-release-command:
     description: 'Commands to run after publishing the release on Github'
     required: false
 
-  pre-publish-script:
+  pre-publish-command:
     description: 'Commands to run before publishing to pub.dev'
     required: false
 
-  post-publish-script:
+  post-publish-command:
     description: 'Commands to run after publishing to pub.dev'
     required: false
   

@@ -11302,8 +11302,8 @@ async function run() {
    // Create a release
 
    await createRelease(octokit, {
-      preReleaseScript: inputs.preReleaseScript,
-      postReleaseScript: inputs.postReleaseScript,
+      preReleaseCommand: inputs.preReleaseCommand,
+      postReleaseCommand: inputs.postReleaseCommand,
       isDraft: inputs.isDraft,
       version: version,
       body: body
@@ -11326,8 +11326,8 @@ async function run() {
    // Publish package
 
    await publishPackageToPub({
-      prePublishScript: inputs.prePublishScript,
-      postPublishScript: inputs.postPublishScript,
+      prePublishCommand: inputs.prePublishCommand,
+      postPublishCommand: inputs.postPublishCommand,
       shouldRunPubScoreTest: inputs.shouldRunPubScoreTest,
       pubScoreMinPoints: inputs.pubScoreMinPoints
    })
@@ -11347,11 +11347,11 @@ async function getActionInputs(octokit) {
 
       inputs.isDraft = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('is-draft').toUpperCase() === 'TRUE'
 
-      inputs.preReleaseScript = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('pre-release-script')
-      inputs.postReleaseScript = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('post-release-script')
+      inputs.preReleaseCommand = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('pre-release-command')
+      inputs.postReleaseCommand = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('post-release-command')
 
-      inputs.prePublishScript = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('pre-publish-script')
-      inputs.postPublishScript = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('post-publish-script')
+      inputs.prePublishCommand = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('pre-publish-command')
+      inputs.postPublishCommand = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('post-publish-command')
 
       inputs.shouldRunPubScoreTest = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('should-run-pub-score-test').toUpperCase() === 'TRUE'
       inputs.pubScoreMinPoints = Number.parseInt(_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('pub-score-min-points'))
@@ -11393,26 +11393,29 @@ function addFakeChangelogHeading(changelogFile) {
    fs__WEBPACK_IMPORTED_MODULE_5___default().closeSync(fd)
 }
 
-function getCommand(commandScript) {
-   if (commandScript) {
-      const commandAndArgs = commandScript.split(' ')
+async function execCommand(command) {
+   if (command) {
+      const commandAndArgs = command.split(' ')
 
-      return {
+      const parsedCommand = {
          commandLine: commandAndArgs[0],
          args: commandAndArgs.slice(1)
       }
+
+      await _actions_exec__WEBPACK_IMPORTED_MODULE_1__.exec(parsedCommand.commandLine, parsedCommand.args)
    }
 }
 
 async function createRelease(octokit, {
-   preReleaseScript, postReleaseScript, isDraft, version, body
+   preReleaseCommand,
+   postReleaseCommand,
+   isDraft,
+   version,
+   body
 }) {
-   const preReleaseCommand = getCommand(preReleaseScript)
-   const postReleaseCommand = getCommand(postReleaseScript)
+   await execCommand(preReleaseCommand)
+
    const repo = _actions_github__WEBPACK_IMPORTED_MODULE_2__.context.repo
-
-   await _actions_exec__WEBPACK_IMPORTED_MODULE_1__.exec(preReleaseCommand.commandLine, preReleaseCommand.args)
-
    await octokit.rest.repos.createRelease({
       owner: repo.owner,
       repo: repo.repo,
@@ -11423,7 +11426,7 @@ async function createRelease(octokit, {
       prerelease: version.contains('-')
    })
 
-   await _actions_exec__WEBPACK_IMPORTED_MODULE_1__.exec(postReleaseCommand.commandLine, postReleaseCommand.args)
+   await execCommand(postReleaseCommand)
 }
 
 async function setUpFlutterSDK() {
@@ -11452,47 +11455,42 @@ async function setUpFlutterSDK() {
 }
 
 async function publishPackageToPub({
-   prePublishScript,
-   postPublishScript,
+   prePublishCommand,
+   postPublishCommand,
    shouldRunPubScoreTest,
    pubScoreMinPoints
 }) {
-   const prePublishCommand = getCommand(prePublishScript)
-   const postPublishCommand = getCommand(postPublishScript)
+   await execCommand(prePublishCommand)
 
-   await _actions_exec__WEBPACK_IMPORTED_MODULE_1__.exec(prePublishCommand.commandLine, prePublishCommand.args)
-
-   await runPanaTest({ shouldRunPubScoreTest: shouldRunPubScoreTest, pubScoreMinPoints: pubScoreMinPoints })
+   if (shouldRunPubScoreTest) await runPanaTest(pubScoreMinPoints)
 
    await _actions_exec__WEBPACK_IMPORTED_MODULE_1__.exec('flutter', ['pub', 'publish', '--force'])
 
-   await _actions_exec__WEBPACK_IMPORTED_MODULE_1__.exec(postPublishCommand.commandLine, postPublishCommand.args)
+   await execCommand(postPublishCommand)
 }
 
-async function runPanaTest({ shouldRunPubScoreTest, pubScoreMinPoints }) {
-   if (shouldRunPubScoreTest) {
-      let panaOutput
+async function runPanaTest(pubScoreMinPoints) {
+   let panaOutput
 
-      await _actions_exec__WEBPACK_IMPORTED_MODULE_1__.exec('flutter', ['pub', 'global', 'activate', 'pana'])
+   await _actions_exec__WEBPACK_IMPORTED_MODULE_1__.exec('flutter', ['pub', 'global', 'activate', 'pana'])
 
-      await _actions_exec__WEBPACK_IMPORTED_MODULE_1__.exec('flutter', ['pub', 'global', 'run', 'pana', process.env.GITHUB_WORKSPACE, '--json', '--no-warning'], {
-         listeners: {
-            stdout: data => { panaOutput += data.toString() }
-         }
-      })
-
-      const resultArr = panaOutput.split(/\r?\n/)
-
-      const panaResult = JSON.parse(resultArr[resultArr.length - 1])
-
-      if (isNaN(pubScoreMinPoints)) _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed('run-pub-score-test was set to true but no value for pub-score-min-points was provided')
-
-      if (panaResult.scores.grantedPoints < pubScoreMinPoints) {
-         for (const test in panaResult.report.sections) {
-            if (test.status !== 'passed') _actions_core__WEBPACK_IMPORTED_MODULE_0__.warning(test.title + '\n\n\n' + test.summary)
-         }
-         _actions_core__WEBPACK_IMPORTED_MODULE_0__.error('Pub score test failed')
+   await _actions_exec__WEBPACK_IMPORTED_MODULE_1__.exec('flutter', ['pub', 'global', 'run', 'pana', process.env.GITHUB_WORKSPACE, '--json', '--no-warning'], {
+      listeners: {
+         stdout: data => { panaOutput += data.toString() }
       }
+   })
+
+   const resultArr = panaOutput.split(/\r?\n/)
+
+   const panaResult = JSON.parse(resultArr[resultArr.length - 1])
+
+   if (isNaN(pubScoreMinPoints)) _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed('run-pub-score-test was set to true but no value for pub-score-min-points was provided')
+
+   if (panaResult.scores.grantedPoints < pubScoreMinPoints) {
+      for (const test in panaResult.report.sections) {
+         if (test.status !== 'passed') _actions_core__WEBPACK_IMPORTED_MODULE_0__.warning(test.title + '\n\n\n' + test.summary)
+      }
+      _actions_core__WEBPACK_IMPORTED_MODULE_0__.error('Pub score test failed')
    }
 }
 

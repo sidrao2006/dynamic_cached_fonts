@@ -46,8 +46,8 @@ async function run() {
    // Create a release
 
    await createRelease(octokit, {
-      preReleaseScript: inputs.preReleaseScript,
-      postReleaseScript: inputs.postReleaseScript,
+      preReleaseCommand: inputs.preReleaseCommand,
+      postReleaseCommand: inputs.postReleaseCommand,
       isDraft: inputs.isDraft,
       version: version,
       body: body
@@ -70,8 +70,8 @@ async function run() {
    // Publish package
 
    await publishPackageToPub({
-      prePublishScript: inputs.prePublishScript,
-      postPublishScript: inputs.postPublishScript,
+      prePublishCommand: inputs.prePublishCommand,
+      postPublishCommand: inputs.postPublishCommand,
       shouldRunPubScoreTest: inputs.shouldRunPubScoreTest,
       pubScoreMinPoints: inputs.pubScoreMinPoints
    })
@@ -91,11 +91,11 @@ async function getActionInputs(octokit) {
 
       inputs.isDraft = core.getInput('is-draft').toUpperCase() === 'TRUE'
 
-      inputs.preReleaseScript = core.getInput('pre-release-script')
-      inputs.postReleaseScript = core.getInput('post-release-script')
+      inputs.preReleaseCommand = core.getInput('pre-release-command')
+      inputs.postReleaseCommand = core.getInput('post-release-command')
 
-      inputs.prePublishScript = core.getInput('pre-publish-script')
-      inputs.postPublishScript = core.getInput('post-publish-script')
+      inputs.prePublishCommand = core.getInput('pre-publish-command')
+      inputs.postPublishCommand = core.getInput('post-publish-command')
 
       inputs.shouldRunPubScoreTest = core.getInput('should-run-pub-score-test').toUpperCase() === 'TRUE'
       inputs.pubScoreMinPoints = Number.parseInt(core.getInput('pub-score-min-points'))
@@ -137,26 +137,29 @@ function addFakeChangelogHeading(changelogFile) {
    fs.closeSync(fd)
 }
 
-function getCommand(commandScript) {
-   if (commandScript) {
-      const commandAndArgs = commandScript.split(' ')
+async function execCommand(command) {
+   if (command) {
+      const commandAndArgs = command.split(' ')
 
-      return {
+      const parsedCommand = {
          commandLine: commandAndArgs[0],
          args: commandAndArgs.slice(1)
       }
+
+      await exec.exec(parsedCommand.commandLine, parsedCommand.args)
    }
 }
 
 async function createRelease(octokit, {
-   preReleaseScript, postReleaseScript, isDraft, version, body
+   preReleaseCommand,
+   postReleaseCommand,
+   isDraft,
+   version,
+   body
 }) {
-   const preReleaseCommand = getCommand(preReleaseScript)
-   const postReleaseCommand = getCommand(postReleaseScript)
+   await execCommand(preReleaseCommand)
+
    const repo = github.context.repo
-
-   await exec.exec(preReleaseCommand.commandLine, preReleaseCommand.args)
-
    await octokit.rest.repos.createRelease({
       owner: repo.owner,
       repo: repo.repo,
@@ -167,7 +170,7 @@ async function createRelease(octokit, {
       prerelease: version.contains('-')
    })
 
-   await exec.exec(postReleaseCommand.commandLine, postReleaseCommand.args)
+   await execCommand(postReleaseCommand)
 }
 
 async function setUpFlutterSDK() {
@@ -196,47 +199,42 @@ async function setUpFlutterSDK() {
 }
 
 async function publishPackageToPub({
-   prePublishScript,
-   postPublishScript,
+   prePublishCommand,
+   postPublishCommand,
    shouldRunPubScoreTest,
    pubScoreMinPoints
 }) {
-   const prePublishCommand = getCommand(prePublishScript)
-   const postPublishCommand = getCommand(postPublishScript)
+   await execCommand(prePublishCommand)
 
-   await exec.exec(prePublishCommand.commandLine, prePublishCommand.args)
-
-   await runPanaTest({ shouldRunPubScoreTest: shouldRunPubScoreTest, pubScoreMinPoints: pubScoreMinPoints })
+   if (shouldRunPubScoreTest) await runPanaTest(pubScoreMinPoints)
 
    await exec.exec('flutter', ['pub', 'publish', '--force'])
 
-   await exec.exec(postPublishCommand.commandLine, postPublishCommand.args)
+   await execCommand(postPublishCommand)
 }
 
-async function runPanaTest({ shouldRunPubScoreTest, pubScoreMinPoints }) {
-   if (shouldRunPubScoreTest) {
-      let panaOutput
+async function runPanaTest(pubScoreMinPoints) {
+   let panaOutput
 
-      await exec.exec('flutter', ['pub', 'global', 'activate', 'pana'])
+   await exec.exec('flutter', ['pub', 'global', 'activate', 'pana'])
 
-      await exec.exec('flutter', ['pub', 'global', 'run', 'pana', process.env.GITHUB_WORKSPACE, '--json', '--no-warning'], {
-         listeners: {
-            stdout: data => { panaOutput += data.toString() }
-         }
-      })
-
-      const resultArr = panaOutput.split(/\r?\n/)
-
-      const panaResult = JSON.parse(resultArr[resultArr.length - 1])
-
-      if (isNaN(pubScoreMinPoints)) core.setFailed('run-pub-score-test was set to true but no value for pub-score-min-points was provided')
-
-      if (panaResult.scores.grantedPoints < pubScoreMinPoints) {
-         for (const test in panaResult.report.sections) {
-            if (test.status !== 'passed') core.warning(test.title + '\n\n\n' + test.summary)
-         }
-         core.error('Pub score test failed')
+   await exec.exec('flutter', ['pub', 'global', 'run', 'pana', process.env.GITHUB_WORKSPACE, '--json', '--no-warning'], {
+      listeners: {
+         stdout: data => { panaOutput += data.toString() }
       }
+   })
+
+   const resultArr = panaOutput.split(/\r?\n/)
+
+   const panaResult = JSON.parse(resultArr[resultArr.length - 1])
+
+   if (isNaN(pubScoreMinPoints)) core.setFailed('run-pub-score-test was set to true but no value for pub-score-min-points was provided')
+
+   if (panaResult.scores.grantedPoints < pubScoreMinPoints) {
+      for (const test in panaResult.report.sections) {
+         if (test.status !== 'passed') core.warning(test.title + '\n\n\n' + test.summary)
+      }
+      core.error('Pub score test failed')
    }
 }
 
