@@ -11425,7 +11425,7 @@ async function createRelease(octokit, {
       target_commitish: _actions_github__WEBPACK_IMPORTED_MODULE_2__.context.sha,
       body: body,
       draft: isDraft,
-      prerelease: version.contains('-')
+      prerelease: version.includes('-')
    })
 
    await execCommand(postReleaseCommand)

@@ -169,7 +169,7 @@ async function createRelease(octokit, {
       target_commitish: github.context.sha,
       body: body,
       draft: isDraft,
-      prerelease: version.contains('-')
+      prerelease: version.includes('-')
    })
 
    await execCommand(postReleaseCommand)
