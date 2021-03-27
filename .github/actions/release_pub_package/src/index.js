@@ -186,8 +186,6 @@ async function setUpFlutterSDK() {
    }
 
    core.addPath(`${cachedTool || process.env.FLUTTER_ROOT}/bin`)
-
-   console.log(process.env)
 }
 
 async function publishPackageToPub(inputs) {
@@ -256,6 +254,8 @@ async function runPanaTest(pubScoreMinPoints) {
    })
 
    const resultArr = panaOutput.split(/\r?\n/)
+
+   console.log(resultArr)
 
    const panaResult = JSON.parse(resultArr[resultArr.length - 1])
 
