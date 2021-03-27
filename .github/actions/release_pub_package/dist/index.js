@@ -11425,17 +11425,17 @@ async function setUpFlutterSDK() {
    if (!cachedTool) {
       if (process.platform === 'win32') {
          const flutterPath = await _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.downloadTool(flutterWinDownloadUrl)
-         await _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.extractZip(flutterPath, process.env.FLUTTER_ROOT)
+         await _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.extractZip(flutterPath, process.env.HOME)
 
          _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.cacheDir(process.env.FLUTTER_ROOT, 'flutter', '2.0.3')
       } else if (process.platform === 'darwin') {
          const flutterPath = await _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.downloadTool(flutterMacOSDownloadUrl)
-         await _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.extractZip(flutterPath, process.env.FLUTTER_ROOT)
+         await _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.extractZip(flutterPath, process.env.HOME)
 
          _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.cacheDir(process.env.FLUTTER_ROOT, 'flutter', '2.0.3')
       } else {
          const flutterPath = await _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.downloadTool(flutterLinuxDownloadUrl)
-         await _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.extractTar(flutterPath, process.env.FLUTTER_ROOT, '-x')
+         await _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.extractTar(flutterPath, process.env.HOME, 'x')
 
          _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.cacheDir(process.env.FLUTTER_ROOT, 'flutter', '2.0.3')
       }

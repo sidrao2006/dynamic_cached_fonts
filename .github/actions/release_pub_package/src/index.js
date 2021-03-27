@@ -169,17 +169,17 @@ async function setUpFlutterSDK() {
    if (!cachedTool) {
       if (process.platform === 'win32') {
          const flutterPath = await tc.downloadTool(flutterWinDownloadUrl)
-         await tc.extractZip(flutterPath, process.env.FLUTTER_ROOT)
+         await tc.extractZip(flutterPath, process.env.HOME)
 
          tc.cacheDir(process.env.FLUTTER_ROOT, 'flutter', '2.0.3')
       } else if (process.platform === 'darwin') {
          const flutterPath = await tc.downloadTool(flutterMacOSDownloadUrl)
-         await tc.extractZip(flutterPath, process.env.FLUTTER_ROOT)
+         await tc.extractZip(flutterPath, process.env.HOME)
 
          tc.cacheDir(process.env.FLUTTER_ROOT, 'flutter', '2.0.3')
       } else {
          const flutterPath = await tc.downloadTool(flutterLinuxDownloadUrl)
-         await tc.extractTar(flutterPath, process.env.FLUTTER_ROOT, '-x')
+         await tc.extractTar(flutterPath, process.env.HOME, 'x')
 
          tc.cacheDir(process.env.FLUTTER_ROOT, 'flutter', '2.0.3')
       }
