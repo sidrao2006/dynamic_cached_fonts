@@ -11434,26 +11434,28 @@ async function createRelease(octokit, {
 async function setUpFlutterSDK() {
    _actions_core__WEBPACK_IMPORTED_MODULE_0__.exportVariable('FLUTTER_ROOT', `${process.env.HOME}/flutter`)
 
-   const toolLocation = _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.find('flutter', '2.x') || process.env.FLUTTER_ROOT
+   const cachedTool = _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.find('flutter', '2.x')
 
-   if (process.platform === 'win32') {
-      const flutterPath = await _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.downloadTool(flutterWinDownloadUrl)
-      await _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.extractZip(flutterPath, process.env.FLUTTER_ROOT)
+   if (!cachedTool) {
+      if (process.platform === 'win32') {
+         const flutterPath = await _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.downloadTool(flutterWinDownloadUrl)
+         await _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.extractZip(flutterPath, process.env.FLUTTER_ROOT)
 
-      _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.cacheDir(process.env.FLUTTER_ROOT, 'flutter', '2.0.3')
-   } else if (process.platform === 'darwin') {
-      const flutterPath = await _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.downloadTool(flutterMacOSDownloadUrl)
-      await _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.extractZip(flutterPath, process.env.FLUTTER_ROOT)
+         _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.cacheDir(process.env.FLUTTER_ROOT, 'flutter', '2.0.3')
+      } else if (process.platform === 'darwin') {
+         const flutterPath = await _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.downloadTool(flutterMacOSDownloadUrl)
+         await _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.extractZip(flutterPath, process.env.FLUTTER_ROOT)
 
-      _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.cacheDir(process.env.FLUTTER_ROOT, 'flutter', '2.0.3')
-   } else {
-      const flutterPath = await _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.downloadTool(flutterLinuxDownloadUrl)
-      await _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.extractTar(flutterPath, process.env.FLUTTER_ROOT, 'xf')
+         _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.cacheDir(process.env.FLUTTER_ROOT, 'flutter', '2.0.3')
+      } else {
+         const flutterPath = await _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.downloadTool(flutterLinuxDownloadUrl)
+         await _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.extractTar(flutterPath, process.env.FLUTTER_ROOT, '-x')
 
-      _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.cacheDir(process.env.FLUTTER_ROOT, 'flutter', '2.0.3')
+         _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.cacheDir(process.env.FLUTTER_ROOT, 'flutter', '2.0.3')
+      }
    }
 
-   _actions_core__WEBPACK_IMPORTED_MODULE_0__.addPath(`${toolLocation}/bin/flutter`)
+   _actions_core__WEBPACK_IMPORTED_MODULE_0__.addPath(`${cachedTool || process.env.FLUTTER_ROOT}/bin/flutter`)
 }
 
 async function publishPackageToPub({

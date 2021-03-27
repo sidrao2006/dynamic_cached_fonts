@@ -178,26 +178,28 @@ async function createRelease(octokit, {
 async function setUpFlutterSDK() {
    core.exportVariable('FLUTTER_ROOT', `${process.env.HOME}/flutter`)
 
-   const toolLocation = tc.find('flutter', '2.x') || process.env.FLUTTER_ROOT
+   const cachedTool = tc.find('flutter', '2.x')
 
-   if (process.platform === 'win32') {
-      const flutterPath = await tc.downloadTool(flutterWinDownloadUrl)
-      await tc.extractZip(flutterPath, process.env.FLUTTER_ROOT)
+   if (!cachedTool) {
+      if (process.platform === 'win32') {
+         const flutterPath = await tc.downloadTool(flutterWinDownloadUrl)
+         await tc.extractZip(flutterPath, process.env.FLUTTER_ROOT)
 
-      tc.cacheDir(process.env.FLUTTER_ROOT, 'flutter', '2.0.3')
-   } else if (process.platform === 'darwin') {
-      const flutterPath = await tc.downloadTool(flutterMacOSDownloadUrl)
-      await tc.extractZip(flutterPath, process.env.FLUTTER_ROOT)
+         tc.cacheDir(process.env.FLUTTER_ROOT, 'flutter', '2.0.3')
+      } else if (process.platform === 'darwin') {
+         const flutterPath = await tc.downloadTool(flutterMacOSDownloadUrl)
+         await tc.extractZip(flutterPath, process.env.FLUTTER_ROOT)
 
-      tc.cacheDir(process.env.FLUTTER_ROOT, 'flutter', '2.0.3')
-   } else {
-      const flutterPath = await tc.downloadTool(flutterLinuxDownloadUrl)
-      await tc.extractTar(flutterPath, process.env.FLUTTER_ROOT, 'xf')
+         tc.cacheDir(process.env.FLUTTER_ROOT, 'flutter', '2.0.3')
+      } else {
+         const flutterPath = await tc.downloadTool(flutterLinuxDownloadUrl)
+         await tc.extractTar(flutterPath, process.env.FLUTTER_ROOT, '-x')
 
-      tc.cacheDir(process.env.FLUTTER_ROOT, 'flutter', '2.0.3')
+         tc.cacheDir(process.env.FLUTTER_ROOT, 'flutter', '2.0.3')
+      }
    }
 
-   core.addPath(`${toolLocation}/bin/flutter`)
+   core.addPath(`${cachedTool || process.env.FLUTTER_ROOT}/bin/flutter`)
 }
 
 async function publishPackageToPub({
