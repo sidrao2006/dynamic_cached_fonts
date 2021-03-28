@@ -1,0 +1,43 @@
+name: Release and publish package
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'CHANGELOG.md'
+      - 'pubspec.yaml'
+  workflow_dispatch:
+
+jobs:
+  release:
+    name: Release and Publish Package
+    environment: Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v2
+
+      - name: Wait on tests
+        uses: lewagon/wait-on-check-action@master
+        with:
+          ref: ${{ github.ref }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 10
+          running-workflow-name: 'Release and Publish Package'
+          allowed-conclusions: success,skipped,cancelled
+
+      - name: Release package
+        if: success()
+        timeout-minutes: 30
+        uses: sidrao2006/release-pub-package@main
+        with:
+          should-run-pub-score-test: true
+          pub-score-min-points: 90
+          pre-publish-command: flutter format .
+          access-token: ${{ secrets.PUB_CREDENTIALS_ACCESS_TOKEN }}
+          refresh-token: ${{ secrets.PUB_CREDENTIALS_REFRESH_TOKEN }}
+          id-token: ${{ secrets.PUB_CREDENTIALS_ID_TOKEN }}
+          token-endpoint: ${{ secrets.PUB_CREDENTIALS_TOKEN_ENDPOINT }}
+          expiration: ${{ secrets.PUB_CREDENTIALS_EXPIRATION }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+

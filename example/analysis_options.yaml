@@ -1,0 +1,11 @@
+---
+include: package:lint/analysis_options.yaml
+
+linter:
+  rules:
+    always_specify_types: true
+    avoid_equals_and_hash_code_on_mutable_classes: true
+    literal_only_boolean_expressions: true
+    sort_constructors_first: true
+    sort_pub_dependencies: false
+    avoid_print: false

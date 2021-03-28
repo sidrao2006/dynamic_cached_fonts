@@ -1,0 +1,26 @@
+name: dynamic_cached_fonts_example
+description: An example app to demonstrate the use of dynamic_cached_fonts.
+
+publish_to: 'none'
+version: 1.0.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  firebase_core: ^1.0.1
+
+  dynamic_cached_fonts:
+    path: ../
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  integration_test: ^1.0.2+2
+  lint: ^1.5.3
+
+environment:
+  sdk: ">=2.0.0 <3.0.0"
+  flutter: ">=1.20.0 <3.0.0"
+
+flutter:
+  uses-material-design: true

@@ -1,0 +1,50 @@
+name: Code Analysis
+on: [push, pull_request]
+
+jobs:
+  pana_analyze:
+    name: Analyze package with Pana
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v2
+
+      - name: Setup JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: '12.x'
+
+      - name: Setup Flutter SDK
+        uses: subosito/flutter-action@v1
+        with:
+          channel: beta
+
+      - name: Get flutter packages
+        run: flutter pub get
+
+      - name: Activate pana
+        run: flutter pub global activate pana
+      
+      - name: Format code for tests
+        run: flutter format .
+      
+      - name: Run pana tests
+        run: |
+          echo 'PANA_RESULT_JSON<<EOF' >> $GITHUB_ENV
+          flutter pub global run pana . --json --no-warning >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+
+      - name: Calculate Result
+        env:
+          PUB_SCORE_MIN_POINTS: 90
+        uses: actions/github-script@v3
+        with:
+          script: |
+            const panaOutput = JSON.parse(process.env.PANA_RESULT_JSON)
+
+            if (panaOutput.scores.grantedPoints < Number.parseInt(process.env.PUB_SCORE_MIN_POINTS)) {
+               for (const test in panaOutput.result.sections) {
+                  if (test.status !== 'passed') core.warning(test.title + '\n\n\n' + test.summary)
+               }
+               core.error('Pub score test failed')
+            }

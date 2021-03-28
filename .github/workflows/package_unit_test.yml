@@ -1,0 +1,27 @@
+name: Unit Tests
+on: [push, pull_request]
+
+jobs:
+  unit_test:
+    name: Unit Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v2
+
+      - name: Setup JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: '12.x'
+
+      - name: Setup Flutter SDK
+        uses: subosito/flutter-action@v1
+        with:
+          channel: beta
+      
+      - name: Get flutter packages
+        run: flutter pub get
+
+      - name: Run unit tests
+        run: flutter test
+   

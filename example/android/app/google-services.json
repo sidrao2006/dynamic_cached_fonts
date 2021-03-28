@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "980764920917",
+    "firebase_url": "https://arcygnus-assets.firebaseio.com",
+    "project_id": "arcygnus-assets",
+    "storage_bucket": "arcygnus-assets.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:980764920917:android:5b6ed5bc7e3e5c8e2318dc",
+        "android_client_info": {
+          "package_name": "com.aneesh.dynamic_cached_fonts_example"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "980764920917-qpdhk0nhf534aijh3803r66pm4m1nm6j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDaGRKU4aAN6JZbPBGURByCL_9xHO3echM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "980764920917-qpdhk0nhf534aijh3803r66pm4m1nm6j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

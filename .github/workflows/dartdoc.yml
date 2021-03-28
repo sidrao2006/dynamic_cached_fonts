@@ -1,0 +1,31 @@
+name: Documentation Analysis
+on: [push, pull_request]
+
+jobs:
+  dartdoc_analysis:
+    name: Documentation Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v2
+
+      - name: Setup JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: '12.x'
+
+      - name: Setup Flutter SDK
+        uses: subosito/flutter-action@v1
+        with:
+          channel: beta
+      
+      - name: Get flutter packages
+        run: flutter pub get
+        
+      - name: Activate dartdoc
+        run: flutter pub global activate dartdoc
+      
+      - name: Run dartdoc
+        run: flutter pub global run dartdoc . --no-generate-docs -q
+
+   
