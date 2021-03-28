@@ -28,7 +28,7 @@ jobs:
       - name: Release package
         if: success()
         timeout-minutes: 30
-        uses: ./.github/actions/release_pub_package
+        uses: sidrao2006/release-pub-package@main
         with:
           should-run-pub-score-test: true
           pub-score-min-points: 90
