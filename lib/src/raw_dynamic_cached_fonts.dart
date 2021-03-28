@@ -1,6 +1,6 @@
 import 'dart:typed_data' show ByteData, Uint8List;
 
-import 'package:flutter/foundation.dart' show FlutterError, kIsWeb, kReleaseMode, required;
+import 'package:flutter/foundation.dart' show kReleaseMode, required, FlutterError;
 import 'package:flutter/services.dart' show FontLoader;
 import 'package:flutter/widgets.dart' show WidgetsFlutterBinding, TextStyle;
 import 'package:flutter_cache_manager/flutter_cache_manager.dart'
@@ -119,7 +119,7 @@ abstract class RawDynamicCachedFonts {
         verboseLog: verboseLog,
       );
     }
-    return font != null || kIsWeb;
+    return font != null;
   }
 
   /// Fetches the given [url] from cache and loads it as an asset.
@@ -150,19 +150,10 @@ abstract class RawDynamicCachedFonts {
     WidgetsFlutterBinding.ensureInitialized();
 
     final String cacheKey = Utils.sanitizeUrl(url);
-    final CacheManager cacheManager = CacheManager(Config(cacheKey));
 
-    final FileInfo font = await cacheManager.getFileFromCache(cacheKey);
+    final FileInfo font = await CacheManager(Config(cacheKey)).getFileFromCache(cacheKey);
 
-    // TODO: Find a better implementation
-    // getFileFromCache throws exceptions on web
-    final Uint8List fontBytes = !kIsWeb
-        ? await font.file.readAsBytes()
-        : await (await cacheManager.getSingleFile(
-            url,
-            key: cacheKey,
-          ))
-            .readAsBytes();
+    final Uint8List fontBytes = await font.file.readAsBytes();
 
     final ByteData cachedFontBytes = ByteData.view(fontBytes.buffer);
 
@@ -213,19 +204,10 @@ abstract class RawDynamicCachedFonts {
 
     final Iterable<Future<ByteData>> cachedFontBytes = urls.map((String url) async {
       final String cacheKey = Utils.sanitizeUrl(url);
-      final CacheManager cacheManager = CacheManager(Config(cacheKey));
 
-      final FileInfo font = await cacheManager.getFileFromCache(cacheKey);
+      final FileInfo font = await CacheManager(Config(cacheKey)).getFileFromCache(cacheKey);
 
-      // TODO: Find a better implementation
-      // getFileFromCache throws exceptions on web
-      final Uint8List fontBytes = !kIsWeb
-          ? await font.file.readAsBytes()
-          : await (await cacheManager.getSingleFile(
-              url,
-              key: cacheKey,
-            ))
-              .readAsBytes();
+      final Uint8List fontBytes = await font.file.readAsBytes();
 
       return ByteData.view(fontBytes.buffer);
     });
