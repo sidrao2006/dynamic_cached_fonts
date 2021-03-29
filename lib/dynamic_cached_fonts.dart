@@ -350,7 +350,7 @@ class DynamicCachedFonts {
     return ByteData.view(fontBytes.buffer);
   }
 
-  /// Caches the [url] with the given configuration.
+  /// Downloads and caches font from the [url] with the given configuration.
   ///
   /// - **REQUIRED** The [url] property is used to specify the download url
   ///   for the required font. It should be a valid http/https url which points to
