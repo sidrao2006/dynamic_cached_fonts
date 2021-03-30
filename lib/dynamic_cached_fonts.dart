@@ -340,7 +340,7 @@ class DynamicCachedFonts {
       <String>[
         'Font has been downloaded!\n',
         'Font file path - ${font.path}',
-        (await font.stat()).toString(),
+        font.statSync().toString(),
       ],
       verboseLog: _verboseLog,
     );
