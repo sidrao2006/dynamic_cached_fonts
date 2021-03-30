@@ -101,12 +101,10 @@ class Utils {
     } else {
       dev.log(
         'Bad File Format',
-        error: FlutterError(
-          <String>[
-            'The provided file format is not supported',
-            'Received file format: $fileFormat',
-          ].join('\n'),
-        ),
+        error: <String>[
+          'The provided file format is not supported',
+          'Received file format: $fileFormat',
+        ].join('\n'),
         name: kLoggerName,
       );
       return false;
