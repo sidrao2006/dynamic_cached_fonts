@@ -322,7 +322,7 @@ class DynamicCachedFonts {
   Future<ByteData> _handleCache(String url) async {
     final String cacheKey = Utils.sanitizeUrl(url);
 
-    final Config cacheconfig = Config(
+    final Config cacheConfig = Config(
       cacheKey,
       stalePeriod: cacheStalePeriod,
       maxNrOfCacheObjects: maxCacheObjects,
@@ -331,7 +331,7 @@ class DynamicCachedFonts {
     final String downloadUrl =
         _isFirebaseURL ? await Utils.handleUrl(url, verboseLog: _verboseLog) : url;
 
-    final File font = await CacheManager(cacheconfig).getSingleFile(
+    final File font = await CacheManager(cacheConfig).getSingleFile(
       downloadUrl,
       key: cacheKey,
     );
