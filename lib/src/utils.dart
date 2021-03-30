@@ -1,12 +1,18 @@
-// ignore_for_file: public_member_api_docs
 import 'dart:developer' as dev;
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart' show required;
+import 'package:flutter_cache_manager/flutter_cache_manager.dart' show CacheManager, Config;
 
 /// The name for for [dev.log].
 const String kLoggerName = 'DynamicCachedFonts';
+
+/// The default cacheStalePeriod.
+const Duration kDefaultCacheStalePeriod = Duration(days: 365);
+
+/// The default maxCacheObjects.
+const int kDefaultMaxCacheObjects = 200;
 
 /// Logs a message to the console
 void devLog(List<String> messageList, {@required bool verboseLog}) {
@@ -15,6 +21,45 @@ void devLog(List<String> messageList, {@required bool verboseLog}) {
     dev.log(
       message,
       name: kLoggerName,
+    );
+  }
+}
+
+class DynamicCachedFontsCacheManager {
+  DynamicCachedFontsCacheManager._();
+
+  /// The default cache key for cache managers' configurations
+  static const String defaultCacheKey = 'DynamicCachedFontsFontCacheKey';
+
+  static Map<String, CacheManager> cacheManagers = <String, CacheManager>{};
+
+  static CacheManager get defaultCacheManager => cacheManagers[defaultCacheKey];
+
+  static set defaultCacheManager(CacheManager cacheManager) {
+    cacheManagers[defaultCacheKey] = cacheManager;
+  }
+}
+
+CacheManager getCacheManager(String cacheKey) =>
+    DynamicCachedFontsCacheManager.cacheManagers[cacheKey] ??
+    DynamicCachedFontsCacheManager.defaultCacheManager;
+
+void handleCacheManager(String cacheKey, Duration cacheStalePeriod, int maxCacheObjects) {
+  if (cacheStalePeriod == kDefaultCacheStalePeriod && maxCacheObjects == kDefaultMaxCacheObjects) {
+    DynamicCachedFontsCacheManager.defaultCacheManager ??= CacheManager(
+      Config(
+        DynamicCachedFontsCacheManager.defaultCacheKey,
+        stalePeriod: cacheStalePeriod,
+        maxNrOfCacheObjects: maxCacheObjects,
+      ),
+    );
+  } else {
+    DynamicCachedFontsCacheManager.cacheManagers[cacheKey] ??= CacheManager(
+      Config(
+        cacheKey,
+        stalePeriod: cacheStalePeriod,
+        maxNrOfCacheObjects: maxCacheObjects,
+      ),
     );
   }
 }
