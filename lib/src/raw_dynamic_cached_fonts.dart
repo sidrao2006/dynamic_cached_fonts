@@ -13,7 +13,9 @@ import 'utils.dart';
 ///
 /// [DynamicCachedFonts] is a concrete implementation of this class.
 abstract class RawDynamicCachedFonts {
-  /// Caches the [url] with the given configuration.
+  const RawDynamicCachedFonts._();
+
+  /// Downloads and caches font from the [url] with the given configuration.
   ///
   /// - **REQUIRED** The [url] property is used to specify the download url
   ///   for the required font. It should be a valid http/https url which points to
