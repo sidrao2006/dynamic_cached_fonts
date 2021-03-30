@@ -165,7 +165,11 @@ abstract class RawDynamicCachedFonts {
     await fontLoader.load();
 
     devLog(
-      <String>['Font has been loaded!'],
+      <String>[
+        'Font has been loaded!',
+        'This font file is valid till - ${font.validTill}',
+        'File stat - ${font.file.statSync()}'
+      ],
       verboseLog: verboseLog,
     );
   }
