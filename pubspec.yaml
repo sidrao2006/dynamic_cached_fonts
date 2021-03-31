@@ -1,6 +1,6 @@
 name: dynamic_cached_fonts
 description: A customizable dynamic font loader for flutter with caching enabled.
-version: 0.0.1
+version: 0.1.0
 repository: https://github.com/sidrao2006/dynamic_cached_fonts
 
 environment:
