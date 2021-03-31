@@ -81,8 +81,7 @@ void handleCacheManager(String cacheKey, Duration cacheStalePeriod, int maxCache
   }
 }
 
-/// A class for [DynamicCachedFonts] which performs actions
-/// which are not exposed as APIs.
+/// A class for [DynamicCachedFonts] which performs actions which are not exposed as APIs.
 class Utils {
   Utils._();
 
