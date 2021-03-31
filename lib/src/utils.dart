@@ -49,15 +49,18 @@ class DynamicCachedFontsCacheManager {
 
   /// A map of [CacheManager]s used throughout the package. The key used
   /// will correspond to [Config.cacheKey] of the respective [CacheManager].
-  static Map<String, CacheManager> cacheManagers = <String, CacheManager>{};
+  static Map<String, CacheManager> cacheManagers = <String, CacheManager>{
+    defaultCacheKey: CacheManager(
+      Config(
+        DynamicCachedFontsCacheManager.defaultCacheKey,
+        stalePeriod: kDefaultCacheStalePeriod,
+        maxNrOfCacheObjects: kDefaultMaxCacheObjects,
+      ),
+    ),
+  };
 
   /// The getter for the default instance of [CacheManager] in [cacheManagers].
   static CacheManager get defaultCacheManager => cacheManagers[defaultCacheKey];
-
-  /// The setter for the default instance of [CacheManager] in [cacheManagers].
-  static set defaultCacheManager(CacheManager cacheManager) {
-    cacheManagers[defaultCacheKey] = cacheManager;
-  }
 }
 
 /// Returns a custom [CacheManager], if present, or
@@ -67,15 +70,7 @@ CacheManager getCacheManager(String cacheKey) =>
 
 /// Creates a new instance of [CacheManager] if the default can't be used.
 void handleCacheManager(String cacheKey, Duration cacheStalePeriod, int maxCacheObjects) {
-  if (cacheStalePeriod == kDefaultCacheStalePeriod && maxCacheObjects == kDefaultMaxCacheObjects) {
-    DynamicCachedFontsCacheManager.defaultCacheManager ??= CacheManager(
-      Config(
-        DynamicCachedFontsCacheManager.defaultCacheKey,
-        stalePeriod: cacheStalePeriod,
-        maxNrOfCacheObjects: maxCacheObjects,
-      ),
-    );
-  } else {
+  if (cacheStalePeriod != kDefaultCacheStalePeriod && maxCacheObjects != kDefaultMaxCacheObjects) {
     DynamicCachedFontsCacheManager.cacheManagers[cacheKey] ??= CacheManager(
       Config(
         cacheKey,
