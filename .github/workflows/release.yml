@@ -5,6 +5,7 @@ on:
     paths:
       - 'CHANGELOG.md'
       - 'pubspec.yaml'
+  workflow_dispatch:
 
 jobs:
   release:
@@ -21,16 +22,17 @@ jobs:
           ref: ${{ github.ref }}
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 10
-          running-workflow-name: 'release'
+          running-workflow-name: 'Release and Publish Package'
           allowed-conclusions: success,skipped,cancelled
 
       - name: Release package
         if: success()
-        uses: ./.github/actions/release_pub_package
+        timeout-minutes: 30
+        uses: sidrao2006/release-pub-package@main
         with:
           should-run-pub-score-test: true
           pub-score-min-points: 90
-          pre-publish: flutter format .
+          pre-publish-command: flutter format .
           access-token: ${{ secrets.PUB_CREDENTIALS_ACCESS_TOKEN }}
           refresh-token: ${{ secrets.PUB_CREDENTIALS_REFRESH_TOKEN }}
           id-token: ${{ secrets.PUB_CREDENTIALS_ID_TOKEN }}
@@ -38,7 +40,4 @@ jobs:
           expiration: ${{ secrets.PUB_CREDENTIALS_EXPIRATION }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: Notify test failure
-        if: failure()
-        run: echo "::warning::Tests failed or Github API limit was reached"
+

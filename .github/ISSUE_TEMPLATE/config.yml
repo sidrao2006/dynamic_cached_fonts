@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Ask a Question
+    url: https://github.com/sidrao2006/dynamic_cached_fonts/discussions/new?category=q-a
+    about: Ask for help.
