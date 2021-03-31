@@ -74,7 +74,7 @@ abstract class RawDynamicCachedFonts {
   ///   Defaults to false.
   ///
   ///   _Tip: To log only in debug mode, set [verboseLog]'s value to [kReleaseMode]_.
-  static Future<void> cacheFont(
+  static Future<FileInfo> cacheFont(
     String url, {
     @required int maxCacheObjects,
     @required Duration cacheStalePeriod,
@@ -106,6 +106,8 @@ abstract class RawDynamicCachedFonts {
       ],
       verboseLog: verboseLog,
     );
+
+    return font;
   }
 
   /// Checks whether the given [url] can be loaded directly from cache.
@@ -171,7 +173,7 @@ abstract class RawDynamicCachedFonts {
   ///   Defaults to false.
   ///
   ///   _Tip: To log only in debug mode, set [verboseLog]'s value to [kReleaseMode]_.
-  static Future<void> loadCachedFont(
+  static Future<FileInfo> loadCachedFont(
     String url, {
     @required String fontFamily,
     bool verboseLog = false,
@@ -203,6 +205,8 @@ abstract class RawDynamicCachedFonts {
       ],
       verboseLog: verboseLog,
     );
+
+    return font;
   }
 
   /// Fetches the given [urls] from cache and loads them into the engine to be used.
@@ -228,7 +232,7 @@ abstract class RawDynamicCachedFonts {
   ///   Defaults to false.
   ///
   ///   _Tip: To log only in debug mode, set [verboseLog]'s value to [kReleaseMode]_.
-  static Future<void> loadCachedFamily(
+  static Future<Iterable<FileInfo>> loadCachedFamily(
     List<String> urls, {
     @required String fontFamily,
     bool verboseLog = false,
@@ -237,11 +241,17 @@ abstract class RawDynamicCachedFonts {
 
     WidgetsFlutterBinding.ensureInitialized();
 
-    final Iterable<Future<ByteData>> cachedFontBytes = urls.map((String url) async {
-      final String cacheKey = Utils.sanitizeUrl(url);
+    final Iterable<FileInfo> fontFiles = await Future.wait(
+      urls.map((String url) async {
+        final String cacheKey = Utils.sanitizeUrl(url);
 
-      final FileInfo font = await Utils.getCacheManager(cacheKey).getFileFromCache(cacheKey);
+        final FileInfo font = await Utils.getCacheManager(cacheKey).getFileFromCache(cacheKey);
 
+        return font;
+      }),
+    );
+
+    final Iterable<Future<ByteData>> cachedFontBytes = fontFiles.map((FileInfo font) async {
       final Uint8List fontBytes = await font.file.readAsBytes();
 
       return ByteData.view(fontBytes.buffer);
@@ -257,6 +267,8 @@ abstract class RawDynamicCachedFonts {
       <String>['Font has been loaded!'],
       verboseLog: verboseLog,
     );
+
+    return fontFiles;
   }
 
   /// Removes the given [url] can be loaded directly from cache.

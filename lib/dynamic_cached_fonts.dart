@@ -2,13 +2,13 @@
 /// It can be easily fetched from cache and loaded on demand.
 library dynamic_cached_fonts;
 
-import 'dart:typed_data' show Uint8List, ByteData;
+import 'dart:typed_data' show ByteData;
 
 import 'package:file/file.dart' show File;
 import 'package:flutter/foundation.dart' show kReleaseMode, FlutterError;
 import 'package:flutter/services.dart' show FontLoader;
 import 'package:flutter/widgets.dart' show TextStyle, WidgetsFlutterBinding, FontWeight, FontStyle;
-import 'package:flutter_cache_manager/flutter_cache_manager.dart' show CacheManager, Config;
+import 'package:flutter_cache_manager/flutter_cache_manager.dart' show CacheManager, Config, FileInfo;
 import 'package:meta/meta.dart' show required, visibleForTesting;
 
 import 'src/raw_dynamic_cached_fonts.dart' show RawDynamicCachedFonts;
@@ -353,7 +353,7 @@ class DynamicCachedFonts {
   ///
   /// This method can be called in `main()`, `initState()` or on button tap/click
   /// as needed.
-  Future<void> load() async {
+  Future<Iterable<File>> load() async {
     WidgetsFlutterBinding.ensureInitialized();
 
     if (!urls.every(
@@ -364,8 +364,16 @@ class DynamicCachedFonts {
       );
     }
 
-    final Iterable<Future<ByteData>> cachedFontBytes = urls.map(
-      (String url) => _handleCache(url),
+    final Iterable<File> fontFiles = await Future.wait(
+      urls.map(
+        (String url) => _handleCache(url),
+      ),
+    );
+
+    final Iterable<Future<ByteData>> cachedFontBytes = fontFiles.map(
+      (File font) async => ByteData.view(
+        font.readAsBytesSync().buffer,
+      ),
     );
 
     if (_verboseLog)
@@ -381,11 +389,13 @@ class DynamicCachedFonts {
       <String>['Font has been loaded!'],
       verboseLog: _verboseLog,
     );
+
+    return fontFiles;
   }
 
   /// Uses [CacheManager.getSingleFile] to either download the file
   /// if it isn't in the cache, or returns the file (as bytes) from cache.
-  Future<ByteData> _handleCache(String url) async {
+  Future<File> _handleCache(String url) async {
     final String cacheKey = Utils.sanitizeUrl(url);
 
     Utils.handleCacheManager(cacheKey, cacheStalePeriod, maxCacheObjects);
@@ -407,9 +417,7 @@ class DynamicCachedFonts {
       verboseLog: _verboseLog,
     );
 
-    final Uint8List fontBytes = await font.readAsBytes();
-
-    return ByteData.view(fontBytes.buffer);
+    return font;
   }
 
   /// Downloads and caches font from the [url] with the given configuration.
@@ -441,7 +449,7 @@ class DynamicCachedFonts {
   ///   Defaults to false.
   ///
   ///   _Tip: To log only in debug mode, set [verboseLog]'s value to [kReleaseMode]_.
-  static Future<void> cacheFont(
+  static Future<FileInfo> cacheFont(
     String url, {
     Duration cacheStalePeriod = kDefaultCacheStalePeriod,
     int maxCacheObjects = kDefaultMaxCacheObjects,
@@ -490,7 +498,7 @@ class DynamicCachedFonts {
   ///   Defaults to false.
   ///
   ///   _Tip: To log only in debug mode, set [verboseLog]'s value to [kReleaseMode]_.
-  static Future<void> loadCachedFont(
+  static Future<FileInfo> loadCachedFont(
     String url, {
     @required String fontFamily,
     bool verboseLog = false,
@@ -524,7 +532,7 @@ class DynamicCachedFonts {
   ///   Defaults to false.
   ///
   ///   _Tip: To log only in debug mode, set [verboseLog]'s value to [kReleaseMode]_.
-  static Future<void> loadCachedFamily(
+  static  Future<Iterable<FileInfo>> loadCachedFamily(
     List<String> urls, {
     @required String fontFamily,
     bool verboseLog = false,
