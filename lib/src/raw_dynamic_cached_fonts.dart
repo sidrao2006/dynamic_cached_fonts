@@ -1,6 +1,6 @@
 import 'dart:typed_data' show ByteData, Uint8List;
 
-import 'package:flutter/foundation.dart' show FlutterError, kIsWeb, kReleaseMode, required;
+import 'package:flutter/foundation.dart' show kReleaseMode, required, FlutterError;
 import 'package:flutter/services.dart' show FontLoader;
 import 'package:flutter/widgets.dart' show WidgetsFlutterBinding, TextStyle;
 import 'package:flutter_cache_manager/flutter_cache_manager.dart'
@@ -13,7 +13,9 @@ import 'utils.dart';
 ///
 /// [DynamicCachedFonts] is a concrete implementation of this class.
 abstract class RawDynamicCachedFonts {
-  /// Caches the [url] with the given configuration.
+  const RawDynamicCachedFonts._();
+
+  /// Downloads and caches font from the [url] with the given configuration.
   ///
   /// - **REQUIRED** The [url] property is used to specify the download url
   ///   for the required font. It should be a valid http/https url which points to
@@ -57,12 +59,9 @@ abstract class RawDynamicCachedFonts {
     }
     final String cacheKey = Utils.sanitizeUrl(url);
 
-    final Config cacheconfig = Config(
-      cacheKey,
-      stalePeriod: cacheStalePeriod,
-      maxNrOfCacheObjects: maxCacheObjects,
-    );
-    final FileInfo font = await CacheManager(cacheconfig).downloadFile(
+    handleCacheManager(cacheKey, cacheStalePeriod, maxCacheObjects);
+
+    final FileInfo font = await getCacheManager(cacheKey).downloadFile(
       url,
       key: cacheKey,
     );
@@ -104,7 +103,7 @@ abstract class RawDynamicCachedFonts {
     // Try catch to catch any errors thrown by the cache manager
     // or the assertion.
     try {
-      font = await CacheManager(Config(cacheKey)).getFileFromCache(cacheKey);
+      font = await getCacheManager(cacheKey).getFileFromCache(cacheKey);
 
       assert(
         font != null,
@@ -119,7 +118,7 @@ abstract class RawDynamicCachedFonts {
         verboseLog: verboseLog,
       );
     }
-    return font != null || kIsWeb;
+    return font != null;
   }
 
   /// Fetches the given [url] from cache and loads it as an asset.
@@ -150,19 +149,10 @@ abstract class RawDynamicCachedFonts {
     WidgetsFlutterBinding.ensureInitialized();
 
     final String cacheKey = Utils.sanitizeUrl(url);
-    final CacheManager cacheManager = CacheManager(Config(cacheKey));
 
-    final FileInfo font = await cacheManager.getFileFromCache(cacheKey);
+    final FileInfo font = await getCacheManager(cacheKey).getFileFromCache(cacheKey);
 
-    // TODO: Find a better implementation
-    // getFileFromCache throws exceptions on web
-    final Uint8List fontBytes = !kIsWeb
-        ? await font.file.readAsBytes()
-        : await (await cacheManager.getSingleFile(
-            url,
-            key: cacheKey,
-          ))
-            .readAsBytes();
+    final Uint8List fontBytes = await font.file.readAsBytes();
 
     final ByteData cachedFontBytes = ByteData.view(fontBytes.buffer);
 
@@ -174,7 +164,11 @@ abstract class RawDynamicCachedFonts {
     await fontLoader.load();
 
     devLog(
-      <String>['Font has been loaded!'],
+      <String>[
+        'Font has been loaded!',
+        'This font file is valid till - ${font.validTill}',
+        'File stat - ${font.file.statSync()}'
+      ],
       verboseLog: verboseLog,
     );
   }
@@ -213,19 +207,10 @@ abstract class RawDynamicCachedFonts {
 
     final Iterable<Future<ByteData>> cachedFontBytes = urls.map((String url) async {
       final String cacheKey = Utils.sanitizeUrl(url);
-      final CacheManager cacheManager = CacheManager(Config(cacheKey));
 
-      final FileInfo font = await cacheManager.getFileFromCache(cacheKey);
+      final FileInfo font = await getCacheManager(cacheKey).getFileFromCache(cacheKey);
 
-      // TODO: Find a better implementation
-      // getFileFromCache throws exceptions on web
-      final Uint8List fontBytes = !kIsWeb
-          ? await font.file.readAsBytes()
-          : await (await cacheManager.getSingleFile(
-              url,
-              key: cacheKey,
-            ))
-              .readAsBytes();
+      final Uint8List fontBytes = await font.file.readAsBytes();
 
       return ByteData.view(fontBytes.buffer);
     });
@@ -255,6 +240,6 @@ abstract class RawDynamicCachedFonts {
 
     final String cacheKey = Utils.sanitizeUrl(url);
 
-    return CacheManager(Config(cacheKey)).removeFile(cacheKey);
+    return getCacheManager(cacheKey).removeFile(cacheKey);
   }
 }
