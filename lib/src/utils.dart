@@ -65,26 +65,6 @@ class DynamicCachedFontsCacheManager {
   static CacheManager get defaultCacheManager => cacheManagers[defaultCacheKey];
 }
 
-/// Returns a custom [CacheManager], if present, or
-@internal
-CacheManager getCacheManager(String cacheKey) =>
-    DynamicCachedFontsCacheManager.cacheManagers[cacheKey] ??
-    DynamicCachedFontsCacheManager.defaultCacheManager;
-
-/// Creates a new instance of [CacheManager] if the default can't be used.
-@internal
-void handleCacheManager(String cacheKey, Duration cacheStalePeriod, int maxCacheObjects) {
-  if (cacheStalePeriod != kDefaultCacheStalePeriod && maxCacheObjects != kDefaultMaxCacheObjects) {
-    DynamicCachedFontsCacheManager.cacheManagers[cacheKey] ??= CacheManager(
-      Config(
-        cacheKey,
-        stalePeriod: cacheStalePeriod,
-        maxNrOfCacheObjects: maxCacheObjects,
-      ),
-    );
-  }
-}
-
 /// A class for [DynamicCachedFonts] which performs actions which are not exposed as APIs.
 @internal
 class Utils {
@@ -135,4 +115,24 @@ class Utils {
   /// Remove `/` or `:` from url which can cause errors when used as storage paths
   /// in some operating systems.
   static String sanitizeUrl(String url) => url.replaceAll(RegExp(r'\/|:'), '');
+
+  /// Returns a custom [CacheManager], if present, or
+  static CacheManager getCacheManager(String cacheKey) =>
+      DynamicCachedFontsCacheManager.customCacheManager ??
+      DynamicCachedFontsCacheManager.cacheManagers[cacheKey] ??
+      DynamicCachedFontsCacheManager.defaultCacheManager;
+
+  /// Creates a new instance of [CacheManager] if the default can't be used.
+  static void handleCacheManager(String cacheKey, Duration cacheStalePeriod, int maxCacheObjects) {
+    if (cacheStalePeriod != kDefaultCacheStalePeriod &&
+        maxCacheObjects != kDefaultMaxCacheObjects) {
+      DynamicCachedFontsCacheManager.cacheManagers[cacheKey] ??= CacheManager(
+        Config(
+          cacheKey,
+          stalePeriod: cacheStalePeriod,
+          maxNrOfCacheObjects: maxCacheObjects,
+        ),
+      );
+    }
+  }
 }

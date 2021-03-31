@@ -59,9 +59,9 @@ abstract class RawDynamicCachedFonts {
     }
     final String cacheKey = Utils.sanitizeUrl(url);
 
-    handleCacheManager(cacheKey, cacheStalePeriod, maxCacheObjects);
+    Utils.handleCacheManager(cacheKey, cacheStalePeriod, maxCacheObjects);
 
-    final FileInfo font = await getCacheManager(cacheKey).downloadFile(
+    final FileInfo font = await Utils.getCacheManager(cacheKey).downloadFile(
       url,
       key: cacheKey,
     );
@@ -103,7 +103,7 @@ abstract class RawDynamicCachedFonts {
     // Try catch to catch any errors thrown by the cache manager
     // or the assertion.
     try {
-      font = await getCacheManager(cacheKey).getFileFromCache(cacheKey);
+      font = await Utils.getCacheManager(cacheKey).getFileFromCache(cacheKey);
 
       assert(
         font != null,
@@ -150,7 +150,7 @@ abstract class RawDynamicCachedFonts {
 
     final String cacheKey = Utils.sanitizeUrl(url);
 
-    final FileInfo font = await getCacheManager(cacheKey).getFileFromCache(cacheKey);
+    final FileInfo font = await Utils.getCacheManager(cacheKey).getFileFromCache(cacheKey);
 
     final Uint8List fontBytes = await font.file.readAsBytes();
 
@@ -208,7 +208,7 @@ abstract class RawDynamicCachedFonts {
     final Iterable<Future<ByteData>> cachedFontBytes = urls.map((String url) async {
       final String cacheKey = Utils.sanitizeUrl(url);
 
-      final FileInfo font = await getCacheManager(cacheKey).getFileFromCache(cacheKey);
+      final FileInfo font = await Utils.getCacheManager(cacheKey).getFileFromCache(cacheKey);
 
       final Uint8List fontBytes = await font.file.readAsBytes();
 
@@ -240,6 +240,6 @@ abstract class RawDynamicCachedFonts {
 
     final String cacheKey = Utils.sanitizeUrl(url);
 
-    return getCacheManager(cacheKey).removeFile(cacheKey);
+    return Utils.getCacheManager(cacheKey).removeFile(cacheKey);
   }
 }
