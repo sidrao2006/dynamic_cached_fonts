@@ -17,7 +17,7 @@ abstract class RawDynamicCachedFonts {
   const RawDynamicCachedFonts._();
 
   /// Accepts [cacheManager] and [force] to provide a custom [CacheManager] for testing.
-  /// 
+  ///
   /// - **REQUIRED** The [cacheManager] property is used to specify a custom instance of
   ///   [CacheManager]. Caching can be customized using the [Config] object passed to
   ///   the instance.
@@ -25,16 +25,16 @@ abstract class RawDynamicCachedFonts {
   /// - The [force] property is used to specify whether or not to overwrite an existing
   ///   instance of custom cache manager.
   ///
-  ///   If [force] is true and a custom cache manager already exists, it will be 
+  ///   If [force] is true and a custom cache manager already exists, it will be
   ///   overwritten with the new instance. This means any fonts cached earlier,
   ///   cannot be accessed using the new instance.
   /// ---
   /// Any new `DynamicCachedFonts` instance or any [RawDynamicCachedFonts] methods
   /// called after this method will use [cacheManager] to download, cache
   /// and load fonts. This means custom configuration **cannot** be provided.
-  /// 
-  /// `maxCacheObjects` and `cacheStalePeriod` in [cacheFont] will have no effect 
-  /// after calling this method. Customize these values in the [Config] object 
+  ///
+  /// `maxCacheObjects` and `cacheStalePeriod` in [cacheFont] will have no effect
+  /// after calling this method. Customize these values in the [Config] object
   /// passed to the [CacheManager] used in [cacheManager].
   @visibleForTesting
   static void custom({

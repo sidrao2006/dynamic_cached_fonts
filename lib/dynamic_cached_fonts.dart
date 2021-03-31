@@ -235,7 +235,7 @@ class DynamicCachedFonts {
         _isFirebaseURL = true;
 
   /// Accepts [cacheManager] and [force] to provide a custom [CacheManager] for testing.
-  /// 
+  ///
   /// - **REQUIRED** The [cacheManager] property is used to specify a custom instance of
   ///   [CacheManager]. Caching can be customized using the [Config] object passed to
   ///   the instance.
@@ -247,11 +247,11 @@ class DynamicCachedFonts {
   ///
   /// - **REQUIRED** The [fontFamily] property is used to specify the name
   ///   of the font family which is to be used as [TextStyle.fontFamily].
-  /// 
+  ///
   /// - The [force] property is used to specify whether or not to overwrite an existing
   ///   instance of custom cache manager.
   ///
-  ///   If [force] is true and a custom cache manager already exists, it will be 
+  ///   If [force] is true and a custom cache manager already exists, it will be
   ///   overwritten with the new instance. This means any fonts cached earlier,
   ///   cannot be accessed using the new instance.
   ///
@@ -265,7 +265,7 @@ class DynamicCachedFonts {
   /// [maxCacheObjects] and [cacheStalePeriod] have not been exposed for customization
   /// since their values won't have any effect in custom mode. Customize these values
   /// in the [Config] object passed to the [CacheManager] used in [cacheManager].
-  /// 
+  ///
   /// Any new [DynamicCachedFonts] instance or any [RawDynamicCachedFonts] methods
   /// called after using this constructor will use [cacheManager] to download, cache
   /// and load fonts. This means custom configuration **cannot** be provided.
