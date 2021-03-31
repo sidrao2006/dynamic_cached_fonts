@@ -1,5 +1,9 @@
 name: Documentation Analysis
-on: [push, pull_request]
+on: 
+  push:
+    branches:
+      - main
+  pull_request:
 
 jobs:
   dartdoc_analysis:
