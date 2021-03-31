@@ -2,8 +2,10 @@ import 'dart:developer' as dev;
 
 import 'package:firebase_storage/firebase_storage.dart' show FirebaseStorage, Reference;
 import 'package:flutter_cache_manager/flutter_cache_manager.dart' show CacheManager, Config;
+import 'package:meta/meta.dart' show required, internal;
 
 /// The name for for [dev.log].
+@internal
 const String kLoggerName = 'DynamicCachedFonts';
 
 /// The default `cacheStalePeriod`.
@@ -13,6 +15,7 @@ const Duration kDefaultCacheStalePeriod = Duration(days: 365);
 const int kDefaultMaxCacheObjects = 200;
 
 /// Logs a message to the console.
+@internal
 void devLog(List<String> messageList, {@required bool verboseLog}) {
   if (verboseLog) {
     final String message = messageList.join('\n');
@@ -39,6 +42,7 @@ void devLog(List<String> messageList, {@required bool verboseLog}) {
 /// by the caller, a new instance of [CacheManager] is created and added to [cacheManagers].
 /// This instance uses the sanitized url (see [Utils.sanitizeUrl]) as [Config.cacheKey] and
 /// as the key when adding the instance to [cacheManagers].
+@internal
 class DynamicCachedFontsCacheManager {
   DynamicCachedFontsCacheManager._();
 
@@ -62,11 +66,13 @@ class DynamicCachedFontsCacheManager {
 }
 
 /// Returns a custom [CacheManager], if present, or
+@internal
 CacheManager getCacheManager(String cacheKey) =>
     DynamicCachedFontsCacheManager.cacheManagers[cacheKey] ??
     DynamicCachedFontsCacheManager.defaultCacheManager;
 
 /// Creates a new instance of [CacheManager] if the default can't be used.
+@internal
 void handleCacheManager(String cacheKey, Duration cacheStalePeriod, int maxCacheObjects) {
   if (cacheStalePeriod != kDefaultCacheStalePeriod && maxCacheObjects != kDefaultMaxCacheObjects) {
     DynamicCachedFontsCacheManager.cacheManagers[cacheKey] ??= CacheManager(
@@ -80,6 +86,7 @@ void handleCacheManager(String cacheKey, Duration cacheStalePeriod, int maxCache
 }
 
 /// A class for [DynamicCachedFonts] which performs actions which are not exposed as APIs.
+@internal
 class Utils {
   Utils._();
 
