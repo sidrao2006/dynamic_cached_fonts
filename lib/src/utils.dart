@@ -1,8 +1,6 @@
 import 'dart:developer' as dev;
 
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter/material.dart' show required;
+import 'package:firebase_storage/firebase_storage.dart' show FirebaseStorage, Reference;
 import 'package:flutter_cache_manager/flutter_cache_manager.dart' show CacheManager, Config;
 
 /// The name for for [dev.log].
