@@ -12,7 +12,7 @@ import 'package:flutter/widgets.dart'
 import 'package:flutter_cache_manager/flutter_cache_manager.dart' show CacheManager, Config;
 
 import 'src/raw_dynamic_cached_fonts.dart' show RawDynamicCachedFonts;
-import 'src/utils.dart' show Utils, devLog;
+import 'src/utils.dart';
 
 export 'src/raw_dynamic_cached_fonts.dart';
 
@@ -100,8 +100,8 @@ class DynamicCachedFonts {
   DynamicCachedFonts({
     @required String url,
     @required this.fontFamily,
-    this.maxCacheObjects = 200,
-    this.cacheStalePeriod = const Duration(days: 365),
+    this.maxCacheObjects = kDefaultMaxCacheObjects,
+    this.cacheStalePeriod = kDefaultCacheStalePeriod,
     bool verboseLog = false,
   })  : assert(
           fontFamily != null && fontFamily != '',
@@ -155,8 +155,8 @@ class DynamicCachedFonts {
   DynamicCachedFonts.family({
     @required this.urls,
     @required this.fontFamily,
-    this.maxCacheObjects = 200,
-    this.cacheStalePeriod = const Duration(days: 365),
+    this.maxCacheObjects = kDefaultMaxCacheObjects,
+    this.cacheStalePeriod = kDefaultCacheStalePeriod,
     bool verboseLog = false,
   })  : assert(
           fontFamily != null && fontFamily != '',
@@ -215,8 +215,8 @@ class DynamicCachedFonts {
   DynamicCachedFonts.fromFirebase({
     @required String bucketUrl,
     @required this.fontFamily,
-    this.maxCacheObjects = 200,
-    this.cacheStalePeriod = const Duration(days: 365),
+    this.maxCacheObjects = kDefaultMaxCacheObjects,
+    this.cacheStalePeriod = kDefaultCacheStalePeriod,
     bool verboseLog = false,
   })  : assert(
           fontFamily != null && fontFamily != '',
@@ -322,16 +322,12 @@ class DynamicCachedFonts {
   Future<ByteData> _handleCache(String url) async {
     final String cacheKey = Utils.sanitizeUrl(url);
 
-    final Config cacheconfig = Config(
-      cacheKey,
-      stalePeriod: cacheStalePeriod,
-      maxNrOfCacheObjects: maxCacheObjects,
-    );
+    handleCacheManager(cacheKey, cacheStalePeriod, maxCacheObjects);
 
     final String downloadUrl =
         _isFirebaseURL ? await Utils.handleUrl(url, verboseLog: _verboseLog) : url;
 
-    final File font = await CacheManager(cacheconfig).getSingleFile(
+    final File font = await getCacheManager(cacheKey).getSingleFile(
       downloadUrl,
       key: cacheKey,
     );
@@ -340,7 +336,7 @@ class DynamicCachedFonts {
       <String>[
         'Font has been downloaded!\n',
         'Font file path - ${font.path}',
-        (await font.stat()).toString(),
+        font.statSync().toString(),
       ],
       verboseLog: _verboseLog,
     );
@@ -350,7 +346,7 @@ class DynamicCachedFonts {
     return ByteData.view(fontBytes.buffer);
   }
 
-  /// Caches the [url] with the given configuration.
+  /// Downloads and caches font from the [url] with the given configuration.
   ///
   /// - **REQUIRED** The [url] property is used to specify the download url
   ///   for the required font. It should be a valid http/https url which points to
@@ -381,8 +377,8 @@ class DynamicCachedFonts {
   ///   _Tip: To log only in debug mode, set [verboseLog]'s value to [kReleaseMode]_.
   static Future<void> cacheFont(
     String url, {
-    Duration cacheStalePeriod = const Duration(days: 365),
-    int maxCacheObjects = 200,
+    Duration cacheStalePeriod = kDefaultCacheStalePeriod,
+    int maxCacheObjects = kDefaultMaxCacheObjects,
     bool verboseLog = false,
   }) =>
       RawDynamicCachedFonts.cacheFont(
