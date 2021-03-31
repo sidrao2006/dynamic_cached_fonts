@@ -12,5 +12,14 @@ Link to related issues
 
 - [ ] I listed at least one issue that this PR fixes in the description above.
 - [ ] I updated/added relevant documentation (doc comments with `///`).
-- [ ] I added new tests to check the change I am making or feature I am adding.
+- [ ] I added new tests to check the change I am making or the feature I am adding.
 - [ ] All existing and new tests are passing.
+
+## Breaking Change
+
+- [ ] No, this isn't a breaking change.
+- [ ] Yes, this is a breaking change.
+       I have modified or deleted the following public APIs in such a way that the package user has to make changes in their code to upgrade to the new version - 
+  1. ...
+  2. ...
+  3. ...
