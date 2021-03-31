@@ -24,13 +24,13 @@ jobs:
   #       uses: subosito/flutter-action@v1
   #       with:
   #         channel: beta
-      
+
   #     - name: Setup Chrome Driver
   #       uses: nanasess/setup-chromedriver@master
 
   #     - name: Get flutter packages
   #       run: flutter pub get
-      
+
   #     - name: Browser pre launch Setup
   #       run: |
   #         sudo apt-get install -y xvfb
