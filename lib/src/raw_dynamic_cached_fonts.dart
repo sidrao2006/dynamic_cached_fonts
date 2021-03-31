@@ -284,6 +284,6 @@ abstract class RawDynamicCachedFonts {
 
     final String cacheKey = Utils.sanitizeUrl(url);
 
-    return Utils.getCacheManager(cacheKey).removeFile(cacheKey);
+    await Utils.getCacheManager(cacheKey).removeFile(cacheKey);
   }
 }
