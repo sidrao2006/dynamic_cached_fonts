@@ -2,21 +2,21 @@
 /// It can be easily fetched from cache and loaded on demand.
 library dynamic_cached_fonts;
 
-import 'dart:typed_data' show ByteData;
+import 'dart:typed_data' show ByteData, Uint8List;
 
 import 'package:file/file.dart' show File;
 import 'package:flutter/foundation.dart' show kReleaseMode, FlutterError;
 import 'package:flutter/services.dart' show FontLoader;
 import 'package:flutter/widgets.dart' show TextStyle, WidgetsFlutterBinding, FontWeight, FontStyle;
-import 'package:flutter_cache_manager/flutter_cache_manager.dart' show CacheManager, Config, FileInfo;
+import 'package:flutter_cache_manager/flutter_cache_manager.dart'
+    show CacheManager, Config, FileInfo;
 import 'package:meta/meta.dart' show required, visibleForTesting;
 
-import 'src/raw_dynamic_cached_fonts.dart' show RawDynamicCachedFonts;
 import 'src/utils.dart';
 
 export 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
-export 'src/raw_dynamic_cached_fonts.dart';
+part 'src/raw_dynamic_cached_fonts.dart';
 
 /// Allows dynamically loading fonts from the given url.
 ///
@@ -234,70 +234,6 @@ class DynamicCachedFonts {
         urls = <String>[bucketUrl],
         _isFirebaseURL = true;
 
-  /// Accepts [cacheManager] and [force] to provide a custom [CacheManager] for testing.
-  ///
-  /// - **REQUIRED** The [cacheManager] property is used to specify a custom instance of
-  ///   [CacheManager]. Caching can be customized using the [Config] object passed to
-  ///   the instance.
-  ///
-  /// - **REQUIRED** The [url] property is used to specify the download url
-  ///   for the required font. It should be a valid http/https url which points to
-  ///   a font file.
-  ///   Currently, only OpenType (OTF) and TrueType (TTF) fonts are supported.
-  ///
-  /// - **REQUIRED** The [fontFamily] property is used to specify the name
-  ///   of the font family which is to be used as [TextStyle.fontFamily].
-  ///
-  /// - The [force] property is used to specify whether or not to overwrite an existing
-  ///   instance of custom cache manager.
-  ///
-  ///   If [force] is true and a custom cache manager already exists, it will be
-  ///   overwritten with the new instance. This means any fonts cached earlier,
-  ///   cannot be accessed using the new instance.
-  ///
-  /// - The [verboseLog] is a debug property used to specify whether detailed
-  ///   logs should be printed for debugging.
-  ///
-  ///   Defaults to false.
-  ///
-  ///   _Tip: To log only in debug mode, set [verboseLog]'s value to [kReleaseMode]_.
-  /// ---
-  /// [maxCacheObjects] and [cacheStalePeriod] have not been exposed for customization
-  /// since their values won't have any effect in custom mode. Customize these values
-  /// in the [Config] object passed to the [CacheManager] used in [cacheManager].
-  ///
-  /// Any new [DynamicCachedFonts] instance or any [RawDynamicCachedFonts] methods
-  /// called after using this constructor will use [cacheManager] to download, cache
-  /// and load fonts. This means custom configuration **cannot** be provided.
-  @visibleForTesting
-  DynamicCachedFonts.custom({
-    @required CacheManager cacheManager,
-    @required String url,
-    @required this.fontFamily,
-    bool force = false,
-    bool verboseLog = false,
-  })  : assert(
-          fontFamily != null && fontFamily != '',
-          'fontFamily cannot be null or empty',
-        ),
-        assert(
-          url != null && url != '',
-          'url cannot be null or empty',
-        ),
-        assert(verboseLog != null),
-        assert(cacheManager != null),
-        assert(force != null),
-        urls = <String>[url],
-        maxCacheObjects = kDefaultMaxCacheObjects,
-        cacheStalePeriod = kDefaultCacheStalePeriod,
-        _fontLoader = FontLoader(fontFamily),
-        _verboseLog = verboseLog,
-        _isFirebaseURL = false {
-    DynamicCachedFontsCacheManager.customCacheManager != null && force
-        ? DynamicCachedFontsCacheManager.customCacheManager = cacheManager
-        : DynamicCachedFontsCacheManager.customCacheManager ??= cacheManager;
-  }
-
   /// Used to specify the download url(s) for the required font(s).
   ///
   /// It should be a valid http/https url or a Google Cloud Storage (gs://) url,
@@ -419,6 +355,36 @@ class DynamicCachedFonts {
 
     return font;
   }
+
+  /// Accepts [cacheManager] and [force] to provide a custom [CacheManager] for testing.
+  ///
+  /// - **REQUIRED** The [cacheManager] property is used to specify a custom instance of
+  ///   [CacheManager]. Caching can be customized using the [Config] object passed to
+  ///   the instance.
+  ///
+  /// - The [force] property is used to specify whether or not to overwrite an existing
+  ///   instance of custom cache manager.
+  ///
+  ///   If [force] is true and a custom cache manager already exists, it will be
+  ///   overwritten with the new instance. This means any fonts cached earlier,
+  ///   cannot be accessed using the new instance.
+  /// ---
+  /// Any new [DynamicCachedFonts] instance or any [RawDynamicCachedFonts] methods
+  /// called after this method will use [cacheManager] to download, cache
+  /// and load fonts. This means custom configuration **cannot** be provided.
+  ///
+  /// [maxCacheObjects] and [cacheStalePeriod] will have no effect after calling
+  ///  this method. Customize these values in the [Config] object passed to the
+  /// [CacheManager] used in [cacheManager].
+  @visibleForTesting
+  static void custom({
+    CacheManager cacheManager,
+    bool force = false,
+  }) =>
+      RawDynamicCachedFonts.custom(
+        cacheManager: cacheManager,
+        force: force,
+      );
 
   /// Downloads and caches font from the [url] with the given configuration.
   ///
