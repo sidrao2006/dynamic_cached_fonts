@@ -378,7 +378,7 @@ class DynamicCachedFonts {
   /// [CacheManager] used in [cacheManager].
   @visibleForTesting
   static void custom({
-    CacheManager cacheManager,
+    @required CacheManager cacheManager,
     bool force = false,
   }) =>
       RawDynamicCachedFonts.custom(
