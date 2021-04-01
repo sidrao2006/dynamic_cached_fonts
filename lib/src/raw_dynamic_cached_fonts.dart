@@ -20,7 +20,7 @@ abstract class RawDynamicCachedFonts {
   ///   overwritten with the new instance. This means any fonts cached earlier,
   ///   cannot be accessed using the new instance.
   /// ---
-  /// Any new `DynamicCachedFonts` instance or any [RawDynamicCachedFonts] methods
+  /// Any new [DynamicCachedFonts] instance or any [RawDynamicCachedFonts] methods
   /// called after this method will use [cacheManager] to download, cache
   /// and load fonts. This means custom configuration **cannot** be provided.
   ///
