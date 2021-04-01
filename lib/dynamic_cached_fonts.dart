@@ -478,7 +478,7 @@ class DynamicCachedFonts {
   ///   Defaults to false.
   ///
   ///   _Tip: To log only in debug mode, set [verboseLog]'s value to [kReleaseMode]_.
-  static  Future<Iterable<FileInfo>> loadCachedFamily(
+  static Future<Iterable<FileInfo>> loadCachedFamily(
     List<String> urls, {
     @required String fontFamily,
     bool verboseLog = false,
