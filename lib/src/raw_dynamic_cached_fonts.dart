@@ -1,13 +1,4 @@
-import 'dart:typed_data' show ByteData, Uint8List;
-
-import 'package:flutter/foundation.dart' show FlutterError, kReleaseMode;
-import 'package:flutter/services.dart' show FontLoader;
-import 'package:flutter/widgets.dart' show WidgetsFlutterBinding, TextStyle;
-import 'package:flutter_cache_manager/flutter_cache_manager.dart'
-    show CacheManager, Config, FileInfo;
-import 'package:meta/meta.dart' show required, visibleForTesting;
-
-import 'utils.dart';
+part of dynamic_cached_fonts;
 
 /// A more customizable implementation of [DynamicCachedFonts] which uses
 /// multiple static methods to download, cache, load and remove font assets.
