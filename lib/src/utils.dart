@@ -1,11 +1,11 @@
 import 'dart:developer' as dev;
 
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter/material.dart' show required;
+import 'package:firebase_storage/firebase_storage.dart' show FirebaseStorage, Reference;
 import 'package:flutter_cache_manager/flutter_cache_manager.dart' show CacheManager, Config;
+import 'package:meta/meta.dart' show required, internal;
 
 /// The name for for [dev.log].
+@internal
 const String kLoggerName = 'DynamicCachedFonts';
 
 /// The default `cacheStalePeriod`.
@@ -15,6 +15,7 @@ const Duration kDefaultCacheStalePeriod = Duration(days: 365);
 const int kDefaultMaxCacheObjects = 200;
 
 /// Logs a message to the console.
+@internal
 void devLog(List<String> messageList, {@required bool verboseLog}) {
   if (verboseLog) {
     final String message = messageList.join('\n');
@@ -41,6 +42,7 @@ void devLog(List<String> messageList, {@required bool verboseLog}) {
 /// by the caller, a new instance of [CacheManager] is created and added to [cacheManagers].
 /// This instance uses the sanitized url (see [Utils.sanitizeUrl]) as [Config.cacheKey] and
 /// as the key when adding the instance to [cacheManagers].
+@internal
 class DynamicCachedFontsCacheManager {
   DynamicCachedFontsCacheManager._();
 
@@ -61,28 +63,24 @@ class DynamicCachedFontsCacheManager {
 
   /// The getter for the default instance of [CacheManager] in [cacheManagers].
   static CacheManager get defaultCacheManager => cacheManagers[defaultCacheKey];
-}
 
-/// Returns a custom [CacheManager], if present, or
-CacheManager getCacheManager(String cacheKey) =>
-    DynamicCachedFontsCacheManager.cacheManagers[cacheKey] ??
-    DynamicCachedFontsCacheManager.defaultCacheManager;
+  static String _customCacheKey;
 
-/// Creates a new instance of [CacheManager] if the default can't be used.
-void handleCacheManager(String cacheKey, Duration cacheStalePeriod, int maxCacheObjects) {
-  if (cacheStalePeriod != kDefaultCacheStalePeriod && maxCacheObjects != kDefaultMaxCacheObjects) {
-    DynamicCachedFontsCacheManager.cacheManagers[cacheKey] ??= CacheManager(
-      Config(
-        cacheKey,
-        stalePeriod: cacheStalePeriod,
-        maxNrOfCacheObjects: maxCacheObjects,
-      ),
-    );
+  /// The getter for the custom instance of [CacheManager] in [cacheManagers].
+  static CacheManager get customCacheManager => cacheManagers[_customCacheKey];
+
+  /// The setter for the custom instance of [CacheManager] in [cacheManagers].
+  /// [Config.cacheKey] will be used as the key when adding the instance to 
+  /// [cacheManagers].
+  static set customCacheManager(CacheManager cacheManager) {
+    _customCacheKey =
+        cacheManager.store.storeKey; // This is the same key provided to Config.cacheKey.
+    cacheManagers[_customCacheKey] = cacheManager;
   }
 }
 
-/// A class for [DynamicCachedFonts] which performs actions
-/// which are not exposed as APIs.
+/// A class for [DynamicCachedFonts] which performs actions which are not exposed as APIs.
+@internal
 class Utils {
   Utils._();
 
@@ -131,4 +129,24 @@ class Utils {
   /// Remove `/` or `:` from url which can cause errors when used as storage paths
   /// in some operating systems.
   static String sanitizeUrl(String url) => url.replaceAll(RegExp(r'\/|:'), '');
+
+  /// Returns a custom [CacheManager], if present, or
+  static CacheManager getCacheManager(String cacheKey) =>
+      DynamicCachedFontsCacheManager.customCacheManager ??
+      DynamicCachedFontsCacheManager.cacheManagers[cacheKey] ??
+      DynamicCachedFontsCacheManager.defaultCacheManager;
+
+  /// Creates a new instance of [CacheManager] if the default can't be used.
+  static void handleCacheManager(String cacheKey, Duration cacheStalePeriod, int maxCacheObjects) {
+    if (cacheStalePeriod != kDefaultCacheStalePeriod &&
+        maxCacheObjects != kDefaultMaxCacheObjects) {
+      DynamicCachedFontsCacheManager.cacheManagers[cacheKey] ??= CacheManager(
+        Config(
+          cacheKey,
+          stalePeriod: cacheStalePeriod,
+          maxNrOfCacheObjects: maxCacheObjects,
+        ),
+      );
+    }
+  }
 }
