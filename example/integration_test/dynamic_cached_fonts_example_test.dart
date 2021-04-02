@@ -64,20 +64,6 @@ void main() {
         await fontFile.file.readAsBytes(),
       );
     });
-
-    testWidgets('Font is loaded with default validity', (_) async {
-      final FileInfo fontFile = await cacheManager.getFileFromCache(cacheKey);
-
-      final Duration fontValidityDurationDiff = fontFile.validTill.difference(DateTime.now()
-          // Default validity - 365 days
-          .add(const Duration(days: 365)));
-
-      expect(
-        fontValidityDurationDiff.inSeconds,
-        lessThan(10),
-        reason: fontFileValidatorFailureReason,
-      );
-    });
   });
 
   testWidgets('DynamicCachedFonts.family loads all fonts into cache', (_) async {
@@ -152,18 +138,6 @@ void main() {
 
     testWidgets('DynamicCachedFonts.cacheFont loads font into cache', (_) async {
       expect(fontFile, isNotNull);
-    });
-
-    testWidgets('DynamicCachedFonts.cacheFont loads font with default validity', (_) async {
-      final Duration fontValidityDurationDiff = fontFile.validTill.difference(DateTime.now()
-          // Default validity - 365 days
-          .add(const Duration(days: 365)));
-
-      expect(
-        fontValidityDurationDiff.inSeconds,
-        lessThan(10),
-        reason: fontFileValidatorFailureReason,
-      );
     });
 
     testWidgets('DynamicCachedFonts.cacheFont loads font with a valid extension', (_) async {
