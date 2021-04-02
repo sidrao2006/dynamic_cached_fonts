@@ -25,7 +25,7 @@ void main() {
     cacheManager = CacheManager(Config(cacheKey));
   });
 
-  group('load() method', () {
+  group('DynamicCachedFonts.load', () {
     FileInfo fontFile;
     DynamicCachedFonts fontLoader;
 
