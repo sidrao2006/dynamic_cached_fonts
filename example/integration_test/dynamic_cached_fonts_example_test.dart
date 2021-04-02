@@ -30,6 +30,8 @@ void main() {
     DynamicCachedFonts fontLoader;
 
     setUpAll(() async {
+      DynamicCachedFonts.custom(cacheManager: cacheManager);
+
       fontLoader = DynamicCachedFonts(url: fontUrl, fontFamily: fontName);
 
       await fontLoader.load();
@@ -86,20 +88,22 @@ void main() {
       firaSansThinUrl,
     ];
 
+    DynamicCachedFonts.custom(
+      cacheManager: cacheManager,
+    );
+
     await DynamicCachedFonts.family(
       urls: fontUrls,
       fontFamily: firaSans,
     ).load();
 
-    final List<FileInfo> fontFiles = await Future.wait(
-      fontUrls.map(
-        (String url) {
-          final String cacheKey = url.replaceAll(RegExp(r'\/|:'), '');
+    final List<FileInfo> fontFiles = await Future.wait(fontUrls.map(
+      (String url) async {
+        final String generatedCacheKey = url.replaceAll(RegExp(r'\/|:'), '');
 
-          return CacheManager(Config(cacheKey)).getFileFromCache(cacheKey);
-        },
-      ),
-    );
+        return cacheManager.getFileFromCache(generatedCacheKey);
+      },
+    ));
 
     expect(fontFiles.every((FileInfo file) => file != null), isTrue);
   });
@@ -110,13 +114,15 @@ void main() {
     setUpAll(() async {
       await Firebase.initializeApp();
 
+      DynamicCachedFonts.custom(cacheManager: cacheManager);
+
       await DynamicCachedFonts.fromFirebase(
         bucketUrl: firebaseFontUrl,
         fontFamily: firebaseFontName,
       ).load();
       final String cacheKey = firebaseFontUrl.replaceAll(RegExp(r'\/|:'), '');
 
-      fontFile = await CacheManager(Config(cacheKey)).getFileFromCache(cacheKey);
+      fontFile = await cacheManager.getFileFromCache(cacheKey);
     });
 
     testWidgets('load() method parses Firebase Bucket Url and loads font', (_) async {
@@ -137,6 +143,8 @@ void main() {
     FileInfo fontFile;
 
     setUpAll(() async {
+      DynamicCachedFonts.custom(cacheManager: cacheManager);
+
       DynamicCachedFonts.cacheFont(fontUrl);
 
       fontFile = await cacheManager.getFileFromCache(cacheKey);
@@ -166,9 +174,13 @@ void main() {
   });
 
   group('DynamicCachedFonts.canLoadFont', () {
+    setUpAll(() {
+      DynamicCachedFonts.custom(cacheManager: cacheManager);
+    });
+
     testWidgets('DynamicCachedFonts.canLoadFont returns true when font is available in cache',
         (_) async {
-      await DefaultCacheManager().downloadFile(
+      await cacheManager.downloadFile(
         fontUrl,
         key: cacheKey,
       );
@@ -197,6 +209,8 @@ void main() {
       await cacheManager.getFileFromCache(cacheKey),
       isNotNull,
     );
+
+    DynamicCachedFonts.custom(cacheManager: cacheManager);
 
     await DynamicCachedFonts.removeCachedFont(fontUrl);
 
