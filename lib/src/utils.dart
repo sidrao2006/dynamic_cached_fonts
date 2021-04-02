@@ -108,18 +108,12 @@ class Utils {
 
   /// Checks whether the [fileFormat] is valid and supported by flutter.
   static bool verifyFileFormat(String url) {
-    final String fileName = Uri.parse(url).pathSegments.last;
-    final String fileFormat = fileName.split('.').last;
-
-    if (fileFormat == 'otf' || fileFormat == 'ttf') {
+    if (url.endsWith('otf') || url.endsWith('ttf')) {
       return true;
     } else {
       dev.log(
         'Bad File Format',
-        error: <String>[
-          'The provided file format is not supported',
-          'Received file format: $fileFormat',
-        ].join('\n'),
+        error: <String>['The provided file format is not supported'],
         name: kLoggerName,
       );
       return false;
