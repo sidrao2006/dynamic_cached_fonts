@@ -94,7 +94,7 @@ void main() {
     expect(fontFiles.every((FileInfo file) => file != null), isTrue);
   });
 
-  group('DynamicCachedFonts.fromFirebase constructor', () {
+  group('DynamicCachedFonts.fromFirebase', () {
     FileInfo fontFile;
 
     setUpAll(() async {
