@@ -138,7 +138,7 @@ class Utils {
 
   /// Creates a new instance of [CacheManager] if the default can't be used.
   static void handleCacheManager(String cacheKey, Duration cacheStalePeriod, int maxCacheObjects) {
-    if (cacheStalePeriod != kDefaultCacheStalePeriod &&
+    if (cacheStalePeriod != kDefaultCacheStalePeriod ||
         maxCacheObjects != kDefaultMaxCacheObjects) {
       DynamicCachedFontsCacheManager.cacheManagers[cacheKey] ??= CacheManager(
         Config(
