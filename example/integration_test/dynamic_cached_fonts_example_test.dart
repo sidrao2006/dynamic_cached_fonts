@@ -11,7 +11,7 @@ const String fontUrl = cascadiaCodeUrl,
     firebaseFontUrl = firaCodeUrl,
     firebaseFontName = firaCode;
 
-final String cacheKey = fontUrl.replaceAll(RegExp(r'\/|:'), '');
+final String cacheKey = cacheKeyFromUrl(fontUrl);
 
 const String fontFileValidatorFailureReason =
     'Difference in the actual validity of file and expected validity is greater than 10 seconds.\nThis might be a speed/performance issue with host device or the test device';
@@ -85,7 +85,7 @@ void main() {
 
     final List<FileInfo> fontFiles = await Future.wait(fontUrls.map(
       (String url) async {
-        final String generatedCacheKey = url.replaceAll(RegExp(r'\/|:'), '');
+        final String generatedCacheKey = cacheKeyFromUrl(url);
 
         return cacheManager.getFileFromCache(generatedCacheKey);
       },
@@ -106,7 +106,7 @@ void main() {
         bucketUrl: firebaseFontUrl,
         fontFamily: firebaseFontName,
       ).load();
-      final String cacheKey = firebaseFontUrl.replaceAll(RegExp(r'\/|:'), '');
+      final String cacheKey = cacheKeyFromUrl(firebaseFontUrl);
 
       fontFile = await cacheManager.getFileFromCache(cacheKey);
     });
