@@ -16,6 +16,8 @@ import 'src/utils.dart';
 
 export 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
+export 'src/utils.dart' show cacheKeyFromUrl;
+
 part 'src/raw_dynamic_cached_fonts.dart';
 
 /// Allows dynamically loading fonts from the given url.

@@ -2,7 +2,12 @@ import 'dart:developer' as dev;
 
 import 'package:firebase_storage/firebase_storage.dart' show FirebaseStorage, Reference;
 import 'package:flutter_cache_manager/flutter_cache_manager.dart' show CacheManager, Config;
-import 'package:meta/meta.dart' show required, internal;
+import 'package:meta/meta.dart' show internal, required, visibleForTesting;
+
+/// Gets the sanitized url from [url] which is used as `cacheKey` when 
+/// downloading, caching or loading.
+@visibleForTesting
+String cacheKeyFromUrl(String url) => Utils.sanitizeUrl(url);
 
 /// The name for for [dev.log].
 @internal
@@ -70,7 +75,7 @@ class DynamicCachedFontsCacheManager {
   static CacheManager get customCacheManager => cacheManagers[_customCacheKey];
 
   /// The setter for the custom instance of [CacheManager] in [cacheManagers].
-  /// [Config.cacheKey] will be used as the key when adding the instance to 
+  /// [Config.cacheKey] will be used as the key when adding the instance to
   /// [cacheManagers].
   static set customCacheManager(CacheManager cacheManager) {
     _customCacheKey =
@@ -132,7 +137,7 @@ class Utils {
 
   /// Creates a new instance of [CacheManager] if the default can't be used.
   static void handleCacheManager(String cacheKey, Duration cacheStalePeriod, int maxCacheObjects) {
-    if (cacheStalePeriod != kDefaultCacheStalePeriod &&
+    if (cacheStalePeriod != kDefaultCacheStalePeriod ||
         maxCacheObjects != kDefaultMaxCacheObjects) {
       DynamicCachedFontsCacheManager.cacheManagers[cacheKey] ??= CacheManager(
         Config(
