@@ -13,9 +13,6 @@ const String fontUrl = cascadiaCodeUrl,
 
 final String cacheKey = cacheKeyFromUrl(fontUrl);
 
-const String fontFileValidatorFailureReason =
-    'Difference in the actual validity of file and expected validity is greater than 10 seconds.\nThis might be a speed/performance issue with host device or the test device';
-
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
