@@ -7,10 +7,10 @@ version: 1.0.0
 dependencies:
   flutter:
     sdk: flutter
-  firebase_core: ^1.0.1
 
   dynamic_cached_fonts:
     path: ../
+  firebase_core: ^1.0.1
 
 dev_dependencies:
   flutter_test:
