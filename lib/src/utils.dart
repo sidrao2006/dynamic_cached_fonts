@@ -1,11 +1,11 @@
 import 'dart:developer' as dev;
-import 'dart:typed_data' show Uint8List;
+import 'dart:typed_data';
 
-import 'package:file/file.dart' show File;
-import 'package:firebase_storage/firebase_storage.dart' show FirebaseStorage, Reference;
-import 'package:flutter/foundation.dart' show listEquals;
-import 'package:flutter_cache_manager/flutter_cache_manager.dart' show CacheManager, Config;
-import 'package:meta/meta.dart' show internal, required, visibleForTesting;
+import 'package:file/file.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:meta/meta.dart';
 
 /// Gets the sanitized url from [url] which is used as `cacheKey` when
 /// downloading, caching or loading.
