@@ -1,10 +1,13 @@
 import 'dart:developer' as dev;
+import 'dart:typed_data' show Uint8List;
 
+import 'package:file/file.dart' show File;
 import 'package:firebase_storage/firebase_storage.dart' show FirebaseStorage, Reference;
+import 'package:flutter/foundation.dart' show listEquals;
 import 'package:flutter_cache_manager/flutter_cache_manager.dart' show CacheManager, Config;
 import 'package:meta/meta.dart' show internal, required, visibleForTesting;
 
-/// Gets the sanitized url from [url] which is used as `cacheKey` when 
+/// Gets the sanitized url from [url] which is used as `cacheKey` when
 /// downloading, caching or loading.
 @visibleForTesting
 String cacheKeyFromUrl(String url) => Utils.sanitizeUrl(url);
@@ -84,10 +87,57 @@ class DynamicCachedFontsCacheManager {
   }
 }
 
+class _FontFileExtensionManager {
+  _FontFileExtensionManager();
+
+  final Map<String, List<int>> _validExtensions = <String, List<int>>{};
+
+  void addExtension({String extension, List<int> magicNumber}) {
+    _validExtensions[extension] = magicNumber;
+  }
+
+  bool matchesFileExtension(String path, Uint8List fileBytes) {
+    String fontExtension;
+
+    final int index = path.lastIndexOf('.');
+    if (index < 0 || index + 1 >= path.length) fontExtension = '';
+    fontExtension = path.substring(index + 1).toLowerCase();
+
+    final List<int> headerBytes = fileBytes.sublist(0, 5).toList();
+
+    return _validExtensions.keys.contains(fontExtension) ||
+        _validExtensions.values.any(
+          (List<int> magicNumber) => listEquals(headerBytes, magicNumber),
+        );
+  }
+}
+
 /// A class for [DynamicCachedFonts] which performs actions which are not exposed as APIs.
 @internal
 class Utils {
   Utils._();
+
+  static final _FontFileExtensionManager _fontFileExtensionManager = _FontFileExtensionManager()
+    ..addExtension(
+      extension: 'ttf',
+      magicNumber: <int>[
+        0x00,
+        0x01,
+        0x00,
+        0x00,
+        0x00,
+      ],
+    )
+    ..addExtension(
+      extension: 'otf',
+      magicNumber: <int>[
+        0x4F,
+        0x54,
+        0x54,
+        0x4F,
+        0x00,
+      ],
+    );
 
   /// Checks whether the received [url] is a Cloud Storage url or an https url.
   /// If the url points to a Cloud Storage bucket, then a download url
@@ -111,20 +161,14 @@ class Utils {
     return ref.getDownloadURL();
   }
 
-  /// Checks whether the [fileFormat] is valid and supported by flutter.
-  static bool verifyFileFormat(String url) {
-    final String fileName = Uri.parse(url).pathSegments.last;
-    final String fileFormat = fileName.split('.').last;
-
-    if (fileFormat == 'otf' || fileFormat == 'ttf') {
+  /// Checks whether the [font] has a valid extension which is supported by Flutter.
+  static bool verifyFileExtension(File font) {
+    if (_fontFileExtensionManager.matchesFileExtension(font.basename, font.readAsBytesSync())) {
       return true;
     } else {
       dev.log(
         'Bad File Format',
-        error: <String>[
-          'The provided file format is not supported',
-          'Received file format: $fileFormat',
-        ].join('\n'),
+        error: <String>['The provided file format is not supported'],
         name: kLoggerName,
       );
       return false;

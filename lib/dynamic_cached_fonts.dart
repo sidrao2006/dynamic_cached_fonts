@@ -294,19 +294,19 @@ class DynamicCachedFonts {
   Future<Iterable<File>> load() async {
     WidgetsFlutterBinding.ensureInitialized();
 
-    if (!urls.every(
-      (String url) => Utils.verifyFileFormat(url),
-    )) {
-      throw FlutterError(
-        'Invalid url. Unsupported file format. Supported file formats - otf and ttf',
-      );
-    }
-
     final Iterable<File> fontFiles = await Future.wait(
       urls.map(
         (String url) => _handleCache(url),
       ),
     );
+
+    if (!fontFiles.every(
+      (File font) => Utils.verifyFileExtension(font),
+    )) {
+      throw FlutterError(
+        'Invalid url. Unsupported file format. Supported file formats - otf and ttf',
+      );
+    }
 
     final Iterable<Future<ByteData>> cachedFontBytes = fontFiles.map(
       (File font) async => ByteData.view(
