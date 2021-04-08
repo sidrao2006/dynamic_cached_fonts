@@ -7,7 +7,7 @@ import 'package:flutter/foundation.dart' show listEquals;
 import 'package:flutter_cache_manager/flutter_cache_manager.dart' show CacheManager, Config;
 import 'package:meta/meta.dart' show internal, required, visibleForTesting;
 
-/// Gets the sanitized url from [url] which is used as `cacheKey` when 
+/// Gets the sanitized url from [url] which is used as `cacheKey` when
 /// downloading, caching or loading.
 @visibleForTesting
 String cacheKeyFromUrl(String url) => Utils.sanitizeUrl(url);
