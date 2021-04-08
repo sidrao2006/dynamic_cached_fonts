@@ -2,15 +2,14 @@
 /// It can be easily fetched from cache and loaded on demand.
 library dynamic_cached_fonts;
 
-import 'dart:typed_data' show ByteData, Uint8List;
+import 'dart:typed_data';
 
-import 'package:file/file.dart' show File;
-import 'package:flutter/foundation.dart' show kReleaseMode, FlutterError;
-import 'package:flutter/services.dart' show FontLoader;
-import 'package:flutter/widgets.dart' show TextStyle, WidgetsFlutterBinding, FontWeight, FontStyle;
-import 'package:flutter_cache_manager/flutter_cache_manager.dart'
-    show CacheManager, Config, FileInfo;
-import 'package:meta/meta.dart' show required, visibleForTesting;
+import 'package:file/file.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:meta/meta.dart';
 
 import 'src/utils.dart';
 

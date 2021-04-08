@@ -1,5 +1,5 @@
-import 'package:dynamic_cached_fonts/dynamic_cached_fonts.dart' show DynamicCachedFonts;
-import 'package:flutter_test/flutter_test.dart' show expect, test;
+import 'package:dynamic_cached_fonts/dynamic_cached_fonts.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   const String firebaseMockUrl = 'gs://mockurl.appspot.com/a.ttf';
