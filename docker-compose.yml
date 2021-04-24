@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+  app:
+    build: .
+    image: sidrao2006/dynamic_cached_fonts
+    volumes:
+      - .:/app
+      - /root/.pub-cache
+      - /app/.dart_tool
+      - /app/example/.dart_tool
+
+
