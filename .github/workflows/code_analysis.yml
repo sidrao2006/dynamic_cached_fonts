@@ -27,7 +27,7 @@ jobs:
         run: flutter pub get
 
       - name: Activate pana
-        run: flutter pub global activate pana
+        run: flutter pub global activate pana ^0.16.0
       
       - name: Format code for tests
         run: flutter format .
