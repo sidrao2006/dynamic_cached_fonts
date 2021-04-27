@@ -8,5 +8,3 @@ services:
       - /root/.pub-cache
       - /app/.dart_tool
       - /app/example/.dart_tool
-
-
