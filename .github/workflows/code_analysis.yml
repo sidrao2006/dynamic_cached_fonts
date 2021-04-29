@@ -27,7 +27,7 @@ jobs:
         run: flutter pub get
 
       - name: Activate pana
-        run: flutter pub global activate pana
+        run: flutter pub global activate pana ^0.16.0
       
       - name: Format code for tests
         run: flutter format .
@@ -47,7 +47,7 @@ jobs:
             const panaOutput = JSON.parse(process.env.PANA_RESULT_JSON)
 
             if (panaOutput.scores.grantedPoints < Number.parseInt(process.env.PUB_SCORE_MIN_POINTS)) {
-               for (const test in panaOutput.result.sections) {
+               for (const test in panaOutput.report.sections) {
                   if (test.status !== 'passed') core.warning(test.title + '\n\n\n' + test.summary)
                }
                core.error('Pub score test failed')
