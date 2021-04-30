@@ -171,9 +171,14 @@ Have a custom font to load from Firebase Cloud Storage? Go for the `DynamicCache
 
 ![Demo 4]
 
-## Bug Reports, Help and Contributions
+## Bug Reports and Help
 
 If you find a bug, please open an issue on [Github][issue_tracker] or if you need any help, let's discuss on [Github Discussions]!
+
+## Contributing
+
+To make things easier, you can use docker compose to set up  a dev environment.
+Just run `docker compose run app`
 
 To contribute to the package, fork the repository and open a [pull request]!
 
