@@ -33,14 +33,14 @@ jobs:
         run: flutter format .
       
       - name: Run pana tests
+        id: test
         run: |
-          echo 'PANA_RESULT_JSON<<EOF' >> $GITHUB_ENV
-          flutter pub global run pana . --json --no-warning >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
+          echo "::set-output name=panaOutput::$(flutter pub global run pana . --json --no-warning)"
 
       - name: Calculate Result
         env:
           PUB_SCORE_MIN_POINTS: 90
+          PANA_RESULT_JSON: ${{ steps.test.outputs.panaOutput }}
         uses: actions/github-script@v3
         with:
           script: |
