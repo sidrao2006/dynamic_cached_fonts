@@ -54,6 +54,5 @@ jobs:
                   const test = JSON.parse(testJson)
                   if (test.status !== 'passed') core.warning(test.title + '\n\n\n' + test.summary)
                }
-               core.error(`Pub score test failed. Achieved score of ${score} is less than expected minimum score of ${minScore}`)
-               core.exit(1)
+               core.setFailed(`Pub score test failed. Achieved score of ${score} is less than expected minimum score of ${minScore}`)
             }
