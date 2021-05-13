@@ -52,8 +52,8 @@ jobs:
               console.log(output);
             if (score < minScore) {
                for (const testJson in sections) {
-               console.log(testJson)
-                  const test = JSON.parse(testJson)
+               console.log(testJson[0])
+                  const test = JSON.parse(testJson[0])
                   console.log(test)
                   if (test.status !== 'passed') core.warning(test.title + '\n\n\n' + test.summary)
                }
