@@ -42,7 +42,7 @@ jobs:
         with:
           node-version: 14
 
-      - run: npm install cli-markdown
+      - run: npm install cli-markdown @actions/core
 
       - name: Calculate Result
         run: node dev/ci/code_analysis.js

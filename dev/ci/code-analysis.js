@@ -1,4 +1,5 @@
-const cliMarkdown = require('cli-markdown');
+import cliMarkdown from 'cli-markdown';
+import core from '@actions/core';
 
 const { PANA_RESULT_JSON, PUB_SCORE_MIN_POINTS } = process.env;
 
