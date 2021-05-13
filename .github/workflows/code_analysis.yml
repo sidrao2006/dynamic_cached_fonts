@@ -48,14 +48,9 @@ jobs:
               minScore = Number.parseInt(process.env.PUB_SCORE_MIN_POINTS)
             const score = output.scores.grantedPoints,
               sections = output.report.sections;
-              
-              console.log(sections);
-              console.log(sections[0][0])
+
             if (score < minScore) {
-               for (const testJson in sections) {
-               console.log(testJson[0])
-                  const test = JSON.parse(testJson[0])
-                  console.log(test)
+               for (const test of sections) {
                   if (test.status !== 'passed') core.warning(test.title + '\n\n\n' + test.summary)
                }
                core.setFailed(`Pub score test failed. Achieved score of ${score} is less than expected minimum score of ${minScore}`)
