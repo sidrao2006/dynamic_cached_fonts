@@ -38,17 +38,13 @@ jobs:
           flutter pub global run pana . --json --no-warning >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
 
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - run: npm install cli-markdown @actions/core
+
       - name: Calculate Result
+        run: node dev/ci/code_analysis.js
         env:
           PUB_SCORE_MIN_POINTS: 90
-        uses: actions/github-script@v3
-        with:
-          script: |
-            const panaOutput = JSON.parse(process.env.PANA_RESULT_JSON)
-
-            if (panaOutput.scores.grantedPoints < Number.parseInt(process.env.PUB_SCORE_MIN_POINTS)) {
-               for (const test in panaOutput.report.sections) {
-                  if (test.status !== 'passed') core.warning(test.title + '\n\n\n' + test.summary)
-               }
-               core.error('Pub score test failed')
-            }
