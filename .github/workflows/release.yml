@@ -12,6 +12,10 @@ jobs:
     name: Release and Publish Package
     environment: Release
     runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+    
     steps:
       - name: Checkout repository code
         uses: actions/checkout@v2
@@ -40,4 +44,3 @@ jobs:
           expiration: ${{ secrets.PUB_CREDENTIALS_EXPIRATION }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
