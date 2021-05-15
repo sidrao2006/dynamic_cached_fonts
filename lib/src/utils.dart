@@ -85,6 +85,23 @@ class DynamicCachedFontsCacheManager {
         cacheManager.store.storeKey; // This is the same key provided to Config.cacheKey.
     _cacheManagers[_customCacheKey] = cacheManager;
   }
+
+  /// Returns a custom [CacheManager], if present, or
+  static CacheManager getCacheManager(String cacheKey) =>
+      customCacheManager ?? _cacheManagers[cacheKey] ?? defaultCacheManager;
+
+  /// Creates a new instance of [CacheManager] if the default can't be used.
+  static void handleCacheManager(String cacheKey, Duration cacheStalePeriod, int maxCacheObjects) {
+    if (cacheStalePeriod != kDefaultCacheStalePeriod ||
+        maxCacheObjects != kDefaultMaxCacheObjects) {
+      _cacheManagers[cacheKey] ??= CacheManager(
+        Config(
+          cacheKey,
+          stalePeriod: cacheStalePeriod,
+          maxNrOfCacheObjects: maxCacheObjects,
+        ),
+      );
+    }
   }
 }
 
@@ -179,24 +196,4 @@ class Utils {
   /// Remove `/` or `:` from url which can cause errors when used as storage paths
   /// in some operating systems.
   static String sanitizeUrl(String url) => url.replaceAll(RegExp(r'\/|:'), '');
-
-  /// Returns a custom [CacheManager], if present, or
-  static CacheManager getCacheManager(String cacheKey) =>
-      DynamicCachedFontsCacheManager.customCacheManager ??
-      DynamicCachedFontsCacheManager.cacheManagers[cacheKey] ??
-      DynamicCachedFontsCacheManager.defaultCacheManager;
-
-  /// Creates a new instance of [CacheManager] if the default can't be used.
-  static void handleCacheManager(String cacheKey, Duration cacheStalePeriod, int maxCacheObjects) {
-    if (cacheStalePeriod != kDefaultCacheStalePeriod ||
-        maxCacheObjects != kDefaultMaxCacheObjects) {
-      DynamicCachedFontsCacheManager.cacheManagers[cacheKey] ??= CacheManager(
-        Config(
-          cacheKey,
-          stalePeriod: cacheStalePeriod,
-          maxNrOfCacheObjects: maxCacheObjects,
-        ),
-      );
-    }
-  }
 }
