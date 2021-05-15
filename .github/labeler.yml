@@ -2,7 +2,7 @@ example: example/**/*
 
 'infra :building_construction:':
   - .github/workflows/*
-  - Docker
+  - Dockerfile
   - docker-compose.yml
   - analysis_options.yml
   - example/analysis_options.yml
