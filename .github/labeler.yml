@@ -7,7 +7,7 @@ example: example/**/*
   - analysis_options.yml
   - example/analysis_options.yml
   - dartdoc_options.yml
-  - '**/README.md'
+  - ./**/README.md
   - CODE_OF_CONDUCT.md
   - LICENSE
   - .github/ISSUE_TEMPLATE/*
@@ -16,14 +16,14 @@ example: example/**/*
 'infra: ci :construction_worker:': .github/workflows/*
 
 'infra: development-experience :children_crossing:':
-  - Docker
+  - Dockerfile
   - docker-compose.yml
   - analysis_options.yml
   - example/analysis_options.yml
   - dartdoc_options.yml
 
 'infra: community':
-  - '**/README.md'
+  - ./**/README.md
   - CODE_OF_CONDUCT.md
   - LICENSE
   - .github/ISSUE_TEMPLATE/*
