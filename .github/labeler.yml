@@ -13,7 +13,7 @@ example: example/**/*
   - .github/ISSUE_TEMPLATE/*
   - .github/PULL_REQUEST_TEMPLATE.md
 
-'infra: ci :construction_worker': .github/workflows/*
+'infra: ci :construction_worker:': .github/workflows/*
 
 'infra: development-experience :children_crossing:':
   - Docker
