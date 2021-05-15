@@ -9,7 +9,7 @@ const score = output.scores.grantedPoints,
     sections = output.report.sections;
 
 for (const test of sections) {
-    if (test.status !== 'passed') {
+    if (test.status !== 'passed' && score < minScore) {
         core.warning(test.title)
         console.log('\n\n\n' + cliMarkdown(test.summary))
     } else console.log(test.title + '\n\n\n' + cliMarkdown(test.summary))
