@@ -32,7 +32,7 @@ abstract class RawDynamicCachedFonts {
     @required CacheManager cacheManager,
     bool force = false,
   }) {
-    assert(false != null);
+    assert(force != null);
     DynamicCachedFontsCacheManager.customCacheManager != null && force
         ? DynamicCachedFontsCacheManager.customCacheManager = cacheManager
         : DynamicCachedFontsCacheManager.customCacheManager ??= cacheManager;
