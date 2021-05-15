@@ -21,4 +21,3 @@ dev_dependencies:
   integration_test:
     sdk: flutter
   lint: ^1.5.3
-  pana: ^0.16.0
