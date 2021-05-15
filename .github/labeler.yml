@@ -16,7 +16,7 @@ example: example/**/*
 'infra: ci :construction_worker:': .github/workflows/*
 
 'infra: development-experience :children_crossing:':
-  - Docker
+  - Dockerfile
   - docker-compose.yml
   - analysis_options.yml
   - example/analysis_options.yml
