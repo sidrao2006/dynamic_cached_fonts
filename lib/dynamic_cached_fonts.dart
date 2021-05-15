@@ -335,12 +335,12 @@ class DynamicCachedFonts {
   Future<File> _handleCache(String url) async {
     final String cacheKey = Utils.sanitizeUrl(url);
 
-    Utils.handleCacheManager(cacheKey, cacheStalePeriod, maxCacheObjects);
+    DynamicCachedFontsCacheManager.handleCacheManager(cacheKey, cacheStalePeriod, maxCacheObjects);
 
     final String downloadUrl =
         _isFirebaseURL ? await Utils.handleUrl(url, verboseLog: _verboseLog) : url;
 
-    final File font = await Utils.getCacheManager(cacheKey).getSingleFile(
+    final File font = await DynamicCachedFontsCacheManager.getCacheManager(cacheKey).getSingleFile(
       downloadUrl,
       key: cacheKey,
     );
