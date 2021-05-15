@@ -40,50 +40,68 @@ void devLog(List<String> messageList, {@required bool verboseLog}) {
 ///
 /// When `cacheStalePeriod` or `maxCacheObjects` is not modified, a default instance
 /// of [CacheManager] is created when a font cache/load is requested. This instance
-/// assigns [defaultCacheKey] to [Config.cacheKey], [kDefaultCacheStalePeriod]
+/// assigns [_defaultCacheKey] to [Config.cacheKey], [kDefaultCacheStalePeriod]
 /// to [Config.stalePeriod] and [kDefaultMaxCacheObjects] to [Config.maxNrOfCacheObjects].
-/// The instance is added to [cacheManagers] with [defaultCacheKey] as the key.
+/// The instance is added to [_cacheManagers] with [_defaultCacheKey] as the key.
 ///
 /// The default instance can be easily accessed with [defaultCacheManager].
 ///
 /// When caching/loading a font, if `cacheStalePeriod` or `maxCacheObjects` is modified
-/// by the caller, a new instance of [CacheManager] is created and added to [cacheManagers].
+/// by the caller, a new instance of [CacheManager] is created and added to [_cacheManagers].
 /// This instance uses the sanitized url (see [Utils.sanitizeUrl]) as [Config.cacheKey] and
-/// as the key when adding the instance to [cacheManagers].
+/// as the key when adding the instance to [_cacheManagers].
 @internal
 class DynamicCachedFontsCacheManager {
   DynamicCachedFontsCacheManager._();
 
   /// The default cache key for cache managers' configurations
-  static const String defaultCacheKey = 'DynamicCachedFontsFontCacheKey';
+  static const String _defaultCacheKey = 'DynamicCachedFontsFontCacheKey';
 
   /// A map of [CacheManager]s used throughout the package. The key used
   /// will correspond to [Config.cacheKey] of the respective [CacheManager].
-  static Map<String, CacheManager> cacheManagers = <String, CacheManager>{
-    defaultCacheKey: CacheManager(
+  static final Map<String, CacheManager> _cacheManagers = <String, CacheManager>{
+    _defaultCacheKey: CacheManager(
       Config(
-        DynamicCachedFontsCacheManager.defaultCacheKey,
+        _defaultCacheKey,
         stalePeriod: kDefaultCacheStalePeriod,
         maxNrOfCacheObjects: kDefaultMaxCacheObjects,
       ),
     ),
   };
 
-  /// The getter for the default instance of [CacheManager] in [cacheManagers].
-  static CacheManager get defaultCacheManager => cacheManagers[defaultCacheKey];
-
   static String _customCacheKey;
 
-  /// The getter for the custom instance of [CacheManager] in [cacheManagers].
-  static CacheManager get customCacheManager => cacheManagers[_customCacheKey];
+  /// The getter for the default instance of [CacheManager] in [_cacheManagers].
+  static CacheManager get defaultCacheManager => _cacheManagers[_defaultCacheKey];
 
-  /// The setter for the custom instance of [CacheManager] in [cacheManagers].
+  /// The getter for the custom instance of [CacheManager] in [_cacheManagers].
+  static CacheManager get customCacheManager => _cacheManagers[_customCacheKey];
+
+  /// The setter for the custom instance of [CacheManager] in [_cacheManagers].
   /// [Config.cacheKey] will be used as the key when adding the instance to
-  /// [cacheManagers].
+  /// [_cacheManagers].
   static set customCacheManager(CacheManager cacheManager) {
     _customCacheKey =
         cacheManager.store.storeKey; // This is the same key provided to Config.cacheKey.
-    cacheManagers[_customCacheKey] = cacheManager;
+    _cacheManagers[_customCacheKey] = cacheManager;
+  }
+
+  /// Returns a custom [CacheManager], if present, or
+  static CacheManager getCacheManager(String cacheKey) =>
+      customCacheManager ?? _cacheManagers[cacheKey] ?? defaultCacheManager;
+
+  /// Creates a new instance of [CacheManager] if the default can't be used.
+  static void handleCacheManager(String cacheKey, Duration cacheStalePeriod, int maxCacheObjects) {
+    if (cacheStalePeriod != kDefaultCacheStalePeriod ||
+        maxCacheObjects != kDefaultMaxCacheObjects) {
+      _cacheManagers[cacheKey] ??= CacheManager(
+        Config(
+          cacheKey,
+          stalePeriod: cacheStalePeriod,
+          maxNrOfCacheObjects: maxCacheObjects,
+        ),
+      );
+    }
   }
 }
 
@@ -178,24 +196,4 @@ class Utils {
   /// Remove `/` or `:` from url which can cause errors when used as storage paths
   /// in some operating systems.
   static String sanitizeUrl(String url) => url.replaceAll(RegExp(r'\/|:'), '');
-
-  /// Returns a custom [CacheManager], if present, or
-  static CacheManager getCacheManager(String cacheKey) =>
-      DynamicCachedFontsCacheManager.customCacheManager ??
-      DynamicCachedFontsCacheManager.cacheManagers[cacheKey] ??
-      DynamicCachedFontsCacheManager.defaultCacheManager;
-
-  /// Creates a new instance of [CacheManager] if the default can't be used.
-  static void handleCacheManager(String cacheKey, Duration cacheStalePeriod, int maxCacheObjects) {
-    if (cacheStalePeriod != kDefaultCacheStalePeriod ||
-        maxCacheObjects != kDefaultMaxCacheObjects) {
-      DynamicCachedFontsCacheManager.cacheManagers[cacheKey] ??= CacheManager(
-        Config(
-          cacheKey,
-          stalePeriod: cacheStalePeriod,
-          maxNrOfCacheObjects: maxCacheObjects,
-        ),
-      );
-    }
-  }
 }
