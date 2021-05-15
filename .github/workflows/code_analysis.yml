@@ -13,11 +13,6 @@ jobs:
       - name: Checkout repository code
         uses: actions/checkout@v2
 
-      - name: Setup JDK
-        uses: actions/setup-java@v1
-        with:
-          java-version: '12.x'
-
       - name: Setup Flutter SDK
         uses: subosito/flutter-action@v1
         with:
@@ -26,16 +21,13 @@ jobs:
       - name: Get flutter packages
         run: flutter pub get
 
-      - name: Activate pana
-        run: flutter pub global activate pana ^0.16.0
-      
       - name: Format code for tests
         run: flutter format .
       
       - name: Run pana tests
         run: |
           echo 'PANA_RESULT_JSON<<EOF' >> $GITHUB_ENV
-          flutter pub global run pana . --json --no-warning >> $GITHUB_ENV
+          dart run pana . --json --no-warning >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
 
       - name: Setup NodeJS
