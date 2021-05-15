@@ -27,7 +27,7 @@ jobs:
       - name: Run pana tests
         run: |
           echo 'PANA_RESULT_JSON<<EOF' >> $GITHUB_ENV
-          dart run pana . --json --no-warning >> $GITHUB_ENV
+          flutter pub run pana . --json --no-warning >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
 
       - name: Setup NodeJS
