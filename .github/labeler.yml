@@ -30,7 +30,7 @@ example: example/**/*
   - .github/PULL_REQUEST_TEMPLATE.md
 
 'internal: dependencies ⬆➕':
-  - any: ['**/pubspec.yaml']
+  - any: ['**/pubspec*']
     all: ['!CHANGELOG.md']
 
 'release :tada:': CHANGELOG.md
