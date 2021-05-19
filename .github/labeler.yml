@@ -2,7 +2,8 @@ example: example/**/*
 
 'infra :building_construction:':
   - .github/workflows/*
-  - Dockerfile
+  - dev/ci/*
+  - dev/docker/*
   - docker-compose.yml
   - analysis_options.yml
   - example/analysis_options.yml
@@ -13,10 +14,12 @@ example: example/**/*
   - .github/ISSUE_TEMPLATE/*
   - .github/PULL_REQUEST_TEMPLATE.md
 
-'infra: ci :construction_worker:': .github/workflows/*
+'infra: ci :construction_worker:': 
+ - .github/workflows/*
+ - dev/ci/*
 
 'infra: development-experience :children_crossing:':
-  - Dockerfile
+  - dev/docker/*
   - docker-compose.yml
   - analysis_options.yml
   - example/analysis_options.yml

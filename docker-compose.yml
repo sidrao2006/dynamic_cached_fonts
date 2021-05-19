@@ -1,10 +1,28 @@
 version: "3.9"
 services:
-  app:
-    build: .
-    image: sidrao2006/dynamic_cached_fonts
+  windows:
+    build:
+      context: .
+      dockerfile: dev/docker/Dockerfile.windows
+    image: sidrao2006/flutter-desktop-windows
     volumes:
       - .:/app
       - /root/.pub-cache
       - /app/.dart_tool
       - /app/example/.dart_tool
+
+  linux:
+    build:
+      context: .
+      dockerfile: dev/docker/Dockerfile.linux
+    image: sidrao2006/flutter-desktop-linux
+    volumes:
+      - .:/app
+      - pub-cache:/root/.pub-cache
+      - dart-tool:/app/.dart_tool
+      - example-dart-tool:/app/example/.dart_tool
+
+volumes:
+  pub-cache:
+  dart-tool:
+  example-dart-tool:
