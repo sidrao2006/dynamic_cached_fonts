@@ -1,0 +1,25 @@
+FROM cirrusci/android-sdk:30-windowsservercore-2019
+
+SHELL ["powershell.exe", "-NoLogo", "-ExecutionPolicy", "Bypass"]
+
+ENV PACKAGE="system-images;android-S;google_apis;arm64-v8a"
+
+RUN sdkmanager ${PACKAGE} && \
+    echo "no" | avdmanager create avd --name flutter_emulator --package ${PACKAGE}
+
+RUN iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+
+WORKDIR /app
+
+COPY dev/docker/packages.config dev/docker/
+
+RUN choco install dev/docker/packages.config
+
+RUN flutter config --enable-windows-desktop
+
+# App
+
+COPY pubspec.* ./
+COPY example/pubspec.* ./example/
+
+RUN flutter pub get
