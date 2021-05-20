@@ -1,0 +1,33 @@
+FROM cirrusci/flutter:stable
+
+# Flutter linux dependencies
+RUN apt-get update && apt-get -y --no-install-recommends \
+    install \
+    clang \
+    cmake \
+    ninja-build \
+    pkg-config \
+    libgtk-3-dev \
+    liblzma-dev
+
+ENV PACKAGE="system-images;android-S;google_apis;arm64-v8a"
+
+RUN sdkmanager ${PACKAGE} && \
+    echo "no" | avdmanager create avd --name flutter_emulator --package ${PACKAGE}
+
+WORKDIR /app
+
+COPY dev/docker/linux-web-setup.sh dev/docker/
+
+# Install Chrome and Chromedriver
+RUN dev/docker/linux-web-setup.sh
+
+# Enable linux and web support
+RUN flutter config --enable-linux-desktop --enable-web
+
+# App
+
+COPY pubspec.* ./
+COPY example/pubspec.* ./example/
+
+RUN flutter pub get
