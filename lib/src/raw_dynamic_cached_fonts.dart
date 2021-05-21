@@ -171,8 +171,11 @@ abstract class RawDynamicCachedFonts {
     String url, {
     @required String fontFamily,
     bool verboseLog = false,
+    @visibleForTesting FontLoader fontLoader,
   }) async {
     assert(verboseLog != null);
+
+    fontLoader ??= FontLoader(fontFamily);
 
     WidgetsFlutterBinding.ensureInitialized();
 
@@ -185,10 +188,9 @@ abstract class RawDynamicCachedFonts {
 
     final ByteData cachedFontBytes = ByteData.view(fontBytes.buffer);
 
-    final FontLoader fontLoader = FontLoader(fontFamily)
-      ..addFont(
-        Future<ByteData>.value(cachedFontBytes),
-      );
+    fontLoader.addFont(
+      Future<ByteData>.value(cachedFontBytes),
+    );
 
     await fontLoader.load();
 
@@ -231,8 +233,11 @@ abstract class RawDynamicCachedFonts {
     List<String> urls, {
     @required String fontFamily,
     bool verboseLog = false,
+    @visibleForTesting FontLoader fontLoader,
   }) async {
     assert(verboseLog != null);
+
+    fontLoader ??= FontLoader(fontFamily);
 
     WidgetsFlutterBinding.ensureInitialized();
 
@@ -252,8 +257,6 @@ abstract class RawDynamicCachedFonts {
 
       return ByteData.view(fontBytes.buffer);
     });
-
-    final FontLoader fontLoader = FontLoader(fontFamily);
 
     for (final Future<ByteData> bytes in cachedFontBytes) fontLoader.addFont(bytes);
 

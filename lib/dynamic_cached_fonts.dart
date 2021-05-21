@@ -469,11 +469,13 @@ class DynamicCachedFonts {
     String url, {
     @required String fontFamily,
     bool verboseLog = false,
+    @visibleForTesting FontLoader fontLoader,
   }) =>
       RawDynamicCachedFonts.loadCachedFont(
         url,
         fontFamily: fontFamily,
         verboseLog: verboseLog,
+        fontLoader: fontLoader,
       );
 
   /// Fetches the given [urls] from cache and loads them into the engine to be used.
@@ -503,10 +505,12 @@ class DynamicCachedFonts {
     List<String> urls, {
     @required String fontFamily,
     bool verboseLog = false,
+    @visibleForTesting FontLoader fontLoader,
   }) =>
       RawDynamicCachedFonts.loadCachedFamily(
         urls,
         fontFamily: fontFamily,
+        fontLoader: fontLoader,
       );
 
   /// Removes the given [url] can be loaded directly from cache.
