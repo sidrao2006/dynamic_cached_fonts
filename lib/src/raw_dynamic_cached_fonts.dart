@@ -252,6 +252,11 @@ abstract class RawDynamicCachedFonts {
       }),
     );
 
+    assert(
+      fontFiles.every((FileInfo font) => font != null),
+      'Font should already be cached to be loaded',
+    );
+
     final Iterable<Future<ByteData>> cachedFontBytes = fontFiles.map((FileInfo font) async {
       final Uint8List fontBytes = await font.file.readAsBytes();
 
