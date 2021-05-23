@@ -71,10 +71,6 @@ void main() {
       firaSansThinUrl,
     ];
 
-    DynamicCachedFonts.custom(
-      cacheManager: cacheManager,
-    );
-
     await DynamicCachedFonts.family(
       urls: fontUrls,
       fontFamily: firaSans,
