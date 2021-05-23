@@ -4,7 +4,6 @@ library dynamic_cached_fonts;
 
 import 'dart:typed_data';
 
-import 'package:file/file.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -290,71 +289,61 @@ class DynamicCachedFonts {
   ///
   /// This method can be called in `main()`, `initState()` or on button tap/click
   /// as needed.
-  Future<Iterable<File>> load() async {
+  Future<Iterable<FileInfo>> load() async {
     WidgetsFlutterBinding.ensureInitialized();
 
-    final Iterable<File> fontFiles = await Future.wait(
+    final List<String> downloadUrls = await Future.wait(
       urls.map(
-        (String url) => _handleCache(url),
+        (String url) async =>
+            _isFirebaseURL ? await Utils.handleUrl(url, verboseLog: _verboseLog) : url,
       ),
     );
 
-    if (!fontFiles.every(
-      (File font) => Utils.verifyFileExtension(font),
-    )) {
-      throw FlutterError(
-        'Invalid url. Unsupported file format. Supported file formats - otf and ttf',
-      );
-    }
+    Iterable<FileInfo> fontFiles;
 
-    final Iterable<Future<ByteData>> cachedFontBytes = fontFiles.map(
-      (File font) async => ByteData.view(
-        font.readAsBytesSync().buffer,
-      ),
-    );
-
-    if (_verboseLog)
-      devLog(
-        <String>['Font has been downloaded and cached!'],
+    try {
+      fontFiles = await loadCachedFamily(
+        downloadUrls,
+        fontFamily: fontFamily,
+        fontLoader: _fontLoader,
         verboseLog: _verboseLog,
       );
 
-    for (final Future<ByteData> bytes in cachedFontBytes) _fontLoader.addFont(bytes);
-    await _fontLoader.load();
+      // Checks whether any of the files is invalid.
+      // The validity is determined by parsing headers returned when the file was
+      // requested. The date/time is a file validity guarantee by the source.
+      // This was done to preserve `Cachemanager.getSingleFile`'s behaviour.
+      fontFiles
+          .where((FileInfo font) => font.validTill.isBefore(DateTime.now()))
+          .forEach((FileInfo font) => cacheFont(
+                font.originalUrl,
+                cacheStalePeriod: cacheStalePeriod,
+                maxCacheObjects: maxCacheObjects,
+                verboseLog: _verboseLog,
+              ));
+    } catch (_) {
+      devLog(
+        <String>['Font is not in cache.', 'Loading font now...'],
+        verboseLog: _verboseLog,
+      );
 
-    devLog(
-      <String>['Font has been loaded!'],
-      verboseLog: _verboseLog,
-    );
+      for (final String url in downloadUrls)
+        await cacheFont(
+          url,
+          cacheStalePeriod: cacheStalePeriod,
+          maxCacheObjects: maxCacheObjects,
+          verboseLog: _verboseLog,
+        );
+
+      fontFiles = await loadCachedFamily(
+        downloadUrls,
+        fontFamily: fontFamily,
+        fontLoader: _fontLoader,
+        verboseLog: _verboseLog,
+      );
+    }
 
     return fontFiles;
-  }
-
-  /// Uses [CacheManager.getSingleFile] to either download the file
-  /// if it isn't in the cache, or returns the file (as bytes) from cache.
-  Future<File> _handleCache(String url) async {
-    final String cacheKey = Utils.sanitizeUrl(url);
-
-    DynamicCachedFontsCacheManager.handleCacheManager(cacheKey, cacheStalePeriod, maxCacheObjects);
-
-    final String downloadUrl =
-        _isFirebaseURL ? await Utils.handleUrl(url, verboseLog: _verboseLog) : url;
-
-    final File font = await DynamicCachedFontsCacheManager.getCacheManager(cacheKey).getSingleFile(
-      downloadUrl,
-      key: cacheKey,
-    );
-
-    devLog(
-      <String>[
-        'Font has been downloaded!\n',
-        'Font file path - ${font.path}',
-        font.statSync().toString(),
-      ],
-      verboseLog: _verboseLog,
-    );
-
-    return font;
   }
 
   /// Accepts [cacheManager] and [force] to provide a custom [CacheManager] for testing.
@@ -469,11 +458,13 @@ class DynamicCachedFonts {
     String url, {
     @required String fontFamily,
     bool verboseLog = false,
+    @visibleForTesting FontLoader fontLoader,
   }) =>
       RawDynamicCachedFonts.loadCachedFont(
         url,
         fontFamily: fontFamily,
         verboseLog: verboseLog,
+        fontLoader: fontLoader,
       );
 
   /// Fetches the given [urls] from cache and loads them into the engine to be used.
@@ -503,10 +494,13 @@ class DynamicCachedFonts {
     List<String> urls, {
     @required String fontFamily,
     bool verboseLog = false,
+    @visibleForTesting FontLoader fontLoader,
   }) =>
       RawDynamicCachedFonts.loadCachedFamily(
         urls,
         fontFamily: fontFamily,
+        verboseLog: verboseLog,
+        fontLoader: fontLoader,
       );
 
   /// Removes the given [url] can be loaded directly from cache.
