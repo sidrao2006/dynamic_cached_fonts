@@ -89,6 +89,7 @@ void main() {
 
   group('DynamicCachedFonts.fromFirebase', () {
     FileInfo fontFile;
+    Reference bucketRef;
 
     setUpAll(() async {
       await Firebase.initializeApp();
@@ -97,7 +98,10 @@ void main() {
         bucketUrl: firebaseFontUrl,
         fontFamily: firebaseFontName,
       ).load();
-      final String cacheKey = cacheKeyFromUrl(firebaseFontUrl);
+
+      bucketRef = FirebaseStorage.instance.refFromURL(firebaseFontUrl);
+
+      final String cacheKey = cacheKeyFromUrl(await bucketRef.getDownloadURL());
 
       fontFile = await cacheManager.getFileFromCache(cacheKey);
     });
@@ -107,8 +111,6 @@ void main() {
     });
 
     testWidgets('Font loader loads valid font file from Firebase', (_) async {
-      final Reference bucketRef = FirebaseStorage.instance.refFromURL(firebaseFontUrl);
-
       expect(
         await fontFile.file.readAsBytes(),
         await bucketRef.getData(),
