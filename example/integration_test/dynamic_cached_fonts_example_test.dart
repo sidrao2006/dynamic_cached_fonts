@@ -173,9 +173,12 @@ void main() {
 
     await DynamicCachedFonts.removeCachedFont(fontUrl);
 
-    expect(
-      await cacheManager.getFileFromCache(cacheKey),
-      isNull,
+    Future<void>.delayed(
+      const Duration(seconds: 10),
+      () async => expect(
+        await cacheManager.getFileFromCache(cacheKey),
+        isNull,
+      ),
     );
   });
 }
