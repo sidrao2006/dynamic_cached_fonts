@@ -156,7 +156,7 @@ void main() {
         (_) async {
       await cacheManager.removeFile(cacheKey);
 
-    // Temporary hack for file removal
+      // Temporary hack for file removal
       Future<void>.delayed(
         const Duration(seconds: 10),
         () async => expect(
