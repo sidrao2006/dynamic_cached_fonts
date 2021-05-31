@@ -115,9 +115,9 @@ class DynamicCachedFonts {
         ),
         assert(verboseLog != null),
         urls = <String>[url],
-        _fontLoader = FontLoader(fontFamily),
         _verboseLog = verboseLog,
-        _isFirebaseURL = false;
+        _isFirebaseURL = false,
+        _loaded = false;
 
   /// Allows dynamically loading fonts from the given list of url and caching them.
   /// The [fontFamily] groups a series of related font assets, each of which defines
@@ -175,9 +175,9 @@ class DynamicCachedFonts {
           'url cannot be null or empty',
         ),
         assert(verboseLog != null),
-        _fontLoader = FontLoader(fontFamily),
         _verboseLog = verboseLog,
-        _isFirebaseURL = false;
+        _isFirebaseURL = false,
+        _loaded = false;
 
   /// Allows dynamically loading fonts from firebase storage with the given
   /// firebase storage url, and caching them.
@@ -229,10 +229,10 @@ class DynamicCachedFonts {
           'bucketUrl cannot be null or empty',
         ),
         assert(verboseLog != null),
-        _fontLoader = FontLoader(fontFamily),
         _verboseLog = verboseLog,
         urls = <String>[bucketUrl],
-        _isFirebaseURL = true;
+        _isFirebaseURL = true,
+        _loaded = false;
 
   /// Used to specify the download url(s) for the required font(s).
   ///
@@ -276,13 +276,11 @@ class DynamicCachedFonts {
   /// _Tip: To log only in debug mode, set the value to [kReleaseMode]_.
   final bool _verboseLog;
 
-  /// Font loader provided by the SDK to add fonts to the engine,
-  /// link them to a font name and load them on demand. The [load] method
-  /// calls [FontLoader.load] to load the fonts into the engine.
-  final FontLoader _fontLoader;
-
   /// Determines whether [url] is a firebase storage bucket url.
   final bool _isFirebaseURL;
+
+  /// Checks whether [load] has already been called.
+  bool _loaded;
 
   /// Used to download and load a font into the
   /// app with the given [url] and cache configuration.
@@ -290,6 +288,9 @@ class DynamicCachedFonts {
   /// This method can be called in `main()`, `initState()` or on button tap/click
   /// as needed.
   Future<Iterable<FileInfo>> load() async {
+    if (_loaded) throw StateError('Font has already been loaded');
+    _loaded = true;
+
     WidgetsFlutterBinding.ensureInitialized();
 
     final List<String> downloadUrls = await Future.wait(
@@ -305,7 +306,6 @@ class DynamicCachedFonts {
       fontFiles = await loadCachedFamily(
         downloadUrls,
         fontFamily: fontFamily,
-        fontLoader: _fontLoader,
         verboseLog: _verboseLog,
       );
 
@@ -338,7 +338,6 @@ class DynamicCachedFonts {
       fontFiles = await loadCachedFamily(
         downloadUrls,
         fontFamily: fontFamily,
-        fontLoader: _fontLoader,
         verboseLog: _verboseLog,
       );
     }
