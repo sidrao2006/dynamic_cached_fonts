@@ -9,7 +9,7 @@ on:
 jobs:
   chrome_integration_test:
     name: Web Integration Test
-    environment: web-desktop-integration-tests
+    environment: Web Desktop Integration Test
     runs-on: ubuntu-latest
 
     defaults:
@@ -55,7 +55,7 @@ jobs:
 
   android_integration_test:
     name: Android Integration Test (Firebase Test Lab)
-    environment: mobile-integration-tests
+    environment: Mobile Integration Tests
     runs-on: ubuntu-latest
 
     steps:
