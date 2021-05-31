@@ -25,7 +25,7 @@ Caching is an added performance upgrade as the font will be downloaded only once
 
 ## Get Started
 
-To use the package, add `dynamic_cached_fonts` as a [dependency in your pubspec.yaml file][install].
+To use the package, add `dynamic_cached_fonts` as a [dependency][install].
 
 ## Usage
 
