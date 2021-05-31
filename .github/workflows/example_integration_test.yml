@@ -46,9 +46,9 @@ jobs:
 
           flutter driver --driver test_driver/integration_test.dart \
           --target ./integration_test/dynamic_cached_fonts_example_test.dart \
-          --browser-name chrome \
-          --device-id web-server
           --dart-define FIREBASE_STORAGE_FONT_URL=$FIREBASE_STORAGE_FONT_URL \
+          --device-id web-server \
+          --browser-name chrome \
           --release
         env:
           FIREBASE_STORAGE_FONT_URL: ${{ secrets.FIREBASE_STORAGE_FONT_URL }}
