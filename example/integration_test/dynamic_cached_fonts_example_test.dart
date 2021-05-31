@@ -53,7 +53,7 @@ void main() {
     testWidgets('Font loader loads valid font file', (_) async {
       final FileInfo downloadedFontFile = await cacheManager.downloadFile(
         fontUrl,
-        key: cacheKey,
+        key: '$cacheKey-test',
       );
 
       expect(
