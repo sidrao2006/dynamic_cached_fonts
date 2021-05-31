@@ -7,59 +7,56 @@ on:
   workflow_dispatch:
 
 jobs:
-  # chrome_integration_test:
-  #   name: Web Integration Test
-  #   environment: integration_tests
-  #   runs-on: ubuntu-latest
+  chrome_integration_test:
+    name: Web Integration Test
+    environment: integration_tests
+    runs-on: ubuntu-latest
 
-  #   defaults:
-  #     run:
-  #       working-directory: example
+    defaults:
+      run:
+        working-directory: example
 
-  #   steps:
-  #     - name: Checkout repository code
-  #       uses: actions/checkout@v2
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v2
 
-  #     - name: Setup Flutter SDK
-  #       uses: subosito/flutter-action@v1
-  #       with:
-  #         channel: beta
+      - name: Setup Flutter SDK
+        uses: subosito/flutter-action@v1
+        with:
+          channel: beta
 
-  #     - name: Setup Chrome Driver
-  #       uses: nanasess/setup-chromedriver@master
+      - name: Setup Chrome Driver
+        uses: nanasess/setup-chromedriver@master
 
-  #     - name: Get flutter packages
-  #       run: flutter pub get
+      - name: Get flutter packages
+        run: flutter pub get
 
-  #     - name: Browser pre launch Setup
-  #       run: |
-  #         sudo apt-get install -y xvfb
-  #         sudo apt-get -y install xorg xvfb gtk2-engines-pixbuf
-  #         sudo apt-get -y install dbus-x11 xfonts-base xfonts-100dpi xfonts-75dpi xfonts-cyrillic xfonts-scalable
-  #         sudo apt-get -y install imagemagick x11-apps
+      - name: Browser pre launch Setup
+        run: |
+          sudo apt-get install -y xvfb
+          sudo apt-get -y install xorg xvfb gtk2-engines-pixbuf
+          sudo apt-get -y install dbus-x11 xfonts-base xfonts-100dpi xfonts-75dpi xfonts-cyrillic xfonts-scalable
+          sudo apt-get -y install imagemagick x11-apps
 
-  #     - name: Run integration tests
-  #       run: |
-  #         Xvfb -ac :99 -screen 0 1280x1024x16 & export DISPLAY=:99
+      - name: Run integration tests
+        run: |
+          Xvfb -ac :99 -screen 0 1280x1024x16 & export DISPLAY=:99
 
-  #         chromedriver --port=4444 &
+          chromedriver --port=4444 &
 
-  #         flutter driver --driver test_driver/integration_test.dart \
-  #         --target ./integration_test/dynamic_cached_fonts_example_test.dart \
-  #         --browser-name chrome \
-  #         --dart-define FIREBASE_STORAGE_FONT_URL=$FIREBASE_STORAGE_FONT_URL \
-  #         --release
-  #       env:
-  #         FIREBASE_STORAGE_FONT_URL: ${{ secrets.FIREBASE_STORAGE_FONT_URL }}
+          flutter driver --driver test_driver/integration_test.dart \
+          --target ./integration_test/dynamic_cached_fonts_example_test.dart \
+          --dart-define FIREBASE_STORAGE_FONT_URL=$FIREBASE_STORAGE_FONT_URL \
+          --device-id web-server \
+          --browser-name chrome \
+          --release
+        env:
+          FIREBASE_STORAGE_FONT_URL: ${{ secrets.FIREBASE_STORAGE_FONT_URL }}
 
   firebase_test_lab_android_integration_test:
     name: Firebase Test Lab Android Integration Test
     environment: integration_tests
     runs-on: ubuntu-latest
-    
-    defaults:
-      run:
-        working-directory: example
 
     steps:
       - name: Checkout repository code
@@ -75,7 +72,11 @@ jobs:
         with:
           channel: beta
 
+      - name: Get flutter packages
+        run: flutter pub get
+
       - name: Build android instrumentation test 
+        working-directory: example
         run: |
           pushd android
           # flutter build generates files in android/ for building the app
@@ -92,6 +93,7 @@ jobs:
           export_default_credentials: true
       
       - name: Upload APKs to Firebase Test Lab
+        working-directory: example
         run: |
           gcloud firebase test android run --type instrumentation \
             --app build/app/outputs/apk/debug/app-debug.apk \
