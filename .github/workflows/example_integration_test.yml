@@ -9,7 +9,7 @@ on:
 jobs:
   chrome_integration_test:
     name: Web Integration Test
-    environment: integration_tests
+    environment: web-desktop-integration-tests
     runs-on: ubuntu-latest
 
     defaults:
@@ -53,9 +53,9 @@ jobs:
         env:
           FIREBASE_STORAGE_FONT_URL: ${{ secrets.FIREBASE_STORAGE_FONT_URL }}
 
-  firebase_test_lab_android_integration_test:
-    name: Firebase Test Lab Android Integration Test
-    environment: integration_tests
+  android_integration_test:
+    name: Android Integration Test (Firebase Test Lab)
+    environment: mobile-integration-tests
     runs-on: ubuntu-latest
 
     steps:
