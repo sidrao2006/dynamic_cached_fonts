@@ -11,7 +11,7 @@ const String fontUrl = cascadiaCodeUrl,
     firebaseFontUrl = firaCodeUrl,
     firebaseFontName = firaCode;
 
-final String cacheKey = cacheKeyFromUrl(fontUrl), downloadCacheKey = '$cacheKey-test';
+final String cacheKey = cacheKeyFromUrl(fontUrl);
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -53,7 +53,7 @@ void main() {
     testWidgets('Font loader loads valid font file', (_) async {
       final FileInfo downloadedFontFile = await cacheManager.downloadFile(
         fontUrl,
-        key: downloadCacheKey,
+        key: cacheKey,
       );
 
       expect(
@@ -143,7 +143,7 @@ void main() {
         (_) async {
       await cacheManager.downloadFile(
         fontUrl,
-        key: downloadCacheKey,
+        key: cacheKey,
       );
 
       expect(
@@ -168,7 +168,7 @@ void main() {
   });
 
   testWidgets('DynamicCachedFonts.removeCachedFont removes the font from cache', (_) async {
-    await cacheManager.downloadFile(fontUrl, key: downloadCacheKey);
+    await cacheManager.downloadFile(fontUrl, key: cacheKey);
 
     expect(
       await cacheManager.getFileFromCache(cacheKey),
