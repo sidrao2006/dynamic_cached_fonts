@@ -17,9 +17,6 @@ jobs:
         uses: subosito/flutter-action@v1
         with:
           channel: beta
-      
-      - name: Get flutter packages
-        run: flutter pub get
 
       - name: Run unit tests
         run: flutter test
