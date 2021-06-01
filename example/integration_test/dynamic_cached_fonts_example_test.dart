@@ -57,8 +57,8 @@ void main() {
       );
 
       expect(
-        await downloadedFontFile.file.readAsBytes(),
-        await fontFile.file.readAsBytes(),
+        downloadedFontFile.file.readAsBytesSync(),
+        fontFile.file.readAsBytesSync(),
       );
     });
   });
@@ -112,7 +112,7 @@ void main() {
 
     testWidgets('Font loader loads valid font file from Firebase', (_) async {
       expect(
-        await fontFile.file.readAsBytes(),
+        fontFile.file.readAsBytesSync(),
         await bucketRef.getData(),
       );
     });
