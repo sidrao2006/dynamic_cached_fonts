@@ -33,11 +33,11 @@ jobs:
 
       - name: Browser pre launch Setup
         run: |
-          sudo apt-get -y install xorg xvfb gtk2-engines-pixbuf
+          sudo apt-get -y install xorg gtk2-engines-pixbuf
 
       - name: Run integration tests
         run: |
-          Xvfb -ac :99 -screen 0 1280x1024x16 & export DISPLAY=:99
+          export DISPLAY=:99
 
           chromedriver --port=4444 &
 
