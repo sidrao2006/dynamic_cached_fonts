@@ -85,11 +85,7 @@ abstract class RawDynamicCachedFonts {
       key: cacheKey,
     );
 
-    if (!Utils.verifyFileExtension(font.file)) {
-      throw FlutterError(
-        'Invalid url. Unsupported file format. Supported file formats - otf and ttf',
-      );
-    }
+    Utils.verifyFileExtension(font.file);
 
     devLog(
       <String>[
