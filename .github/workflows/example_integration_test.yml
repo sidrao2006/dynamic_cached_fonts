@@ -31,10 +31,6 @@ jobs:
       - name: Get flutter packages
         run: flutter pub get
 
-      - name: Browser pre launch Setup
-        run: |
-          sudo apt-get -y install xorg gtk2-engines-pixbuf
-
       - name: Run integration tests
         run: |
           export DISPLAY=:99
