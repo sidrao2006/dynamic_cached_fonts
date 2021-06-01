@@ -136,6 +136,13 @@ void main() {
 
       expect(fontExtension, 'ttf');
     });
+
+    testWidgets('throws UnsupportedError if file extension is not valid', (_) async {
+      const String woffUrl =
+          'https://cdn.jsdelivr.net/gh/mozilla/Fira@4.202/woff/FiraMono-Regular.woff';
+
+      expect(DynamicCachedFonts.cacheFont(woffUrl), throwsUnsupportedError);
+    });
   });
 
   group('DynamicCachedFonts.canLoadFont', () {
