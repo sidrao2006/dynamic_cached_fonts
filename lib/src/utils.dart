@@ -180,16 +180,13 @@ class Utils {
   }
 
   /// Checks whether the [font] has a valid extension which is supported by Flutter.
-  static bool verifyFileExtension(File font) {
-    if (_fontFileExtensionManager.matchesFileExtension(font.basename, font.readAsBytesSync())) {
-      return true;
-    } else {
-      dev.log(
-        'Bad File Format',
-        error: <String>['The provided file format is not supported'],
-        name: kLoggerName,
+  static void verifyFileExtension(File font) {
+    if (!_fontFileExtensionManager.matchesFileExtension(font.basename, font.readAsBytesSync())) {
+      throw UnsupportedError(
+        'Bad File Format\n'
+        'The provided file extension is not supported. '
+        'Currently, only OpenType (OTF) and TrueType (TTF) fonts are supported.',
       );
-      return false;
     }
   }
 
