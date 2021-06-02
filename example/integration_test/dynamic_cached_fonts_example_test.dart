@@ -38,21 +38,21 @@ void main() {
       font = (await cachedFontLoader.load()).first;
     });
 
-    testWidgets('Font file is loaded into cache', (_) async {
+    testWidgets('should load font into cache', (_) async {
       expect(font, isNotNull);
     });
 
-    testWidgets('Loaded font file has a valid extension', (_) async {
+    testWidgets('should load font file with a valid extension', (_) async {
       final String fontFileName = font.file.basename;
 
       expect(fontFileName, endsWith('ttf'));
     });
 
-    testWidgets('Font can be loaded only once', (_) async {
+    testWidgets('should allow font to be loaded only once', (_) async {
       expect(cachedFontLoader.load(), throwsStateError);
     });
 
-    testWidgets('Font loader loads valid font file', (_) async {
+    testWidgets('should load valid font file', (_) async {
       final FileInfo downloadedFont = await cacheManager.downloadFile(
         fontUrl,
         key: '$cacheKey-test',
@@ -65,7 +65,7 @@ void main() {
     });
   });
 
-  testWidgets('DynamicCachedFonts.family loads all fonts into cache', (_) async {
+  testWidgets('DynamicCachedFonts.family should load all fonts into cache', (_) async {
     const List<String> fontUrls = <String>[
       firaSansBoldUrl,
       firaSansItalicUrl,
@@ -97,15 +97,15 @@ void main() {
       bucketRef = FirebaseStorage.instance.refFromURL(firebaseFontUrl);
     });
 
-    testWidgets('parses Firebase Bucket URL', (_) async {
+    testWidgets('should parse Firebase Bucket URL', (_) async {
       expect(font.originalUrl, equals(await bucketRef.getDownloadURL()));
     });
 
-    testWidgets('load() method parses Firebase Bucket Url and loads font', (_) async {
+    testWidgets('should load font into cache', (_) async {
       expect(font, isNotNull);
     });
 
-    testWidgets('Font loader loads valid font file from Firebase', (_) async {
+    testWidgets('should load valid font file from Firebase', (_) async {
       expect(
         font.file.readAsBytesSync(),
         orderedEquals(await bucketRef.getData()),
@@ -122,17 +122,17 @@ void main() {
       font = await cacheManager.getFileFromCache(cacheKey);
     });
 
-    testWidgets('DynamicCachedFonts.cacheFont loads font into cache', (_) async {
+    testWidgets('should load font into cache', (_) async {
       expect(font, isNotNull);
     });
 
-    testWidgets('DynamicCachedFonts.cacheFont loads font with a valid extension', (_) async {
+    testWidgets('should load font file with a valid extension', (_) async {
       final String fontFileName = font.file.basename;
 
       expect(fontFileName, endsWith('ttf'));
     });
 
-    testWidgets('throws UnsupportedError if file extension is not valid', (_) async {
+    testWidgets('should throw UnsupportedError if file extension is not valid', (_) async {
       const String woffUrl =
           'https://cdn.jsdelivr.net/gh/mozilla/Fira@4.202/woff/FiraMono-Regular.woff';
 
@@ -146,16 +146,14 @@ void main() {
           key: cacheKey,
         ));
 
-    testWidgets('DynamicCachedFonts.canLoadFont returns true when font is available in cache',
-        (_) async {
+    testWidgets('should return true when font is available in cache', (_) async {
       expect(
         await DynamicCachedFonts.canLoadFont(fontUrl),
         isTrue,
       );
     });
 
-    testWidgets('DynamicCachedFonts.canLoadFont returns false when font is not available in cache',
-        (_) async {
+    testWidgets('should return false when font is not available in cache', (_) async {
       await cacheManager.removeFile(cacheKey);
 
       // Temporary hack for file removal
@@ -186,18 +184,18 @@ void main() {
       );
     });
 
-    testWidgets('loads font into cache', (_) async {
+    testWidgets('should load font into cache', (_) async {
       expect(font, isNotNull);
     });
 
-    testWidgets('loads valid font file', (_) async {
+    testWidgets('should load valid font file', (_) async {
       expect(
         downloadedFont.file.readAsBytesSync(),
         orderedEquals(font.file.readAsBytesSync()),
       );
     });
 
-    testWidgets('loads font into the Flutter Engine', (_) async {
+    testWidgets('should load font into the Flutter Engine', (_) async {
       // This tests that load() is being called in loadCachedFamily.
       // A single instance of FontLoader can only be loaded once, so if
       // StateError is thrown, it means that load() has already been called.
@@ -232,11 +230,11 @@ void main() {
       );
     });
 
-    testWidgets('loads font into cache', (_) async {
+    testWidgets('should load all fonts into cache', (_) async {
       expect(fonts, everyElement(isNotNull));
     });
 
-    testWidgets('loads valid font files', (_) async {
+    testWidgets('should load valid font files', (_) async {
       final List<Uint8List> downloadedFontBytes = downloadedFonts
           .map((FileInfo downloadedFont) => downloadedFont.file.readAsBytesSync())
           .toList();
@@ -249,7 +247,7 @@ void main() {
       }
     });
 
-    testWidgets('loads font into the Flutter Engine', (_) async {
+    testWidgets('should load the font family into the Flutter Engine', (_) async {
       // This tests that load() is being called in loadCachedFamily.
       // A single instance of FontLoader can only be loaded once, so if
       // StateError is thrown, it means that load() has already been called.
@@ -257,7 +255,7 @@ void main() {
     });
   });
 
-  testWidgets('DynamicCachedFonts.removeCachedFont removes the font from cache', (_) async {
+  testWidgets('DynamicCachedFonts.removeCachedFont should remove the font from cache', (_) async {
     await cacheManager.downloadFile(fontUrl, key: cacheKey);
 
     await DynamicCachedFonts.removeCachedFont(fontUrl);
