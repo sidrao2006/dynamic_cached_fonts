@@ -29,3 +29,4 @@ jobs:
         if: ${{ env.SCORE < env.PUB_SCORE_MIN_POINTS }}
         run: |
           echo "::error::Pub score test failed. Achieved score of $SCORE is less than expected minimum score of $PUB_SCORE_MIN_POINTS"
+          exit 1
