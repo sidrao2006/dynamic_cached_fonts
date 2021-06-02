@@ -7,6 +7,10 @@ on:
       - 'pubspec.yaml'
   workflow_dispatch:
 
+concurrency: 
+  group: Release
+  cancel-in-progress: true
+
 jobs:
   release:
     name: Release and Publish Package
