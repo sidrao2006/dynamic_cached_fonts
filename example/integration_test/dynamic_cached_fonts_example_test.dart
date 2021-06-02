@@ -260,11 +260,6 @@ void main() {
   testWidgets('DynamicCachedFonts.removeCachedFont removes the font from cache', (_) async {
     await cacheManager.downloadFile(fontUrl, key: cacheKey);
 
-    expect(
-      await cacheManager.getFileFromCache(cacheKey),
-      isNotNull,
-    );
-
     await DynamicCachedFonts.removeCachedFont(fontUrl);
 
     // Temporary hack for file removal
