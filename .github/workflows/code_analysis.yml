@@ -13,6 +13,9 @@ jobs:
       - name: Checkout repository code
         uses: actions/checkout@v2
 
+      - name: Format code for tests
+        run: flutter format .
+
       - name: Analyze package with pana
         uses: axel-op/dart-package-analyzer@v3
         id: analysis
