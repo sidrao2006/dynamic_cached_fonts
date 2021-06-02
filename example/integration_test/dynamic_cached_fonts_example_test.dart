@@ -95,16 +95,17 @@ void main() {
     setUpAll(() async {
       await Firebase.initializeApp();
 
-      await DynamicCachedFonts.fromFirebase(
+      fontFile = (await DynamicCachedFonts.fromFirebase(
         bucketUrl: firebaseFontUrl,
         fontFamily: firebaseFontName,
-      ).load();
+      ).load())
+          .first;
 
       bucketRef = FirebaseStorage.instance.refFromURL(firebaseFontUrl);
+    });
 
-      final String cacheKey = cacheKeyFromUrl(await bucketRef.getDownloadURL());
-
-      fontFile = await cacheManager.getFileFromCache(cacheKey);
+    testWidgets('parses Firebase Bucket URL', (_) async {
+      expect(fontFile.originalUrl, equals(await bucketRef.getDownloadURL()));
     });
 
     testWidgets('load() method parses Firebase Bucket Url and loads font', (_) async {
