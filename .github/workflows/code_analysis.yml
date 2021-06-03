@@ -13,8 +13,8 @@ jobs:
       - name: Checkout repository code
         uses: actions/checkout@v2
 
-      - ​name: Setup Dart SDK
-        uses​: ​dart-lang/setup-dart@v1
+      - name: Setup Dart SDK
+        uses: dart-lang/setup-dart@v1
 
       - name: Format code for tests
         run: dart format .
