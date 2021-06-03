@@ -77,10 +77,12 @@ void main() {
     ];
 
     setUp(() async {
-      fonts = await DynamicCachedFonts.family(
+      cachedFontLoader = DynamicCachedFonts.family(
         urls: fontUrls,
         fontFamily: firaSans,
-      ).load();
+      );
+
+      fonts = await cachedFontLoader.load();
     });
 
     testWidgets('should load all fonts into cache', (_) async {
@@ -91,7 +93,7 @@ void main() {
       final List<Uint8List> downloadedFontBytes = await awaitedMap(fontUrls, (String url) async {
         final String generatedCacheKey = cacheKeyFromUrl(url);
         final FileInfo donwloadedFont =
-            await cacheManager.downloadFile(url, key: generatedCacheKey);
+            await cacheManager.downloadFile(url, key: '$generatedCacheKey-test');
 
         return donwloadedFont.file.readAsBytes();
       });
