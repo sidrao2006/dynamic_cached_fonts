@@ -13,32 +13,23 @@ jobs:
       - name: Checkout repository code
         uses: actions/checkout@v2
 
-      - name: Setup Flutter SDK
-        uses: subosito/flutter-action@v1
-        with:
-          channel: beta
-
-      - name: Get flutter packages
-        run: flutter pub get
+      - name: Setup Dart SDK
+        uses: dart-lang/setup-dart@v1
 
       - name: Format code for tests
-        run: flutter format .
-      
-      - name: Run pana tests
-        run: |
-          echo 'PANA_RESULT_JSON<<EOF' >> $GITHUB_ENV
-          flutter pub run pana . --json --no-warning >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
+        run: dart format .
 
-      - name: Setup NodeJS
-        uses: actions/setup-node@v2
+      - name: Analyze package with pana
+        uses: axel-op/dart-package-analyzer@v3
+        id: analysis
         with:
-          node-version: 14
-
-      - name: Install node dependencies
-        run: npm install cli-markdown @actions/core
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Calculate Result
-        run: node dev/ci/code_analysis.js
         env:
           PUB_SCORE_MIN_POINTS: 90
+          SCORE: ${{ steps.analysis.outputs.total }}
+        if: ${{ env.SCORE < env.PUB_SCORE_MIN_POINTS }}
+        run: |
+          echo "::error::Pub score test failed. Achieved score of $SCORE is less than expected minimum score of $PUB_SCORE_MIN_POINTS"
+          exit 1
