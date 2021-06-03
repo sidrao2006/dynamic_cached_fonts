@@ -65,7 +65,10 @@ void main() {
     });
   });
 
-  testWidgets('DynamicCachedFonts.family should load all fonts into cache', (_) async {
+  group('DynamicCachedFonts.family', () {
+    Iterable<FileInfo> fonts;
+    DynamicCachedFonts cachedFontLoader;
+
     const List<String> fontUrls = <String>[
       firaSansBoldUrl,
       firaSansItalicUrl,
@@ -73,12 +76,37 @@ void main() {
       firaSansThinUrl,
     ];
 
-    final Iterable<FileInfo> fonts = await DynamicCachedFonts.family(
-      urls: fontUrls,
-      fontFamily: firaSans,
-    ).load();
+    setUp(() async {
+      fonts = await DynamicCachedFonts.family(
+        urls: fontUrls,
+        fontFamily: firaSans,
+      ).load();
+    });
 
-    expect(fonts, everyElement(isNotNull));
+    testWidgets('should load all fonts into cache', (_) async {
+      expect(fonts, everyElement(isNotNull));
+    });
+
+    testWidgets('should load valid font files', (_) async {
+      final List<Uint8List> downloadedFontBytes = await awaitedMap(fontUrls, (String url) async {
+        final String generatedCacheKey = cacheKeyFromUrl(url);
+        final FileInfo donwloadedFont =
+            await cacheManager.downloadFile(url, key: generatedCacheKey);
+
+        return donwloadedFont.file.readAsBytes();
+      });
+
+      final List<Uint8List> fontBytes =
+          fonts.map((FileInfo font) => font.file.readAsBytesSync()).toList();
+
+      for (int i = 0; i < fontUrls.length; i++) {
+        expect(fontBytes[i], orderedEquals(downloadedFontBytes[i]));
+      }
+    });
+
+    testWidgets('should load the font family into the Flutter Engine', (_) async {
+      expect(cachedFontLoader.load(), throwsStateError);
+    });
   });
 
   group('DynamicCachedFonts.fromFirebase', () {
