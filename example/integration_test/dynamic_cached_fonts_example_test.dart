@@ -4,6 +4,7 @@ import 'package:dynamic_cached_fonts/dynamic_cached_fonts.dart';
 import 'package:dynamic_cached_fonts_example/constants.dart';
 import 'package:firebase_core/firebase_core.dart' show Firebase;
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show FontLoader;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart' show IntegrationTestWidgetsFlutterBinding;
@@ -111,37 +112,42 @@ void main() {
     });
   });
 
-  group('DynamicCachedFonts.fromFirebase', () {
-    FileInfo font;
-    Reference bucketRef;
+  group(
+    'DynamicCachedFonts.fromFirebase',
+    () {
+      FileInfo font;
+      Reference bucketRef;
 
-    setUp(() async {
-      await Firebase.initializeApp();
+      setUp(() async {
+        await Firebase.initializeApp();
 
-      font = (await DynamicCachedFonts.fromFirebase(
-        bucketUrl: firebaseFontUrl,
-        fontFamily: firebaseFontName,
-      ).load())
-          .first;
+        font = (await DynamicCachedFonts.fromFirebase(
+          bucketUrl: firebaseFontUrl,
+          fontFamily: firebaseFontName,
+        ).load())
+            .first;
 
-      bucketRef = FirebaseStorage.instance.refFromURL(firebaseFontUrl);
-    });
+        bucketRef = FirebaseStorage.instance.refFromURL(firebaseFontUrl);
+      });
 
-    testWidgets('should parse Firebase Bucket URL', (_) async {
-      expect(font.originalUrl, equals(await bucketRef.getDownloadURL()));
-    });
+      testWidgets('should parse Firebase Bucket URL', (_) async {
+        expect(font.originalUrl, equals(await bucketRef.getDownloadURL()));
+      });
 
-    testWidgets('should load font into cache', (_) async {
-      expect(font, isNotNull);
-    });
+      testWidgets('should load font into cache', (_) async {
+        expect(font, isNotNull);
+      });
 
-    testWidgets('should load valid font file from Firebase', (_) async {
-      expect(
-        font.file.readAsBytesSync(),
-        orderedEquals(await bucketRef.getData()),
-      );
-    });
-  });
+      testWidgets('should load valid font file from Firebase', (_) async {
+        expect(
+          font.file.readAsBytesSync(),
+          orderedEquals(await bucketRef.getData()),
+        );
+      });
+    },
+    skip: ThemeData().platform == TargetPlatform.windows ||
+        ThemeData().platform == TargetPlatform.linux,
+  );
 
   group('DynamicCachedFonts.cacheFont', () {
     FileInfo font;
