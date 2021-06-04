@@ -130,7 +130,4 @@ jobs:
         run: sudo apt-get install ninja-build libgtk-3-dev
 
       - name: Run Integration Tests
-        run: flutter driver --driver test_driver/integration_test.dart \
-          --target ./integration_test/dynamic_cached_fonts_example_test.dart \
-          --dart-define FIREBASE_STORAGE_FONT_URL=$FIREBASE_STORAGE_FONT_URL \
-          --device-id ${{ matrix.flutter_os }} \
+        run: flutter driver --driver test_driver/integration_test.dart --target ./integration_test/dynamic_cached_fonts_example_test.dart --dart-define FIREBASE_STORAGE_FONT_URL=$FIREBASE_STORAGE_FONT_URL --device-id ${{ matrix.flutter_os }}
