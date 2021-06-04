@@ -107,6 +107,11 @@ jobs:
             flutter_os: macos
 
     runs-on: ${{ matrix.os }}
+
+    defaults:
+      run:
+        working-directory: example
+
     steps:
       - name: Checkout repository code
         uses: actions/checkout@v2
