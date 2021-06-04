@@ -86,3 +86,46 @@ jobs:
             --app build/app/outputs/apk/debug/app-debug.apk \
             --test build/app/outputs/apk/androidTest/debug/app-debug-androidTest.apk\
             --timeout 2m \
+
+  desktop_integration_test:
+    name: ${{ matrix.name }} Integration Test
+    environment: Web Desktop Integration Test
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            name: Linux (Ubuntu)
+            flutter_os: linux
+
+          - os: windows-latest
+            name: Windows
+            flutter_os: windows
+
+          - os: macos-latest
+            name: MacOS
+            flutter_os: macos
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v2
+
+      - name: Setup Flutter SDK
+        uses: subosito/flutter-action@v1
+        with:
+          channel: beta
+      
+      - name: Configure Flutter platforms
+        run: flutter config --enable-${{ matrix.flutter_os }}-desktop
+
+      - name: Install Linux Dependencies
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        # Remaining dependencies are pre-installed
+        run: sudo apt-get install ninja-build libgtk-3-dev
+
+      - name: Run Integration Tests
+        run: flutter driver --driver test_driver/integration_test.dart \
+          --target ./integration_test/dynamic_cached_fonts_example_test.dart \
+          --dart-define FIREBASE_STORAGE_FONT_URL=$FIREBASE_STORAGE_FONT_URL \
+          --device-id ${{ matrix.flutter_os }} \
