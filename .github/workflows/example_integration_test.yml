@@ -131,6 +131,6 @@ jobs:
 
       - name: Run Integration Tests
         run: |
-         [[ ${{ matrix.flutter_os }} = 'linux' ]] && Xvfb -ac :99 & export DISPLAY=:99
+         ls /srv >null && Xvfb -ac :99 & export DISPLAY=:99
 
           flutter driver --driver test_driver/integration_test.dart --target ./integration_test/dynamic_cached_fonts_example_test.dart --dart-define FIREBASE_STORAGE_FONT_URL=$FIREBASE_STORAGE_FONT_URL --device-id ${{ matrix.flutter_os }}
