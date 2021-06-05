@@ -134,6 +134,6 @@ jobs:
         env:
           OS: ${{ matrix.os }}
         run: |
-         if ( "$OS" -eq "ubuntu-latest" ) { Xvfb -ac :99 & export DISPLAY=:99 }
+         if ( "$OS" -eq "ubuntu-latest" ) { Xvfb -ac :99; $DISPLAY=:99 }
 
           flutter driver --driver test_driver/integration_test.dart --target ./integration_test/dynamic_cached_fonts_example_test.dart --dart-define FIREBASE_STORAGE_FONT_URL=$FIREBASE_STORAGE_FONT_URL --device-id ${{ matrix.flutter_os }}
