@@ -128,7 +128,16 @@ jobs:
       - name: Setup Linux Environment
         if: ${{ matrix.os == 'ubuntu-latest' }}
         # Remaining dependencies are pre-installed
-        run: sudo apt-get install ninja-build libgtk-3-dev xvfb
+        run: |
+          sudo apt-get update
+
+          sudo apt-get -y --no-install-recommends install \
+          clang \
+          cmake \
+          ninja-build \
+          pkg-config \
+          libgtk-3-dev \
+          liblzma-dev
 
       - name: Run Integration Tests
         env:
