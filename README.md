@@ -182,7 +182,8 @@ Just run `docker compose run app`
 
 To contribute to the package, fork the repository and open a [pull request]!
 
-![GitHub forks]
+[![GitHub Forks][github-forks-badge]][github-forks]
+[![Github Stars][github-stars-badge]][github-stars]
 
 <!-- Badges -->
 [license-badge]: https://img.shields.io/github/license/sidrao2006/dynamic_cached_fonts?style=for-the-badge
@@ -193,6 +194,8 @@ To contribute to the package, fork the repository and open a [pull request]!
 [unit-tests-badge]:https://github.com/sidrao2006/dynamic_cached_fonts/actions/workflows/package_unit_test.yml/badge.svg
 [integration-tests-badge]: https://github.com/sidrao2006/dynamic_cached_fonts/actions/workflows/example_integration_test.yml/badge.svg
 [release-package-badge]: https://github.com/sidrao2006/dynamic_cached_fonts/actions/workflows/release.yml/badge.svg
+[github-forks-badge]: https://img.shields.io/github/forks/sidrao2006/dynamic_cached_fonts?style=social
+[github-stars-badge]: https://img.shields.io/github/stars/sidrao2006/dynamic_cached_fonts?style=social
 
 <!-- Badge Follow Up Links -->
 [license]: https://github.com/sidrao2006/dynamic_cached_fonts/blob/main/LICENSE
@@ -202,6 +205,8 @@ To contribute to the package, fork the repository and open a [pull request]!
 [unit-tests]:https://github.com/sidrao2006/dynamic_cached_fonts/actions/workflows/package_unit_test.yml
 [integration-tests]: https://github.com/sidrao2006/dynamic_cached_fonts/actions/workflows/example_integration_test.yml
 [release-package]: https://github.com/sidrao2006/dynamic_cached_fonts/actions/workflows/release.yml
+[github-forks]: https://github.com/sidrao2006/dynamic_cached_fonts/fork
+[github-stars]: https://github.com/sidrao2006/dynamic_cached_fonts
 
 <!-- GIFs -->
 [Demo 1]: https://raw.githubusercontent.com/sidrao2006/dynamic_cached_fonts/main/doc/images/demo1.gif
@@ -215,4 +220,3 @@ To contribute to the package, fork the repository and open a [pull request]!
 [issue_tracker]: https://github.com/sidrao2006/dynamic_cached_fonts/issues/new/choose
 [Github Discussions]: https://github.com/sidrao2006/dynamic_cached_fonts/discussions/new?category=q-a
 [pull request]: https://github.com/sidrao2006/dynamic_cached_fonts/compare/main
-[Github forks]: https://img.shields.io/github/forks/sidrao2006/dynamic_cached_fonts?style=social
