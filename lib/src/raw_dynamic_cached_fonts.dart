@@ -89,9 +89,9 @@ abstract class RawDynamicCachedFonts {
 
     devLog(
       <String>[
-        "Font file downloaded\n",
-        "Validity: ${font.validTill}",
-        "Download URL: ${font.originalUrl}",
+        'Font file downloaded\n',
+        'Validity: ${font.validTill}',
+        'Download URL: ${font.originalUrl}',
       ],
       verboseLog: verboseLog,
     );

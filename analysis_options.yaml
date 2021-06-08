@@ -9,3 +9,4 @@ linter:
     sort_pub_dependencies: false
     public_member_api_docs: true
     curly_braces_in_flow_control_structures: false
+    prefer_single_quotes: true
