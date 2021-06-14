@@ -112,42 +112,39 @@ void main() {
     });
   });
 
-  group(
-    'DynamicCachedFonts.fromFirebase',
-    () {
-      FileInfo font;
-      Reference bucketRef;
+  group('DynamicCachedFonts.fromFirebase', () {
+    FileInfo font;
+    Reference bucketRef;
 
-      setUp(() async {
-        await Firebase.initializeApp();
+    setUp(() async {
+      await Firebase.initializeApp();
 
-        font = (await DynamicCachedFonts.fromFirebase(
-          bucketUrl: firebaseFontUrl,
-          fontFamily: firebaseFontName,
-        ).load())
-            .first;
+      font = (await DynamicCachedFonts.fromFirebase(
+        bucketUrl: firebaseFontUrl,
+        fontFamily: firebaseFontName,
+      ).load())
+          .first;
 
-        bucketRef = FirebaseStorage.instance.refFromURL(firebaseFontUrl);
-      });
+      bucketRef = FirebaseStorage.instance.refFromURL(firebaseFontUrl);
+    });
 
-      testWidgets('should parse Firebase Bucket URL', (_) async {
-        expect(font.originalUrl, equals(await bucketRef.getDownloadURL()));
-      });
+    testWidgets('should parse Firebase Bucket URL', (_) async {
+      expect(font.originalUrl, equals(await bucketRef.getDownloadURL()));
+    });
 
-      testWidgets('should load font into cache', (_) async {
-        expect(font, isNotNull);
-      });
+    testWidgets('should load font into cache', (_) async {
+      expect(font, isNotNull);
+    });
 
-      testWidgets('should load valid font file from Firebase', (_) async {
-        expect(
-          font.file.readAsBytesSync(),
-          orderedEquals(await bucketRef.getData()),
-        );
-      });
-    },
-    skip: ThemeData().platform == TargetPlatform.windows ||
-        ThemeData().platform == TargetPlatform.linux,
-  );
+    testWidgets('should load valid font file from Firebase', (_) async {
+      expect(
+        font.file.readAsBytesSync(),
+        orderedEquals(await bucketRef.getData()),
+      );
+    });
+  },
+      skip: ThemeData().platform == TargetPlatform.windows ||
+          ThemeData().platform == TargetPlatform.linux);
 
   group('DynamicCachedFonts.cacheFont', () {
     FileInfo font;
