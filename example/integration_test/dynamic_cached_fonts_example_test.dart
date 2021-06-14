@@ -4,6 +4,7 @@ import 'package:dynamic_cached_fonts/dynamic_cached_fonts.dart';
 import 'package:dynamic_cached_fonts_example/constants.dart';
 import 'package:firebase_core/firebase_core.dart' show Firebase;
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show FontLoader;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart' show IntegrationTestWidgetsFlutterBinding;
@@ -141,7 +142,9 @@ void main() {
         orderedEquals(await bucketRef.getData()),
       );
     });
-  });
+  },
+      skip: ThemeData().platform == TargetPlatform.windows ||
+          ThemeData().platform == TargetPlatform.linux);
 
   group('DynamicCachedFonts.cacheFont', () {
     FileInfo font;
