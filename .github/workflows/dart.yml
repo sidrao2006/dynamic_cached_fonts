@@ -1,0 +1,22 @@
+name: Verify Formatting
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  verify_formatting:
+    name: Verify Formatting
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v2
+
+      - name: Setup Dart SDK
+        uses: dart-lang/setup-dart@v1
+
+      - name: Verify formatting
+        run: dart format --line-length=100 --output=none --set-exit-if-changed .
