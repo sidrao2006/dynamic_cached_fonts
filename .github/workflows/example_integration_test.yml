@@ -121,7 +121,7 @@ jobs:
         uses: subosito/flutter-action@v1
         with:
           channel: beta
-      
+
       - name: Configure Flutter platforms
         run: flutter config --enable-${{ matrix.flutter_os }}-desktop
 
@@ -134,12 +134,11 @@ jobs:
           liblzma-dev `
           ninja-build `
           xvfb
-          
 
       - name: Run Integration Tests
         env:
           OS: ${{ matrix.os }}
         run: |
-         if ( "$env:OS" -eq "ubuntu-latest" ) {Xvfb -ac :99 &; $env:DISPLAY=":99" }
+         if ( "$env:OS" -eq "ubuntu-latest" ) { Xvfb -ac :99 &; $env:DISPLAY=":99" }
 
           flutter driver --driver test_driver/integration_test.dart --target ./integration_test/dynamic_cached_fonts_example_test.dart --dart-define FIREBASE_STORAGE_FONT_URL=$FIREBASE_STORAGE_FONT_URL --device-id ${{ matrix.flutter_os }}
