@@ -17,6 +17,9 @@ jobs:
 
       - name: Setup Dart SDK
         uses: dart-lang/setup-dart@v1
+      
+      - name: Get packages
+        run: dart pub get
 
       - name: Analyze Project
         run: dart analyze --fatal-infos .
