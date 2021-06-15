@@ -1,0 +1,22 @@
+name: Analyze Project
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  analyze_project:
+    name: Analyze Project
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v2
+
+      - name: Setup Dart SDK
+        uses: dart-lang/setup-dart@v1
+
+      - name: Analyze Project
+        run: dart analyze --fatal-infos .
