@@ -510,4 +510,27 @@ class DynamicCachedFonts {
   static Future<void> removeCachedFont(String url) => RawDynamicCachedFonts.removeCachedFont(
         url,
       );
+
+  /// Used to specify whether detailed logs should be printed for debugging.
+  ///
+  /// Logging is disabled by default.
+  ///
+  /// Call this method before any other `DynamicCachedFonts.*` or `RawDynamicCachedFonts.*`
+  /// method(s) to enable logging.
+  /// Once this method is called with false, any command called after that won't log.
+  ///
+  /// ```dart
+  /// DynamicCachedFonts.toggleVerboseLogging(true);
+  /// ... // Any command called here will log results.
+  /// DynamicCachedFonts.toggleVerboseLogging(false);
+  /// ... // Any command called here won't log results.
+  /// ```
+  static void toggleVerboseLogging(bool shouldVerboseLog) {
+    Utils.shouldVerboseLog = shouldVerboseLog;
+
+    devLog(
+      ['${shouldVerboseLog ? 'Enabled' : 'Disabled'} verbose logging'],
+      overrideLoggerConfig: true,
+    );
+  }
 }
