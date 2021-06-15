@@ -1,12 +1,11 @@
 ---
-include: package:lint/analysis_options.yaml
+include: package:flutter_lints/flutter.yaml
 
 linter:
   rules:
     avoid_equals_and_hash_code_on_mutable_classes: true
     literal_only_boolean_expressions: true
     sort_constructors_first: true
-    sort_pub_dependencies: false
     public_member_api_docs: true
     curly_braces_in_flow_control_structures: false
     prefer_single_quotes: true
