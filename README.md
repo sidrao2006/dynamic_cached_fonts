@@ -53,7 +53,7 @@ Text(
 
 ![Demo 1]
 
-Or a button is clicked
+Or when a button is clicked
 
 ```dart
 ElevatedButton(
@@ -71,7 +71,7 @@ ElevatedButton(
 
 ![Demo 2]
 
-If you want to change the how large the cache can be or maybe how long the font stays in cache, pass in `maxCacheObjects` and `cacheStalePeriod`.
+If you want to change how large the cache can be or maybe how long the font stays in cache, pass in `maxCacheObjects` and `cacheStalePeriod`.
 
 ```dart
 DynamicCachedFonts(
@@ -119,7 +119,7 @@ You can pass in `maxCacheObjects` and `cacheStalePeriod` here as well.
 
 #### `canLoadFont`, `loadCachedFont`, `loadCachedFamily`
 
-`canLoadFont` is used to check whether the font is available in cache. It is usually used in combination with the loaders.
+`canLoadFont` is used to check whether the font is available in cache. It is usually used in combination with the `loadCached*` methods.
 
 First, Check whether the font is already in cache. If it is, then load the font.
 
@@ -145,7 +145,7 @@ if(DynamicCachedFonts.canLoadFont(fontUrl)) {
 }
 ```
 
-Now, if the font isn't available in cache, download it.
+Now, if the font isn't available in cache, download it!
 
 ```dart
 if(DynamicCachedFonts.canLoadFont(fontUrl)) {
