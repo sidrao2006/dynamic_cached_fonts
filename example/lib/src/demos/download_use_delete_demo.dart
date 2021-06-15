@@ -60,12 +60,11 @@ class _DynamicCachedFontsDemo3State extends State<DynamicCachedFontsDemo3> {
     );
   }
 
-  Future<void> handleDownloadButtonPress() =>
-      DynamicCachedFonts.cacheFont(notoSansUrl, verboseLog: true);
+  Future<void> handleDownloadButtonPress() => DynamicCachedFonts.cacheFont(notoSansUrl);
 
   Future<void> handleUseFontPress() async {
-    if (await DynamicCachedFonts.canLoadFont(notoSansUrl, verboseLog: true)) {
-      await DynamicCachedFonts.loadCachedFont(notoSansUrl, fontFamily: notoSans, verboseLog: true);
+    if (await DynamicCachedFonts.canLoadFont(notoSansUrl)) {
+      await DynamicCachedFonts.loadCachedFont(notoSansUrl, fontFamily: notoSans);
       setState(() {});
     } else {
       print('Font not found in cache :(');

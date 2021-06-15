@@ -20,7 +20,6 @@ class _DynamicCachedFontsDemo4State extends State<DynamicCachedFontsDemo4> {
       (_) => DynamicCachedFonts.fromFirebase(
         bucketUrl: firaCodeUrl,
         fontFamily: firaCode,
-        verboseLog: true,
       ).load(),
     );
     super.initState();
