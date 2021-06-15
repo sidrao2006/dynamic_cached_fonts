@@ -100,11 +100,17 @@ class DynamicCachedFonts {
   ///
   ///   _Tip: To log only in debug mode, set [verboseLog]'s value to [kReleaseMode]_.
   DynamicCachedFonts({
-    @required String url,
-    @required this.fontFamily,
+    @required
+        String url,
+    @required
+        this.fontFamily,
     this.maxCacheObjects = kDefaultMaxCacheObjects,
     this.cacheStalePeriod = kDefaultCacheStalePeriod,
-    bool verboseLog = false,
+    @Deprecated(
+      'Use "DynamicCachedFonts.toggleVerboseLogging" instead as it reduces code repetition. '
+      'This feature was deprecated after v0.2.0',
+    )
+        bool verboseLog = false,
   })  : assert(
           fontFamily != null && fontFamily != '',
           'fontFamily cannot be null or empty',
@@ -155,11 +161,17 @@ class DynamicCachedFonts {
   ///
   ///   _Tip: To log only in debug mode, set [verboseLog]'s value to [kReleaseMode]_.
   DynamicCachedFonts.family({
-    @required this.urls,
-    @required this.fontFamily,
+    @required
+        this.urls,
+    @required
+        this.fontFamily,
     this.maxCacheObjects = kDefaultMaxCacheObjects,
     this.cacheStalePeriod = kDefaultCacheStalePeriod,
-    bool verboseLog = false,
+    @Deprecated(
+      'Use "DynamicCachedFonts.toggleVerboseLogging" instead as it reduces code repetition. '
+      'This feature was deprecated after v0.2.0',
+    )
+        bool verboseLog = false,
   })  : assert(
           fontFamily != null && fontFamily != '',
           'fontFamily cannot be null or empty',
@@ -215,11 +227,17 @@ class DynamicCachedFonts {
   ///
   ///   _Tip: To log only in debug mode, set [verboseLog]'s value to [kReleaseMode]_.
   DynamicCachedFonts.fromFirebase({
-    @required String bucketUrl,
-    @required this.fontFamily,
+    @required
+        String bucketUrl,
+    @required
+        this.fontFamily,
     this.maxCacheObjects = kDefaultMaxCacheObjects,
     this.cacheStalePeriod = kDefaultCacheStalePeriod,
-    bool verboseLog = false,
+    @Deprecated(
+      'Use "DynamicCachedFonts.toggleVerboseLogging" instead as it reduces code repetition. '
+      'This feature was deprecated after v0.2.0',
+    )
+        bool verboseLog = false,
   })  : assert(
           fontFamily != null && fontFamily != '',
           'fontFamily cannot be null or empty',
@@ -408,7 +426,11 @@ class DynamicCachedFonts {
     String url, {
     Duration cacheStalePeriod = kDefaultCacheStalePeriod,
     int maxCacheObjects = kDefaultMaxCacheObjects,
-    bool verboseLog = false,
+    @Deprecated(
+      'Use "DynamicCachedFonts.toggleVerboseLogging" instead as it reduces code repetition. '
+      'This feature was deprecated after v0.2.0',
+    )
+        bool verboseLog = false,
   }) =>
       RawDynamicCachedFonts.cacheFont(
         url,
@@ -431,7 +453,11 @@ class DynamicCachedFonts {
   ///   _Tip: To log only in debug mode, set [verboseLog]'s value to [kReleaseMode]_.
   static Future<bool> canLoadFont(
     String url, {
-    bool verboseLog = false,
+    @Deprecated(
+      'Use "DynamicCachedFonts.toggleVerboseLogging" instead as it reduces code repetition. '
+      'This feature was deprecated after v0.2.0',
+    )
+        bool verboseLog = false,
   }) =>
       RawDynamicCachedFonts.canLoadFont(
         url,
@@ -455,9 +481,15 @@ class DynamicCachedFonts {
   ///   _Tip: To log only in debug mode, set [verboseLog]'s value to [kReleaseMode]_.
   static Future<FileInfo> loadCachedFont(
     String url, {
-    @required String fontFamily,
-    bool verboseLog = false,
-    @visibleForTesting FontLoader fontLoader,
+    @required
+        String fontFamily,
+    @Deprecated(
+      'Use "DynamicCachedFonts.toggleVerboseLogging" instead as it reduces code repetition. '
+      'This feature was deprecated after v0.2.0',
+    )
+        bool verboseLog = false,
+    @visibleForTesting
+        FontLoader fontLoader,
   }) =>
       RawDynamicCachedFonts.loadCachedFont(
         url,
@@ -491,9 +523,15 @@ class DynamicCachedFonts {
   ///   _Tip: To log only in debug mode, set [verboseLog]'s value to [kReleaseMode]_.
   static Future<Iterable<FileInfo>> loadCachedFamily(
     List<String> urls, {
-    @required String fontFamily,
-    bool verboseLog = false,
-    @visibleForTesting FontLoader fontLoader,
+    @required
+        String fontFamily,
+    @Deprecated(
+      'Use "DynamicCachedFonts.toggleVerboseLogging" instead as it reduces code repetition. '
+      'This feature was deprecated after v0.2.0',
+    )
+        bool verboseLog = false,
+    @visibleForTesting
+        FontLoader fontLoader,
   }) =>
       RawDynamicCachedFonts.loadCachedFamily(
         urls,

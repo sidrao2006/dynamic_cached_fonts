@@ -67,9 +67,15 @@ abstract class RawDynamicCachedFonts {
   ///   _Tip: To log only in debug mode, set [verboseLog]'s value to [kReleaseMode]_.
   static Future<FileInfo> cacheFont(
     String url, {
-    @required int maxCacheObjects,
-    @required Duration cacheStalePeriod,
-    bool verboseLog = false,
+    @required
+        int maxCacheObjects,
+    @required
+        Duration cacheStalePeriod,
+    @Deprecated(
+      'Use "DynamicCachedFonts.toggleVerboseLogging" instead as it reduces code repetition. '
+      'This feature was deprecated after v0.2.0',
+    )
+        bool verboseLog = false,
   }) async {
     assert(verboseLog != null);
 
@@ -113,7 +119,11 @@ abstract class RawDynamicCachedFonts {
   ///   _Tip: To log only in debug mode, set [verboseLog]'s value to [kReleaseMode]_.
   static Future<bool> canLoadFont(
     String url, {
-    bool verboseLog = false,
+    @Deprecated(
+      'Use "DynamicCachedFonts.toggleVerboseLogging" instead as it reduces code repetition. '
+      'This feature was deprecated after v0.2.0',
+    )
+        bool verboseLog = false,
   }) async {
     assert(verboseLog != null);
 
@@ -165,9 +175,15 @@ abstract class RawDynamicCachedFonts {
   ///   _Tip: To log only in debug mode, set [verboseLog]'s value to [kReleaseMode]_.
   static Future<FileInfo> loadCachedFont(
     String url, {
-    @required String fontFamily,
-    bool verboseLog = false,
-    @visibleForTesting FontLoader fontLoader,
+    @required
+        String fontFamily,
+    @Deprecated(
+      'Use "DynamicCachedFonts.toggleVerboseLogging" instead as it reduces code repetition. '
+      'This feature was deprecated after v0.2.0',
+    )
+        bool verboseLog = false,
+    @visibleForTesting
+        FontLoader fontLoader,
   }) async {
     assert(verboseLog != null);
 
@@ -231,9 +247,15 @@ abstract class RawDynamicCachedFonts {
   ///   _Tip: To log only in debug mode, set [verboseLog]'s value to [kReleaseMode]_.
   static Future<Iterable<FileInfo>> loadCachedFamily(
     List<String> urls, {
-    @required String fontFamily,
-    bool verboseLog = false,
-    @visibleForTesting FontLoader fontLoader,
+    @required
+        String fontFamily,
+    @Deprecated(
+      'Use "DynamicCachedFonts.toggleVerboseLogging" instead as it reduces code repetition. '
+      'This feature was deprecated after v0.2.0',
+    )
+        bool verboseLog = false,
+    @visibleForTesting
+        FontLoader fontLoader,
   }) async {
     assert(verboseLog != null);
 
