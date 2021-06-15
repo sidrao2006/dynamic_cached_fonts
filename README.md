@@ -177,8 +177,10 @@ If you find a bug, please open an issue on [Github][issue_tracker] or if you nee
 
 ## Contributing
 
-To make things easier, you can use docker compose to set up  a dev environment.
-Just run `docker compose run app`
+To make things easier, you can use [docker compose] to set up a dev environment.
+Just run `docker compose run linux` to set up a Linux dev environment or run `docker compose run windows` to set up a Linux dev environment.
+
+> You need to be on a Windows machine to be able to set up a docker Windows environment.
 
 To contribute to the package, fork the repository and open a [pull request]!
 
@@ -219,4 +221,5 @@ To contribute to the package, fork the repository and open a [pull request]!
 [install]: https://pub.dev/packages/dynamic_cached_fonts/install
 [issue_tracker]: https://github.com/sidrao2006/dynamic_cached_fonts/issues/new/choose
 [Github Discussions]: https://github.com/sidrao2006/dynamic_cached_fonts/discussions/new?category=q-a
+[docker compose]: https://docs.docker.com/compose/
 [pull request]: https://github.com/sidrao2006/dynamic_cached_fonts/compare/main
