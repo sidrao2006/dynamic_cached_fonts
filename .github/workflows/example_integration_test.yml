@@ -87,6 +87,35 @@ jobs:
             --test build/app/outputs/apk/androidTest/debug/app-debug-androidTest.apk\
             --timeout 2m \
 
+  ios_integration_test:
+    name: iOS Integration Test
+    environment: Mobile Integration Tests
+    runs-on: macos-latest
+
+    defaults:
+      run:
+        working-directory: example
+
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v2
+
+      - name: Setup Flutter SDK
+        uses: subosito/flutter-action@v1
+        with:
+          channel: beta
+
+      - name: Run tests on simulator
+        env:
+          FIREBASE_STORAGE_FONT_URL: ${{ secrets.FIREBASE_STORAGE_FONT_URL }}
+        run: |
+          flutter emulators --launch apple_ios_simulator
+
+          flutter test \
+            --dart-define FIREBASE_STORAGE_FONT_URL=$FIREBASE_STORAGE_FONT_URL \
+            --device-id iPhone \
+            ./integration_test/dynamic_cached_fonts_example_test.dart
+
   desktop_integration_test:
     name: ${{ matrix.name }} Integration Test
     environment: Web Desktop Integration Test
