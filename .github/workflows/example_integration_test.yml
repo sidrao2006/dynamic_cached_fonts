@@ -29,9 +29,10 @@ jobs:
         uses: nanasess/setup-chromedriver@master
 
       - name: Run integration tests
+        env:
+          DISPLAY: :99
+          FIREBASE_STORAGE_FONT_URL: ${{ secrets.FIREBASE_STORAGE_FONT_URL }}
         run: |
-          export DISPLAY=:99
-
           chromedriver --port=4444 &
 
           flutter driver --driver test_driver/integration_test.dart \
@@ -40,13 +41,15 @@ jobs:
           --device-id web-server \
           --browser-name chrome \
           --release
-        env:
-          FIREBASE_STORAGE_FONT_URL: ${{ secrets.FIREBASE_STORAGE_FONT_URL }}
 
   android_integration_test:
     name: Android Integration Test (Firebase Test Lab)
     environment: Mobile Integration Tests
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: example
 
     steps:
       - name: Checkout repository code
@@ -62,30 +65,30 @@ jobs:
         with:
           channel: beta
 
-      - name: Build android instrumentation test 
-        working-directory: example
+      - name: Run pre-build script
+        # flutter build generates files in android/ for building the app
+        run: flutter build apk
+
+      - name: Build android instrumentation test
+        working-directory: example/android
         run: |
-          pushd android
-          # flutter build generates files in android/ for building the app
-          flutter build apk
           ./gradlew app:assembleAndroidTest
           ./gradlew app:assembleDebug -Ptarget=$GITHUB_WORKSPACE/example/integration_test/dynamic_cached_fonts_example_test.dart
-          popd
-      
+
       - name: Set up Google Cloud SDK for Firebase
         uses: google-github-actions/setup-gcloud@master
         with:
           project_id: ${{ secrets.GCLOUD_PROJECT_ID }}
           service_account_key: ${{ secrets.GCLOUD_SERVICE_ACCOUNT_KEY }}
           export_default_credentials: true
-      
+
       - name: Upload APKs to Firebase Test Lab
-        working-directory: example
         run: |
-          gcloud firebase test android run --type instrumentation \
+          gcloud firebase test android run \
+            --type instrumentation \
             --app build/app/outputs/apk/debug/app-debug.apk \
             --test build/app/outputs/apk/androidTest/debug/app-debug-androidTest.apk\
-            --timeout 2m \
+            --timeout 2m
 
   ios_integration_test:
     name: iOS Integration Test
@@ -119,9 +122,12 @@ jobs:
   desktop_integration_test:
     name: ${{ matrix.name }} Integration Test
     environment: Web Desktop Integration Test
+    runs-on: ${{ matrix.os }}
+
     strategy:
       fail-fast: false
       matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
         include:
           - os: ubuntu-latest
             name: Linux (Ubuntu)
@@ -134,8 +140,6 @@ jobs:
           - os: macos-latest
             name: MacOS
             flutter_os: macos
-
-    runs-on: ${{ matrix.os }}
 
     defaults:
       run:
@@ -170,4 +174,8 @@ jobs:
         run: |
          if ( "$env:OS" -eq "ubuntu-latest" ) { Xvfb -ac :99 &; $env:DISPLAY=":99" }
 
-          flutter driver --driver test_driver/integration_test.dart --target ./integration_test/dynamic_cached_fonts_example_test.dart --dart-define FIREBASE_STORAGE_FONT_URL=$FIREBASE_STORAGE_FONT_URL --device-id ${{ matrix.flutter_os }}
+         flutter driver `
+           --driver test_driver/integration_test.dart `
+           --target ./integration_test/dynamic_cached_fonts_example_test.dart `
+           --dart-define FIREBASE_STORAGE_FONT_URL=$FIREBASE_STORAGE_FONT_URL `
+           --device-id ${{ matrix.flutter_os }}
