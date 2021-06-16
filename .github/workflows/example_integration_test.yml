@@ -49,7 +49,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - run: exit 1
       - name: Checkout repository code
         uses: actions/checkout@v2
 
