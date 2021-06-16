@@ -66,14 +66,15 @@ jobs:
         with:
           channel: beta
 
+      - name: Run pre-build script
+        # flutter build generates files in android/ for building the app
+        run: flutter build apk
+
       - name: Build android instrumentation test
+        working-directory: example/android
         run: |
-          pushd android
-          # flutter build generates files in android/ for building the app
-          flutter build apk
           ./gradlew app:assembleAndroidTest
           ./gradlew app:assembleDebug -Ptarget=$GITHUB_WORKSPACE/example/integration_test/dynamic_cached_fonts_example_test.dart
-          popd
 
       - name: Set up Google Cloud SDK for Firebase
         uses: google-github-actions/setup-gcloud@master
