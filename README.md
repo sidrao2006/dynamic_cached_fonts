@@ -167,7 +167,7 @@ Finally, if you want to customize their implementation, extend `RawDynamicCached
 
 Have a custom font to load from Firebase Cloud Storage? Go for the `DynamicCachedFonts.fromFirebase` constructor! It accepts a Google Cloud Storage location which is a url starting with `gs://`. Other than that, it is similar to the default constructor.
 
-> Tip: Every method, except `load()`, has a parameter named `verboseLog` which is used to log detailed statuses and configurations for debugging.
+> Tip: Use `DynamicCachedFonts.toggleVerboseLogging` to log detailed statuses and configurations for debugging.
 
 ![Demo 4]
 

@@ -6,6 +6,8 @@ import 'src/components.dart';
 import 'src/demos.dart';
 
 void main() {
+  DynamicCachedFonts.toggleVerboseLogging(true);
+
   runApp(
     const MaterialApp(
       title: 'Dynamic Cached Fonts Demo',
@@ -27,7 +29,6 @@ class _DynamicCachedFontsDemo1State extends State<DynamicCachedFontsDemo1> {
     final DynamicCachedFonts dynamicCachedFont = DynamicCachedFonts(
       fontFamily: cascadiaCode,
       url: cascadiaCodeUrl,
-      verboseLog: true,
     );
     dynamicCachedFont.load();
 

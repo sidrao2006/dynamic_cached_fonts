@@ -45,7 +45,6 @@ class DynamicCachedFontsDemo2 extends StatelessWidget {
     final DynamicCachedFonts dynamicCachedFont = DynamicCachedFonts(
       fontFamily: firaMono,
       url: firaMonoUrl,
-      verboseLog: true,
     );
 
     dynamicCachedFont.load();
