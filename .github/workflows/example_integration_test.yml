@@ -106,29 +106,14 @@ jobs:
         with:
           channel: beta
 
-      - name: Run pre-build script
-        run: flutter build ios --simulator integration_test/dynamic_cached_fonts_example_test.dart
-
-      - name: Build integration test for iOS
-        env:
-          OUTPUT: ../build/ios_integ
-        working-directory: example/ios
-        run: |
-          xcodebuild -sdk iphonesimulator \
-            -workspace Runner.xcworkspace \
-            -scheme Runner \
-            -config Flutter/Release.xcconfig \
-            -derivedDataPath "$OUTPUT" \
-            -destination 'platform=iOS Simulator,name=iPhone 12,OS=14.4' \
-            -quiet \
-            build-for-testing \
-            CODE_SIGNING_ALLOWED=NO
-
       - name: Run tests on simulator
         run: |
-          xcodebuild test-without-building \
-          -xctestrun "build/ios_integ/Build/Products/Runner_iphoneos14.4-arm64-armv7.xctestrun" \
-          -destination "platform=iOS Simulator,name=iPhone 12,OS=14.4"
+          flutter emulators
+          
+          flutter driver \
+            --driver test_driver/integration_test.dart \
+            --target ./integration_test/dynamic_cached_fonts_example_test.dart \
+            --dart-define FIREBASE_STORAGE_FONT_URL=$FIREBASE_STORAGE_FONT_URL
 
   desktop_integration_test:
     name: ${{ matrix.name }} Integration Test
