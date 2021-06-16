@@ -23,7 +23,6 @@ class _DynamicCachedFontsDemo5State extends State<DynamicCachedFontsDemo5> {
         firaSansThinUrl,
       ],
       fontFamily: firaSans,
-      verboseLog: true,
     );
     dynamicCachedFont.load();
 

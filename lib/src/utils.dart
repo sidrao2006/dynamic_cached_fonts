@@ -24,8 +24,12 @@ const int kDefaultMaxCacheObjects = 200;
 
 /// Logs a message to the console.
 @internal
-void devLog(List<String> messageList, {@required bool verboseLog}) {
-  if (verboseLog) {
+void devLog(
+  List<String> messageList, {
+  bool verboseLog,
+  bool overrideLoggerConfig,
+}) {
+  if (overrideLoggerConfig ?? (Utils.shouldVerboseLog || verboseLog)) {
     final String message = messageList.join('\n');
     dev.log(
       message,
@@ -156,6 +160,9 @@ class Utils {
         0x00,
       ],
     );
+
+  /// A property used to specify whether detailed logs should be printed for debugging.
+  static bool shouldVerboseLog = false;
 
   /// Checks whether the received [url] is a Cloud Storage url or an https url.
   /// If the url points to a Cloud Storage bucket, then a download url
