@@ -125,7 +125,6 @@ jobs:
           popd
 
           pushd $PRODUCT
-          ls -l
           zip -qr "ios_tests.zip" "Release-iphoneos" "Runner_iphoneos14.4-arm64-armv7.xctestrun"
           popd
 
