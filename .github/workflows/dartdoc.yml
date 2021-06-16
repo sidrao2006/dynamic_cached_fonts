@@ -21,5 +21,3 @@ jobs:
       
       - name: Run dartdoc
         run: dart pub global run dartdoc . --no-generate-docs -q
-
-   
