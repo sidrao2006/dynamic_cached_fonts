@@ -30,10 +30,9 @@ jobs:
 
       - name: Run integration tests
         env:
+          DISPLAY: :99
           FIREBASE_STORAGE_FONT_URL: ${{ secrets.FIREBASE_STORAGE_FONT_URL }}
         run: |
-          export DISPLAY=:99
-
           chromedriver --port=4444 &
 
           flutter driver --driver test_driver/integration_test.dart \
