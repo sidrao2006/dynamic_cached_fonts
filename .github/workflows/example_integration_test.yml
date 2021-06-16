@@ -123,22 +123,11 @@ jobs:
             build-for-testing \
             CODE_SIGNING_ALLOWED=NO
 
-      - name: Create test zip file
-        working-directory: example/build/ios_integ/Build/Products
-        run: zip -r "ios_tests.zip" "Release-iphoneos" "Runner_iphoneos14.4-arm64-armv7.xctestrun"
-
-      - name: Set up Google Cloud SDK for Firebase
-        uses: google-github-actions/setup-gcloud@master
-        with:
-          project_id: ${{ secrets.GCLOUD_PROJECT_ID }}
-          service_account_key: ${{ secrets.GCLOUD_SERVICE_ACCOUNT_KEY }}
-          export_default_credentials: true
-
-      - name: Upload APKs to Firebase Test Lab
+      - name: Run tests on simulator
         run: |
-          gcloud firebase test ios run \
-            --test "build/ios_integ/Build/Products/ios_tests.zip" \
-            --timeout 5m
+          xcodebuild test-without-building \
+          -xctestrun "build/ios_integ/Build/Products/Runner_iphoneos14.4-arm64-armv7.xctestrun" \
+          -destination "platform=iOS Simulator,name=iPhone 12,OS=14.4"
 
   desktop_integration_test:
     name: ${{ matrix.name }} Integration Test
