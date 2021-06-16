@@ -110,7 +110,7 @@ jobs:
           OUTPUT: ../build/ios_integ
           PRODUCT: build/ios_integ/Build/Products
         run: |
-          flutter build ios integration_test/dynamic_cached_fonts_example_test.dart --simulator
+          flutter build ios --simulator integration_test/dynamic_cached_fonts_example_test.dart
 
           pushd ios
           xcodebuild -sdk iphoneos \
