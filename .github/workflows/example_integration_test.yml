@@ -106,6 +106,8 @@ jobs:
           channel: beta
 
       - name: Run tests on simulator
+        env:
+          FIREBASE_STORAGE_FONT_URL: ${{ secrets.FIREBASE_STORAGE_FONT_URL }}
         run: |
           flutter emulators --launch apple_ios_simulator
           
