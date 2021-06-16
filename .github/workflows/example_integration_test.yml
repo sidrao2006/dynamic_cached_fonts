@@ -137,7 +137,7 @@ jobs:
       - name: Upload APKs to Firebase Test Lab
         run: |
           gcloud firebase test ios run \
-            --test "build/ios_integ/ios_tests.zip" \
+            --test "build/ios_integ/Build/Products/ios_tests.zip" \
             --timeout 5m
 
   desktop_integration_test:
