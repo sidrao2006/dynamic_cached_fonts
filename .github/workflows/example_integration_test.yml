@@ -114,7 +114,7 @@ jobs:
             --driver test_driver/integration_test.dart \
             --target ./integration_test/dynamic_cached_fonts_example_test.dart \
             --dart-define FIREBASE_STORAGE_FONT_URL=$FIREBASE_STORAGE_FONT_URL \
-            --device-id apple_ios_simulator
+            --device-id iPhone
 
   desktop_integration_test:
     name: ${{ matrix.name }} Integration Test
