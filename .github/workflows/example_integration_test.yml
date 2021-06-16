@@ -126,7 +126,7 @@ jobs:
 
           pushd $PRODUCT
           ls -l
-          zip -qr "ios_tests.zip" "Release-iphoneos" "Runner_iphoneos*.xctestrun"
+          zip -qr "ios_tests.zip" "Release-iphoneos" "Runner_iphoneos14.4-arm64-armv7.xctestrun"
           popd
 
       - name: Set up Google Cloud SDK for Firebase
