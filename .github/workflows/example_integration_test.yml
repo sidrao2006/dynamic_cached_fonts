@@ -86,7 +86,7 @@ jobs:
             --app build/app/outputs/apk/debug/app-debug.apk \
             --test build/app/outputs/apk/androidTest/debug/app-debug-androidTest.apk\
             --timeout 2m \
-  
+
   ios_integration_test:
     name: iOS Integration Test
     environment: Mobile Integration Tests
