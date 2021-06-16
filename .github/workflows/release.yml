@@ -31,15 +31,13 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 10
           running-workflow-name: 'Release and Publish Package'
-          allowed-conclusions: success,skipped,cancelled
+          allowed-conclusions: success,skipped
 
       - name: Release package
         if: success()
         timeout-minutes: 30
         uses: sidrao2006/release-pub-package@main
         with:
-          should-run-pub-score-test: true
-          pub-score-min-points: 90
           pre-publish-command: flutter format .
           access-token: ${{ secrets.PUB_CREDENTIALS_ACCESS_TOKEN }}
           refresh-token: ${{ secrets.PUB_CREDENTIALS_REFRESH_TOKEN }}
