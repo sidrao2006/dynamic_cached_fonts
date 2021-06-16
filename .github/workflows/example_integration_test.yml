@@ -118,7 +118,8 @@ jobs:
             -scheme Runner \
             -config Flutter/Release.xcconfig \
             -derivedDataPath $OUTPUT \
-            build-for-testing
+            build-for-testing \
+            CODE_SIGNING_ALLOWED=NO
           popd
 
           pushd $PRODUCT
