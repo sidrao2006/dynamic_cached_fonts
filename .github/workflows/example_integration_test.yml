@@ -114,14 +114,14 @@ jobs:
           OUTPUT: ../build/ios_integ
         working-directory: example/ios
         run: |
-          xcodebuild build-for-testing \
-            -sdk "iphoneos" \
-            -workspace "Runner.xcworkspace" \
-            -scheme "Runner" \
-            -config "Flutter/Release.xcconfig" \
+          xcodebuild -sdk iphonesimulator \
+            -workspace Runner.xcworkspace \
+            -scheme Runner \
+            -config Flutter/Release.xcconfig \
             -derivedDataPath "$OUTPUT" \
-            -destination "platform=iOS Simulator,name=iPhone 12,OS=14.4" \
+            -destination 'platform=iOS Simulator,name=iPhone 12,OS=14.4' \
             -quiet \
+            build-for-testing \
             CODE_SIGNING_ALLOWED=NO
 
       - name: Run tests on simulator
