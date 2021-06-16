@@ -110,7 +110,7 @@ jobs:
           FIREBASE_STORAGE_FONT_URL: ${{ secrets.FIREBASE_STORAGE_FONT_URL }}
         run: |
           flutter emulators --launch apple_ios_simulator
-          
+
           flutter test \
             --dart-define FIREBASE_STORAGE_FONT_URL=$FIREBASE_STORAGE_FONT_URL \
             --device-id iPhone \
