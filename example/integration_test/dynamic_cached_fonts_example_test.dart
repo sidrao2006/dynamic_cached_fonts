@@ -174,12 +174,12 @@ void main() {
   });
 
   group('DynamicCachedFonts.canLoadFont', () {
-    setUp(() => cacheManager.downloadFile(
-          fontUrl,
-          key: cacheKey,
-        ));
-
     testWidgets('should return true when font is available in cache', (_) async {
+      cacheManager.downloadFile(
+        fontUrl,
+        key: cacheKey,
+      );
+
       expect(
         await DynamicCachedFonts.canLoadFont(fontUrl),
         isTrue,
@@ -187,8 +187,6 @@ void main() {
     });
 
     testWidgets('should return false when font is not available in cache', (_) async {
-      await cacheManager.removeFile(cacheKey);
-
       expect(
         await DynamicCachedFonts.canLoadFont(fontUrl),
         isFalse,
