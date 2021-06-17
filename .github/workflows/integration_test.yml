@@ -8,8 +8,8 @@ on:
 
 jobs:
   chrome_integration_test:
-    name: Actions Integration Test
-    environment: Web Desktop Integration Test
+    name: Web Integration Test
+    environment: Actions Integration Test
     runs-on: ubuntu-latest
 
     defaults:
@@ -44,7 +44,7 @@ jobs:
 
   android_integration_test:
     name: Android Integration Test (Firebase Test Lab)
-    environment: Test Lab Integration Tests
+    environment: Test Lab Integration Test
     runs-on: ubuntu-latest
 
     defaults:
@@ -92,7 +92,7 @@ jobs:
 
   ios_integration_test:
     name: iOS Integration Test
-    environment: Actions Integration Tests
+    environment: Actions Integration Test
     runs-on: macos-latest
 
     defaults:
