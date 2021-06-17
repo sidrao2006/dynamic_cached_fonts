@@ -189,13 +189,9 @@ void main() {
     testWidgets('should return false when font is not available in cache', (_) async {
       await cacheManager.removeFile(cacheKey);
 
-      // Temporary hack for file removal
-      Future<void>.delayed(
-        const Duration(seconds: 10),
-        () async => expect(
-          await DynamicCachedFonts.canLoadFont(fontUrl),
-          isFalse,
-        ),
+      expect(
+        await DynamicCachedFonts.canLoadFont(fontUrl),
+        isFalse,
       );
     });
   });
@@ -293,13 +289,9 @@ void main() {
 
     await DynamicCachedFonts.removeCachedFont(fontUrl);
 
-    // Temporary hack for file removal
-    Future<void>.delayed(
-      const Duration(seconds: 10),
-      () async => expect(
-        await cacheManager.getFileFromCache(cacheKey),
-        isNull,
-      ),
+    expect(
+      await cacheManager.getFileFromCache(cacheKey),
+      isNull,
     );
   });
 }
