@@ -9,7 +9,6 @@
 [![Documentation Analysis][doc-analysis-badge]][doc-analysis]
 [![Unit Tests][unit-tests-badge]][unit-tests]
 [![Integration Tests][integration-tests-badge]][integration-tests]
-[![Release and publish package][release-package-badge]][release-package]
 
 A customizable dynamic font loader for flutter with caching enabled. Supports Firebase Cloud Storage too!
 
@@ -195,7 +194,6 @@ To contribute to the package, fork the repository and open a [pull request]!
 [doc-analysis-badge]: https://github.com/sidrao2006/dynamic_cached_fonts/actions/workflows/dartdoc.yml/badge.svg
 [unit-tests-badge]:https://github.com/sidrao2006/dynamic_cached_fonts/actions/workflows/package_unit_test.yml/badge.svg
 [integration-tests-badge]: https://github.com/sidrao2006/dynamic_cached_fonts/actions/workflows/example_integration_test.yml/badge.svg
-[release-package-badge]: https://github.com/sidrao2006/dynamic_cached_fonts/actions/workflows/release.yml/badge.svg
 [github-forks-badge]: https://img.shields.io/github/forks/sidrao2006/dynamic_cached_fonts?style=social
 [github-stars-badge]: https://img.shields.io/github/stars/sidrao2006/dynamic_cached_fonts?style=social
 
@@ -206,7 +204,6 @@ To contribute to the package, fork the repository and open a [pull request]!
 [doc-analysis]: https://github.com/sidrao2006/dynamic_cached_fonts/actions/workflows/dartdoc.yml
 [unit-tests]:https://github.com/sidrao2006/dynamic_cached_fonts/actions/workflows/package_unit_test.yml
 [integration-tests]: https://github.com/sidrao2006/dynamic_cached_fonts/actions/workflows/example_integration_test.yml
-[release-package]: https://github.com/sidrao2006/dynamic_cached_fonts/actions/workflows/release.yml
 [github-forks]: https://github.com/sidrao2006/dynamic_cached_fonts/fork
 [github-stars]: https://github.com/sidrao2006/dynamic_cached_fonts
 
