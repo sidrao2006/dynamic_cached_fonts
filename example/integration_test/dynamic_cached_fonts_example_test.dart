@@ -287,11 +287,9 @@ void main() {
 
     await DynamicCachedFonts.removeCachedFont(fontUrl);
 
-    final FileInfo cachedFont = await cacheManager.getFileFromCache(cacheKey);
-
     expect(
-      cachedFont.file.existsSync(),
-      isFalse,
+      await cacheManager.getFileFromCache(cacheKey),
+      isNull,
     );
   });
 }
