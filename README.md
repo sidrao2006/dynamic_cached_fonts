@@ -193,7 +193,7 @@ To contribute to the package, fork the repository and open a [pull request]!
 [code-analysis-badge]: https://github.com/sidrao2006/dynamic_cached_fonts/actions/workflows/code_analysis.yml/badge.svg
 [doc-analysis-badge]: https://github.com/sidrao2006/dynamic_cached_fonts/actions/workflows/dartdoc.yml/badge.svg
 [unit-tests-badge]:https://github.com/sidrao2006/dynamic_cached_fonts/actions/workflows/package_unit_test.yml/badge.svg
-[integration-tests-badge]: https://github.com/sidrao2006/dynamic_cached_fonts/actions/workflows/example_integration_test.yml/badge.svg
+[integration-tests-badge]: https://github.com/sidrao2006/dynamic_cached_fonts/actions/workflows/integration_test.yml/badge.svg
 [github-forks-badge]: https://img.shields.io/github/forks/sidrao2006/dynamic_cached_fonts?style=social
 [github-stars-badge]: https://img.shields.io/github/stars/sidrao2006/dynamic_cached_fonts?style=social
 
@@ -203,7 +203,7 @@ To contribute to the package, fork the repository and open a [pull request]!
 [code-analysis]: https://github.com/sidrao2006/dynamic_cached_fonts/actions/workflows/code_analysis.yml
 [doc-analysis]: https://github.com/sidrao2006/dynamic_cached_fonts/actions/workflows/dartdoc.yml
 [unit-tests]:https://github.com/sidrao2006/dynamic_cached_fonts/actions/workflows/package_unit_test.yml
-[integration-tests]: https://github.com/sidrao2006/dynamic_cached_fonts/actions/workflows/example_integration_test.yml
+[integration-tests]: https://github.com/sidrao2006/dynamic_cached_fonts/actions/workflows/integration_test.yml
 [github-forks]: https://github.com/sidrao2006/dynamic_cached_fonts/fork
 [github-stars]: https://github.com/sidrao2006/dynamic_cached_fonts
 
