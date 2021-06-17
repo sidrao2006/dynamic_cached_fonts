@@ -175,7 +175,7 @@ void main() {
 
   group('DynamicCachedFonts.canLoadFont', () {
     testWidgets('should return true when font is available in cache', (_) async {
-      cacheManager.downloadFile(
+      await cacheManager.downloadFile(
         fontUrl,
         key: cacheKey,
       );
