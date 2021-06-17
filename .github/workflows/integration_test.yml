@@ -9,7 +9,7 @@ on:
 jobs:
   chrome_integration_test:
     name: Web Integration Test
-    environment: Web Desktop Integration Test
+    environment: Actions Integration Test
     runs-on: ubuntu-latest
 
     defaults:
@@ -44,7 +44,7 @@ jobs:
 
   android_integration_test:
     name: Android Integration Test (Firebase Test Lab)
-    environment: Mobile Integration Tests
+    environment: Test Lab Integration Test
     runs-on: ubuntu-latest
 
     defaults:
@@ -92,7 +92,7 @@ jobs:
 
   ios_integration_test:
     name: iOS Integration Test
-    environment: Mobile Integration Tests
+    environment: Actions Integration Test
     runs-on: macos-latest
 
     defaults:
@@ -121,7 +121,7 @@ jobs:
 
   desktop_integration_test:
     name: ${{ matrix.name }} Integration Test
-    environment: Web Desktop Integration Test
+    environment: Actions Integration Test
     runs-on: ${{ matrix.os }}
 
     strategy:
