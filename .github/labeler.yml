@@ -53,6 +53,6 @@ example: example/**/*
 
 'internal: style :nail_care:': '**/analysis_options.yaml'
 
-'documentation :book:': 
- - '**/doc/*'
- - '**/dartdoc_options.yaml'
+'documentation :book:':
+  - '**/doc/*'
+  - '**/dartdoc_options.yaml'
