@@ -1,6 +1,10 @@
 ---
 include: package:flutter_lints/flutter.yaml
 
+analyzer:
+  strong-mode:
+    implicit-casts: false
+
 linter:
   rules:
     avoid_equals_and_hash_code_on_mutable_classes: true
