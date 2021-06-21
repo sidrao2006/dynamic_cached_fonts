@@ -190,11 +190,12 @@ void main() {
       await cacheManager.removeFile(cacheKey);
 
       // Temporary hack for file removal
-      await Future<void>.delayed(const Duration(milliseconds: 10));
-
-      expect(
-        await DynamicCachedFonts.canLoadFont(fontUrl),
-        isFalse,
+      Future<void>.delayed(
+        const Duration(milliseconds: 10),
+        () async => expect(
+          await DynamicCachedFonts.canLoadFont(fontUrl),
+          isFalse,
+        ),
       );
     });
   });
@@ -293,11 +294,12 @@ void main() {
     await DynamicCachedFonts.removeCachedFont(fontUrl);
 
     // Temporary hack for file removal
-    await Future<void>.delayed(const Duration(milliseconds: 10));
-
-    expect(
-      await cacheManager.getFileFromCache(cacheKey),
-      isNull,
+    Future<void>.delayed(
+      const Duration(milliseconds: 10),
+      () async => expect(
+        await cacheManager.getFileFromCache(cacheKey),
+        isNull,
+      ),
     );
   });
 }
