@@ -191,7 +191,7 @@ void main() {
 
       // Temporary hack for file removal
       Future<void>.delayed(
-        const Duration(seconds: 10),
+        const Duration(milliseconds: 10),
         () async => expect(
           await DynamicCachedFonts.canLoadFont(fontUrl),
           isFalse,
@@ -295,7 +295,7 @@ void main() {
 
     // Temporary hack for file removal
     Future<void>.delayed(
-      const Duration(seconds: 10),
+      const Duration(milliseconds: 10),
       () async => expect(
         await cacheManager.getFileFromCache(cacheKey),
         isNull,
