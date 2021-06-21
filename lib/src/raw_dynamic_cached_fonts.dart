@@ -96,24 +96,9 @@ abstract class RawDynamicCachedFonts {
 
     final String cacheKey = Utils.sanitizeUrl(url);
 
-    FileInfo font;
+    final FileInfo font =
+        await DynamicCachedFontsCacheManager.getCacheManager(cacheKey).getFileFromCache(cacheKey);
 
-    // Try catch to catch any errors thrown by the cache manager
-    // or the assertion.
-    try {
-      font =
-          await DynamicCachedFontsCacheManager.getCacheManager(cacheKey).getFileFromCache(cacheKey);
-
-      assert(
-        font != null,
-        <String>[
-          'Font is not available in cache.',
-          'Call cacheFont to download font.',
-        ].join(),
-      );
-    } catch (e) {
-      devLog([e.toString()]);
-    }
     return font != null;
   }
 
