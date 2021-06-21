@@ -50,3 +50,9 @@ example: example/**/*
   - example/integration_test/*
 
 'test: unit-test': test/*
+
+'internal: style :nail_care:': '**/analysis_options.yaml'
+
+'documentation :book:':
+  - '**/doc/*'
+  - '**/dartdoc_options.yaml'
