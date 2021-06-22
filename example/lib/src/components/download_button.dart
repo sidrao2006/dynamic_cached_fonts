@@ -1,18 +1,16 @@
-// @dart=2.9
-
 import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget {
   const CustomButton({
-    Key key,
-    this.onPressed,
+    Key? key,
+    required this.onPressed,
     this.title = 'Download',
     this.icon,
   }) : super(key: key);
 
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final String title;
-  final IconData icon;
+  final IconData? icon;
 
   @override
   Widget build(BuildContext context) {
