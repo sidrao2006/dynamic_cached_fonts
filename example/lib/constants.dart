@@ -1,4 +1,7 @@
 // Demo title name
+
+// @dart=2.9
+
 const String demoTitle = 'Dynamic Cached Fonts Demo';
 
 // Font family names

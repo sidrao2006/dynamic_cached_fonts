@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'package:dynamic_cached_fonts/dynamic_cached_fonts.dart';
 import 'package:flutter/material.dart';
 
