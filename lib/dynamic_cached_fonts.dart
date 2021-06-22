@@ -1,5 +1,3 @@
-// ignore_for_file: deprecated_member_use_from_same_package
-
 /// An asset loader which dynamically loads font from the given url and caches it.
 /// It can be easily fetched from cache and loaded on demand.
 library dynamic_cached_fonts;
@@ -95,17 +93,17 @@ class DynamicCachedFonts {
   ///   It is used to specify the cache configuration, [Config],
   ///   for [CacheManager].
   DynamicCachedFonts({
-    @required String url,
-    @required this.fontFamily,
+    required String url,
+    required this.fontFamily,
     this.maxCacheObjects = kDefaultMaxCacheObjects,
     this.cacheStalePeriod = kDefaultCacheStalePeriod,
   })  : assert(
-          fontFamily != null && fontFamily != '',
-          'fontFamily cannot be null or empty',
+          fontFamily != '',
+          'fontFamily cannot be empty',
         ),
         assert(
-          url != null && url != '',
-          'url cannot be null or empty',
+          url != '',
+          'url cannot be empty',
         ),
         urls = <String>[url],
         _isFirebaseURL = false,
@@ -140,13 +138,13 @@ class DynamicCachedFonts {
   ///   It is used to specify the cache configuration, [Config],
   ///   for [CacheManager].
   DynamicCachedFonts.family({
-    @required this.urls,
-    @required this.fontFamily,
+    required this.urls,
+    required this.fontFamily,
     this.maxCacheObjects = kDefaultMaxCacheObjects,
     this.cacheStalePeriod = kDefaultCacheStalePeriod,
   })  : assert(
-          fontFamily != null && fontFamily != '',
-          'fontFamily cannot be null or empty',
+          fontFamily != '',
+          'fontFamily cannot be empty',
         ),
         assert(
           urls.length > 1,
@@ -154,9 +152,9 @@ class DynamicCachedFonts {
         ),
         assert(
           urls.every(
-            (String url) => url != null && url != '',
+            (String url) => url != '',
           ),
-          'url cannot be null or empty',
+          'url cannot be empty',
         ),
         _isFirebaseURL = false,
         _loaded = false;
@@ -190,17 +188,17 @@ class DynamicCachedFonts {
   ///   It is used to specify the cache configuration, [Config],
   ///   for [CacheManager].
   DynamicCachedFonts.fromFirebase({
-    @required String bucketUrl,
-    @required this.fontFamily,
+    required String bucketUrl,
+    required this.fontFamily,
     this.maxCacheObjects = kDefaultMaxCacheObjects,
     this.cacheStalePeriod = kDefaultCacheStalePeriod,
   })  : assert(
-          fontFamily != null && fontFamily != '',
-          'fontFamily cannot be null or empty',
+          fontFamily != '',
+          'fontFamily cannot be empty',
         ),
         assert(
-          bucketUrl != null && bucketUrl != '',
-          'bucketUrl cannot be null or empty',
+          bucketUrl != '',
+          'bucketUrl cannot be empty',
         ),
         urls = <String>[bucketUrl],
         _isFirebaseURL = true,
@@ -323,7 +321,7 @@ class DynamicCachedFonts {
   /// [CacheManager] used in [cacheManager].
   @visibleForTesting
   static void custom({
-    @required CacheManager cacheManager,
+    required CacheManager cacheManager,
     bool force = false,
   }) =>
       RawDynamicCachedFonts.custom(
@@ -381,8 +379,8 @@ class DynamicCachedFonts {
   ///   of the font family which is to be used as [TextStyle.fontFamily].
   static Future<FileInfo> loadCachedFont(
     String url, {
-    @required String fontFamily,
-    @visibleForTesting FontLoader fontLoader,
+    required String fontFamily,
+    @visibleForTesting FontLoader? fontLoader,
   }) =>
       RawDynamicCachedFonts.loadCachedFont(
         url,
@@ -408,8 +406,8 @@ class DynamicCachedFonts {
   ///   of the font family which is to be used as [TextStyle.fontFamily].
   static Future<Iterable<FileInfo>> loadCachedFamily(
     List<String> urls, {
-    @required String fontFamily,
-    @visibleForTesting FontLoader fontLoader,
+    required String fontFamily,
+    @visibleForTesting FontLoader? fontLoader,
   }) =>
       RawDynamicCachedFonts.loadCachedFamily(
         urls,

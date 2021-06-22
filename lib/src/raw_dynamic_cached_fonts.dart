@@ -29,13 +29,13 @@ abstract class RawDynamicCachedFonts {
   /// passed to the [CacheManager] used in [cacheManager].
   @visibleForTesting
   static void custom({
-    @required CacheManager cacheManager,
+    required CacheManager cacheManager,
     bool force = false,
   }) {
-    assert(force != null);
-    DynamicCachedFontsCacheManager.customCacheManager != null && force
-        ? DynamicCachedFontsCacheManager.customCacheManager = cacheManager
-        : DynamicCachedFontsCacheManager.customCacheManager ??= cacheManager;
+    if (force)
+      DynamicCachedFontsCacheManager.setCustomCacheManager(cacheManager);
+    else if (DynamicCachedFontsCacheManager.getCustomCacheManager() == null)
+      DynamicCachedFontsCacheManager.setCustomCacheManager(cacheManager);
   }
 
   /// Downloads and caches font from the [url] with the given configuration.
@@ -60,8 +60,8 @@ abstract class RawDynamicCachedFonts {
   ///   for [CacheManager].
   static Future<FileInfo> cacheFont(
     String url, {
-    @required int maxCacheObjects,
-    @required Duration cacheStalePeriod,
+    required int maxCacheObjects,
+    required Duration cacheStalePeriod,
   }) async {
     WidgetsFlutterBinding.ensureInitialized();
 
@@ -96,7 +96,7 @@ abstract class RawDynamicCachedFonts {
 
     final String cacheKey = Utils.sanitizeUrl(url);
 
-    final FileInfo font =
+    final FileInfo? font =
         await DynamicCachedFontsCacheManager.getCacheManager(cacheKey).getFileFromCache(cacheKey);
 
     return font != null;
@@ -115,8 +115,8 @@ abstract class RawDynamicCachedFonts {
   ///   of the font family which is to be used as [TextStyle.fontFamily].
   static Future<FileInfo> loadCachedFont(
     String url, {
-    @required String fontFamily,
-    @visibleForTesting FontLoader fontLoader,
+    required String fontFamily,
+    @visibleForTesting FontLoader? fontLoader,
   }) async {
     fontLoader ??= FontLoader(fontFamily);
 
@@ -124,7 +124,7 @@ abstract class RawDynamicCachedFonts {
 
     final String cacheKey = Utils.sanitizeUrl(url);
 
-    final FileInfo font =
+    final FileInfo? font =
         await DynamicCachedFontsCacheManager.getCacheManager(cacheKey).getFileFromCache(cacheKey);
 
     if (font == null) {
@@ -168,30 +168,29 @@ abstract class RawDynamicCachedFonts {
   ///   of the font family which is to be used as [TextStyle.fontFamily].
   static Future<Iterable<FileInfo>> loadCachedFamily(
     List<String> urls, {
-    @required String fontFamily,
-    @visibleForTesting FontLoader fontLoader,
+    required String fontFamily,
+    @visibleForTesting FontLoader? fontLoader,
   }) async {
     fontLoader ??= FontLoader(fontFamily);
 
     WidgetsFlutterBinding.ensureInitialized();
 
-    final Iterable<FileInfo> fontFiles = await Future.wait(
+    final Iterable<FileInfo?> fontFiles = await Future.wait(
       urls.map((String url) async {
         final String cacheKey = Utils.sanitizeUrl(url);
 
-        final FileInfo font = await DynamicCachedFontsCacheManager.getCacheManager(cacheKey)
+        final FileInfo? font = await DynamicCachedFontsCacheManager.getCacheManager(cacheKey)
             .getFileFromCache(cacheKey);
 
         return font;
       }),
     );
 
-    if (!fontFiles.every((FileInfo font) => font != null)) {
+    if (fontFiles.any((FileInfo? font) => font == null))
       throw StateError('Font should already be cached to be loaded');
-    }
 
-    final Iterable<Future<ByteData>> cachedFontBytes = fontFiles.map((FileInfo font) async {
-      final Uint8List fontBytes = await font.file.readAsBytes();
+    final Iterable<Future<ByteData>> cachedFontBytes = fontFiles.map((FileInfo? font) async {
+      final Uint8List fontBytes = await font!.file.readAsBytes();
 
       return ByteData.view(fontBytes.buffer);
     });
@@ -202,7 +201,7 @@ abstract class RawDynamicCachedFonts {
 
     devLog(['Font has been loaded!']);
 
-    return fontFiles;
+    return fontFiles as Iterable<FileInfo>;
   }
 
   /// Removes the given [url] can be loaded directly from cache.

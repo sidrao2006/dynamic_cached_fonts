@@ -26,7 +26,7 @@ const int kDefaultMaxCacheObjects = 200;
 @internal
 void devLog(
   List<String> messageList, {
-  bool overrideLoggerConfig,
+  bool? overrideLoggerConfig,
 }) {
   if (overrideLoggerConfig ?? Utils.shouldVerboseLog) {
     final String message = messageList.join('\n');
@@ -62,7 +62,7 @@ class DynamicCachedFontsCacheManager {
 
   /// A map of [CacheManager]s used throughout the package. The key used
   /// will correspond to [Config.cacheKey] of the respective [CacheManager].
-  static final Map<String, CacheManager> _cacheManagers = <String, CacheManager>{
+  static final Map<String, CacheManager> _cacheManagers = {
     _defaultCacheKey: CacheManager(
       Config(
         _defaultCacheKey,
@@ -72,26 +72,26 @@ class DynamicCachedFontsCacheManager {
     ),
   };
 
-  static String _customCacheKey;
+  static String? _customCacheKey;
 
   /// The getter for the default instance of [CacheManager] in [_cacheManagers].
-  static CacheManager get defaultCacheManager => _cacheManagers[_defaultCacheKey];
+  static CacheManager get defaultCacheManager => _cacheManagers[_defaultCacheKey]!;
 
   /// The getter for the custom instance of [CacheManager] in [_cacheManagers].
-  static CacheManager get customCacheManager => _cacheManagers[_customCacheKey];
+  static CacheManager? getCustomCacheManager() => _cacheManagers[_customCacheKey!];
 
   /// The setter for the custom instance of [CacheManager] in [_cacheManagers].
   /// [Config.cacheKey] will be used as the key when adding the instance to
   /// [_cacheManagers].
-  static set customCacheManager(CacheManager cacheManager) {
+  static setCustomCacheManager(CacheManager cacheManager) {
     _customCacheKey =
         cacheManager.store.storeKey; // This is the same key provided to Config.cacheKey.
-    _cacheManagers[_customCacheKey] = cacheManager;
+    _cacheManagers[_customCacheKey!] = cacheManager;
   }
 
   /// Returns a custom [CacheManager], if present, or
   static CacheManager getCacheManager(String cacheKey) =>
-      customCacheManager ?? _cacheManagers[cacheKey] ?? defaultCacheManager;
+      getCustomCacheManager() ?? _cacheManagers[cacheKey] ?? defaultCacheManager;
 
   /// Creates a new instance of [CacheManager] if the default can't be used.
   static void handleCacheManager(String cacheKey, Duration cacheStalePeriod, int maxCacheObjects) {
@@ -111,9 +111,9 @@ class DynamicCachedFontsCacheManager {
 class _FontFileExtensionManager {
   _FontFileExtensionManager();
 
-  final Map<String, List<int>> _validExtensions = <String, List<int>>{};
+  final Map<String, List<int>> _validExtensions = {};
 
-  void addExtension({String extension, List<int> magicNumber}) {
+  void addExtension({required String extension, required List<int> magicNumber}) {
     _validExtensions[extension] = magicNumber;
   }
 
