@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:dynamic_cached_fonts/dynamic_cached_fonts.dart';
 import 'package:dynamic_cached_fonts_example/constants.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +6,7 @@ import '../components.dart';
 import 'download_use_delete_demo.dart';
 
 class DynamicCachedFontsDemo2 extends StatelessWidget {
-  const DynamicCachedFontsDemo2({Key key}) : super(key: key);
+  const DynamicCachedFontsDemo2({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

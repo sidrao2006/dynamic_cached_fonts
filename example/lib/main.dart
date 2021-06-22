@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:dynamic_cached_fonts/dynamic_cached_fonts.dart';
 import 'package:flutter/material.dart';
 
@@ -19,7 +17,7 @@ void main() {
 }
 
 class DynamicCachedFontsDemo1 extends StatefulWidget {
-  const DynamicCachedFontsDemo1({Key key}) : super(key: key);
+  const DynamicCachedFontsDemo1({Key? key}) : super(key: key);
 
   @override
   _DynamicCachedFontsDemo1State createState() => _DynamicCachedFontsDemo1State();

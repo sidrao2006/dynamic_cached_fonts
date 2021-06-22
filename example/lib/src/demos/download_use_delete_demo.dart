@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'dart:async';
 
 import 'package:dynamic_cached_fonts/dynamic_cached_fonts.dart';
@@ -10,7 +8,7 @@ import '../components.dart';
 import 'firebase_demo.dart';
 
 class DynamicCachedFontsDemo3 extends StatefulWidget {
-  const DynamicCachedFontsDemo3({Key key}) : super(key: key);
+  const DynamicCachedFontsDemo3({Key? key}) : super(key: key);
 
   @override
   _DynamicCachedFontsDemo3State createState() => _DynamicCachedFontsDemo3State();
