@@ -26,9 +26,10 @@ const int kDefaultMaxCacheObjects = 200;
 @internal
 void devLog(
   List<String> messageList, {
+  bool verboseLog = false,
   bool? overrideLoggerConfig,
 }) {
-  if (overrideLoggerConfig ?? Utils.shouldVerboseLog) {
+  if (overrideLoggerConfig ?? (Utils.shouldVerboseLog || verboseLog)) {
     final String message = messageList.join('\n');
     dev.log(
       message,
@@ -166,15 +167,21 @@ class Utils {
   /// Checks whether the received [url] is a Cloud Storage url or an https url.
   /// If the url points to a Cloud Storage bucket, then a download url
   /// is generated using the Firebase SDK.
-  static Future<String> handleUrl(String url) async {
+  static Future<String> handleUrl(
+    String url, {
+    required bool verboseLog,
+  }) async {
     final Reference ref = FirebaseStorage.instance.refFromURL(url);
 
-    devLog([
-      'Created Firebase Storage reference with following values -\n',
-      'Bucket name - ${ref.bucket}',
-      'Object name - ${ref.name}',
-      'Object path - ${ref.fullPath}',
-    ]);
+    devLog(
+      <String>[
+        'Created Firebase Storage reference with following values -\n',
+        'Bucket name - ${ref.bucket}',
+        'Object name - ${ref.name}',
+        'Object path - ${ref.fullPath}',
+      ],
+      verboseLog: verboseLog,
+    );
 
     return ref.getDownloadURL();
   }
