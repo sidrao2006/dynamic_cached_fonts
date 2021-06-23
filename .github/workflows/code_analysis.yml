@@ -9,6 +9,10 @@ jobs:
   pana_analyze:
     name: Analyze package with Pana
     runs-on: ubuntu-latest
+
+    permissions:
+      checks: write
+
     steps:
       - name: Checkout repository code
         uses: actions/checkout@v2
