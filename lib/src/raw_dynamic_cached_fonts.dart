@@ -189,8 +189,11 @@ abstract class RawDynamicCachedFonts {
     if (fontFiles.any((FileInfo? font) => font == null))
       throw StateError('Font should already be cached to be loaded');
 
-    final Iterable<Future<ByteData>> cachedFontBytes = fontFiles.map((FileInfo? font) async {
-      final Uint8List fontBytes = await font!.file.readAsBytes();
+    // The null-check above ensures that this line simply acts as a cast.
+    final Iterable<FileInfo> nonNullFontFiles = fontFiles.whereType<FileInfo>();
+
+    final Iterable<Future<ByteData>> cachedFontBytes = nonNullFontFiles.map((FileInfo font) async {
+      final Uint8List fontBytes = await font.file.readAsBytes();
 
       return ByteData.view(fontBytes.buffer);
     });
@@ -201,7 +204,7 @@ abstract class RawDynamicCachedFonts {
 
     devLog(['Font has been loaded!']);
 
-    return fontFiles as Iterable<FileInfo>;
+    return nonNullFontFiles;
   }
 
   /// Removes the given [url] can be loaded directly from cache.

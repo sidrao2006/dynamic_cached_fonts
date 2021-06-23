@@ -78,7 +78,7 @@ class DynamicCachedFontsCacheManager {
   static CacheManager get defaultCacheManager => _cacheManagers[_defaultCacheKey]!;
 
   /// The getter for the custom instance of [CacheManager] in [_cacheManagers].
-  static CacheManager? getCustomCacheManager() => _cacheManagers[_customCacheKey!];
+  static CacheManager? getCustomCacheManager() => _cacheManagers[_customCacheKey];
 
   /// The setter for the custom instance of [CacheManager] in [_cacheManagers].
   /// [Config.cacheKey] will be used as the key when adding the instance to
