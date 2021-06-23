@@ -94,11 +94,25 @@ class DynamicCachedFonts {
   ///
   ///   It is used to specify the cache configuration, [Config],
   ///   for [CacheManager].
+  ///
+  /// - The [verboseLog] is a debug property used to specify whether detailed
+  ///   logs should be printed for debugging.
+  ///
+  ///   Defaults to false.
+  ///
+  ///   _Tip: To log only in debug mode, set [verboseLog]'s value to [kReleaseMode]_.
   DynamicCachedFonts({
-    @required String url,
-    @required this.fontFamily,
+    @required
+        String url,
+    @required
+        this.fontFamily,
     this.maxCacheObjects = kDefaultMaxCacheObjects,
     this.cacheStalePeriod = kDefaultCacheStalePeriod,
+    @Deprecated(
+      'Use "DynamicCachedFonts.toggleVerboseLogging" instead as it reduces code repetition. '
+      'This feature was deprecated after v0.2.0',
+    )
+        bool verboseLog = false,
   })  : assert(
           fontFamily != null && fontFamily != '',
           'fontFamily cannot be null or empty',
@@ -107,7 +121,9 @@ class DynamicCachedFonts {
           url != null && url != '',
           'url cannot be null or empty',
         ),
+        assert(verboseLog != null),
         urls = <String>[url],
+        _verboseLog = verboseLog,
         _isFirebaseURL = false,
         _loaded = false;
 
@@ -139,11 +155,25 @@ class DynamicCachedFonts {
   ///
   ///   It is used to specify the cache configuration, [Config],
   ///   for [CacheManager].
+  ///
+  /// - The [verboseLog] is a debug property used to specify whether detailed
+  ///   logs should be printed for debugging.
+  ///
+  ///   Defaults to false.
+  ///
+  ///   _Tip: To log only in debug mode, set [verboseLog]'s value to [kReleaseMode]_.
   DynamicCachedFonts.family({
-    @required this.urls,
-    @required this.fontFamily,
+    @required
+        this.urls,
+    @required
+        this.fontFamily,
     this.maxCacheObjects = kDefaultMaxCacheObjects,
     this.cacheStalePeriod = kDefaultCacheStalePeriod,
+    @Deprecated(
+      'Use "DynamicCachedFonts.toggleVerboseLogging" instead as it reduces code repetition. '
+      'This feature was deprecated after v0.2.0',
+    )
+        bool verboseLog = false,
   })  : assert(
           fontFamily != null && fontFamily != '',
           'fontFamily cannot be null or empty',
@@ -158,6 +188,8 @@ class DynamicCachedFonts {
           ),
           'url cannot be null or empty',
         ),
+        assert(verboseLog != null),
+        _verboseLog = verboseLog,
         _isFirebaseURL = false,
         _loaded = false;
 
@@ -189,11 +221,25 @@ class DynamicCachedFonts {
   ///
   ///   It is used to specify the cache configuration, [Config],
   ///   for [CacheManager].
+  ///
+  /// - The [verboseLog] is a debug property used to specify whether detailed
+  ///   logs should be printed for debugging.
+  ///
+  ///   Defaults to false.
+  ///
+  ///   _Tip: To log only in debug mode, set [verboseLog]'s value to [kReleaseMode]_.
   DynamicCachedFonts.fromFirebase({
-    @required String bucketUrl,
-    @required this.fontFamily,
+    @required
+        String bucketUrl,
+    @required
+        this.fontFamily,
     this.maxCacheObjects = kDefaultMaxCacheObjects,
     this.cacheStalePeriod = kDefaultCacheStalePeriod,
+    @Deprecated(
+      'Use "DynamicCachedFonts.toggleVerboseLogging" instead as it reduces code repetition. '
+      'This feature was deprecated after v0.2.0',
+    )
+        bool verboseLog = false,
   })  : assert(
           fontFamily != null && fontFamily != '',
           'fontFamily cannot be null or empty',
@@ -202,6 +248,8 @@ class DynamicCachedFonts {
           bucketUrl != null && bucketUrl != '',
           'bucketUrl cannot be null or empty',
         ),
+        assert(verboseLog != null),
+        _verboseLog = verboseLog,
         urls = <String>[bucketUrl],
         _isFirebaseURL = true,
         _loaded = false;
@@ -240,6 +288,14 @@ class DynamicCachedFonts {
   /// for [CacheManager].
   final Duration cacheStalePeriod;
 
+  /// A debug property used to specify whether detailed
+  /// logs should be printed for debugging.
+  ///
+  /// Defaults to false.
+  ///
+  /// _Tip: To log only in debug mode, set the value to [kReleaseMode]_.
+  final bool _verboseLog;
+
   /// Determines whether [url] is a firebase storage bucket url.
   final bool _isFirebaseURL;
 
@@ -259,7 +315,8 @@ class DynamicCachedFonts {
 
     final List<String> downloadUrls = await Future.wait(
       urls.map(
-        (String url) async => _isFirebaseURL ? await Utils.handleUrl(url) : url,
+        (String url) async =>
+            _isFirebaseURL ? await Utils.handleUrl(url, verboseLog: _verboseLog) : url,
       ),
     );
 
@@ -269,6 +326,7 @@ class DynamicCachedFonts {
       fontFiles = await loadCachedFamily(
         downloadUrls,
         fontFamily: fontFamily,
+        verboseLog: _verboseLog,
       );
 
       // Checks whether any of the files is invalid.
@@ -281,20 +339,26 @@ class DynamicCachedFonts {
                 font.originalUrl,
                 cacheStalePeriod: cacheStalePeriod,
                 maxCacheObjects: maxCacheObjects,
+                verboseLog: _verboseLog,
               ));
     } catch (_) {
-      devLog(['Font is not in cache.', 'Loading font now...']);
+      devLog(
+        <String>['Font is not in cache.', 'Loading font now...'],
+        verboseLog: _verboseLog,
+      );
 
       for (final String url in downloadUrls)
         await cacheFont(
           url,
           cacheStalePeriod: cacheStalePeriod,
           maxCacheObjects: maxCacheObjects,
+          verboseLog: _verboseLog,
         );
 
       fontFiles = await loadCachedFamily(
         downloadUrls,
         fontFamily: fontFamily,
+        verboseLog: _verboseLog,
       );
     }
 
@@ -353,15 +417,28 @@ class DynamicCachedFonts {
   ///
   ///   It is used to specify the cache configuration, [Config],
   ///   for [CacheManager].
+  ///
+  /// - The [verboseLog] is a debug property used to specify whether detailed
+  ///   logs should be printed for debugging.
+  ///
+  ///   Defaults to false.
+  ///
+  ///   _Tip: To log only in debug mode, set [verboseLog]'s value to [kReleaseMode]_.
   static Future<FileInfo> cacheFont(
     String url, {
     Duration cacheStalePeriod = kDefaultCacheStalePeriod,
     int maxCacheObjects = kDefaultMaxCacheObjects,
+    @Deprecated(
+      'Use "DynamicCachedFonts.toggleVerboseLogging" instead as it reduces code repetition. '
+      'This feature was deprecated after v0.2.0',
+    )
+        bool verboseLog = false,
   }) =>
       RawDynamicCachedFonts.cacheFont(
         url,
         cacheStalePeriod: cacheStalePeriod,
         maxCacheObjects: maxCacheObjects,
+        verboseLog: verboseLog,
       );
 
   /// Checks whether the given [url] can be loaded directly from cache.
@@ -369,7 +446,25 @@ class DynamicCachedFonts {
   /// - **REQUIRED** The [url] property is used to specify the url
   ///   for the required font. It should be a valid http/https url which points to
   ///   a font file. The [url] should match the url passed to [cacheFont].
-  static Future<bool> canLoadFont(String url) => RawDynamicCachedFonts.canLoadFont(url);
+  ///
+  /// - The [verboseLog] is a debug property used to specify whether detailed
+  ///   logs should be printed for debugging.
+  ///
+  ///   Defaults to false.
+  ///
+  ///   _Tip: To log only in debug mode, set [verboseLog]'s value to [kReleaseMode]_.
+  static Future<bool> canLoadFont(
+    String url, {
+    @Deprecated(
+      'Use "DynamicCachedFonts.toggleVerboseLogging" instead as it reduces code repetition. '
+      'This feature was deprecated after v0.2.0',
+    )
+        bool verboseLog = false,
+  }) =>
+      RawDynamicCachedFonts.canLoadFont(
+        url,
+        verboseLog: verboseLog,
+      );
 
   /// Fetches the given [url] from cache and loads it as an asset.
   ///
@@ -379,14 +474,29 @@ class DynamicCachedFonts {
   ///
   /// - **REQUIRED** The [fontFamily] property is used to specify the name
   ///   of the font family which is to be used as [TextStyle.fontFamily].
+  ///
+  /// - The [verboseLog] is a debug property used to specify whether detailed
+  ///   logs should be printed for debugging.
+  ///
+  ///   Defaults to false.
+  ///
+  ///   _Tip: To log only in debug mode, set [verboseLog]'s value to [kReleaseMode]_.
   static Future<FileInfo> loadCachedFont(
     String url, {
-    @required String fontFamily,
-    @visibleForTesting FontLoader fontLoader,
+    @required
+        String fontFamily,
+    @Deprecated(
+      'Use "DynamicCachedFonts.toggleVerboseLogging" instead as it reduces code repetition. '
+      'This feature was deprecated after v0.2.0',
+    )
+        bool verboseLog = false,
+    @visibleForTesting
+        FontLoader fontLoader,
   }) =>
       RawDynamicCachedFonts.loadCachedFont(
         url,
         fontFamily: fontFamily,
+        verboseLog: verboseLog,
         fontLoader: fontLoader,
       );
 
@@ -406,14 +516,29 @@ class DynamicCachedFonts {
   ///
   /// - **REQUIRED** The [fontFamily] property is used to specify the name
   ///   of the font family which is to be used as [TextStyle.fontFamily].
+  ///
+  /// - The [verboseLog] is a debug property used to specify whether detailed
+  ///   logs should be printed for debugging.
+  ///
+  ///   Defaults to false.
+  ///
+  ///   _Tip: To log only in debug mode, set [verboseLog]'s value to [kReleaseMode]_.
   static Future<Iterable<FileInfo>> loadCachedFamily(
     List<String> urls, {
-    @required String fontFamily,
-    @visibleForTesting FontLoader fontLoader,
+    @required
+        String fontFamily,
+    @Deprecated(
+      'Use "DynamicCachedFonts.toggleVerboseLogging" instead as it reduces code repetition. '
+      'This feature was deprecated after v0.2.0',
+    )
+        bool verboseLog = false,
+    @visibleForTesting
+        FontLoader fontLoader,
   }) =>
       RawDynamicCachedFonts.loadCachedFamily(
         urls,
         fontFamily: fontFamily,
+        verboseLog: verboseLog,
         fontLoader: fontLoader,
       );
 
@@ -422,7 +547,9 @@ class DynamicCachedFonts {
   /// - **REQUIRED** The [url] property is used to specify the url
   ///   for the required font. It should be a valid http/https url which points to
   ///   a font file. The [url] should match the url passed to [cacheFont].
-  static Future<void> removeCachedFont(String url) => RawDynamicCachedFonts.removeCachedFont(url);
+  static Future<void> removeCachedFont(String url) => RawDynamicCachedFonts.removeCachedFont(
+        url,
+      );
 
   /// Used to specify whether detailed logs should be printed for debugging.
   ///
