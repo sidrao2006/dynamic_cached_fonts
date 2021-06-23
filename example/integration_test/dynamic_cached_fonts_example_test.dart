@@ -31,7 +31,7 @@ void main() {
 
   group('DynamicCachedFonts.load', () {
     FileInfo? font;
-    late final DynamicCachedFonts cachedFontLoader;
+    late DynamicCachedFonts cachedFontLoader;
 
     setUp(() async {
       cachedFontLoader = DynamicCachedFonts(url: fontUrl, fontFamily: fontName);
@@ -68,7 +68,7 @@ void main() {
 
   group('DynamicCachedFonts.family', () {
     Iterable<FileInfo>? fonts;
-    late final DynamicCachedFonts cachedFontLoader;
+    late DynamicCachedFonts cachedFontLoader;
 
     const List<String> fontUrls = <String>[
       firaSansBoldUrl,
@@ -114,7 +114,7 @@ void main() {
 
   group('DynamicCachedFonts.fromFirebase', () {
     FileInfo? font;
-    late final Reference bucketRef;
+    late Reference bucketRef;
 
     setUp(() async {
       await Firebase.initializeApp();
@@ -201,9 +201,9 @@ void main() {
   });
 
   group('DynamicCachedFonts.loadCachedFont', () {
-    late final FontLoader fontLoader;
+    late FontLoader fontLoader;
     FileInfo? font;
-    late final FileInfo downloadedFont;
+    late FileInfo downloadedFont;
 
     setUp(() async {
       fontLoader = FontLoader(fontName);
@@ -237,9 +237,9 @@ void main() {
   });
 
   group('DynamicCachedFonts.loadCachedFamily', () {
-    late final FontLoader fontLoader;
-    late final Iterable<FileInfo> fonts;
-    late final Iterable<FileInfo> downloadedFonts;
+    late FontLoader fontLoader;
+    late Iterable<FileInfo> fonts;
+    late Iterable<FileInfo> downloadedFonts;
 
     const List<String> fontUrls = <String>[
       firaSansBoldUrl,
