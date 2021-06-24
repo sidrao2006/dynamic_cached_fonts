@@ -1,5 +1,5 @@
 name: Documentation Analysis
-on: 
+on:
   push:
     branches:
       - main
@@ -20,8 +20,6 @@ jobs:
         
       - name: Activate dartdoc
         run: flutter pub global activate dartdoc
-      
+
       - name: Run dartdoc
         run: flutter pub global run dartdoc . --no-generate-docs -q
-
-   
