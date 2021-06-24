@@ -15,7 +15,7 @@ example: example/**/*
   - .github/ISSUE_TEMPLATE/*
   - .github/PULL_REQUEST_TEMPLATE.md
 
-'infra: ci :construction_worker:': 
+'infra: ci :construction_worker:':
   - .github/workflows/*
   - .github/*.yml
   - dev/ci/*
@@ -45,7 +45,7 @@ example: example/**/*
   - example/integration_test/*
   - test/*
 
-'test: integration-test': 
+'test: integration-test':
   - example/test_driver/*
   - example/integration_test/*
 
