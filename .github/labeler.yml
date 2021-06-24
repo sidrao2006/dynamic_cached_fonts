@@ -38,7 +38,8 @@ example: example/**/*
   - any: ['**/pubspec*']
     all: ['!CHANGELOG.md']
 
-'release :tada:': CHANGELOG.md
+'release :tada:': 
+  - any: ['CHANGELOG.md', 'pubspec.yaml', 'example/pubspec.lock']
 
 'test :rotating_light:':
   - example/test_driver/*
