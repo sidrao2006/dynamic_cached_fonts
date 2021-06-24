@@ -33,7 +33,11 @@ jobs:
         env:
           PUB_SCORE_MIN_POINTS: 90
           SCORE: ${{ steps.analysis.outputs.total }}
-        if: ${{ env.SCORE < env.PUB_SCORE_MIN_POINTS }}
         run: |
-          echo "::error::Pub score test failed. Achieved score of $SCORE is less than expected minimum score of $PUB_SCORE_MIN_POINTS"
-          exit 1
+          if [[ $SCORE -lt $PUB_SCORE_MIN_POINTS ]]
+          then
+            echo "::error::Pub score test failed. Achieved score of $SCORE is less than expected minimum score of $PUB_SCORE_MIN_POINTS"
+            exit 1
+          else
+            echo "Pub score test passed!"
+          fi
