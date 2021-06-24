@@ -1,5 +1,5 @@
 name: Unit Tests
-on: 
+on:
   push:
     branches:
       - main
@@ -20,4 +20,3 @@ jobs:
 
       - name: Run unit tests
         run: flutter test
-   

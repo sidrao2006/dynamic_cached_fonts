@@ -7,7 +7,7 @@ on:
       - 'pubspec.yaml'
   workflow_dispatch:
 
-concurrency: 
+concurrency:
   group: Release
   cancel-in-progress: true
 
@@ -16,10 +16,10 @@ jobs:
     name: Release and Publish Package
     environment: Release
     runs-on: ubuntu-latest
-    
+
     permissions:
       contents: write
-    
+
     steps:
       - name: Checkout repository code
         uses: actions/checkout@v2

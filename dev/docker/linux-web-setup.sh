@@ -1,5 +1,7 @@
+#!/bin/bash
+
 # Version
-CHROME_DRIVER_VERSION=`curl -sS https://chromedriver.storage.googleapis.com/LATEST_RELEASE`
+CHROME_DRIVER_VERSION=$(curl -sS https://chromedriver.storage.googleapis.com/LATEST_RELEASE)
 
 # Install dependencies.
 apt-get install -y unzip openjdk-8-jre-headless xvfb libxi6 libgconf-2-4
@@ -10,7 +12,7 @@ apt-get -y install ~/google-chrome-stable_current_amd64.deb
 rm ~/google-chrome-stable_current_amd64.deb
 
 # Install ChromeDriver.
-wget -N https://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip -P ~/
+wget -N "https://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip" -P ~/
 unzip ~/chromedriver_linux64.zip -d ~/
 rm ~/chromedriver_linux64.zip
 mv -f ~/chromedriver /usr/local/bin/chromedriver
