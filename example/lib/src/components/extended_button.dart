@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 
 class ExtendedButton extends StatelessWidget {
   const ExtendedButton({
-    Key key,
-    this.onPressed,
-    this.label,
+    Key? key,
+    required this.onPressed,
+    required this.label,
     this.icon,
   }) : super(key: key);
 
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final String label;
-  final IconData icon;
+  final IconData? icon;
 
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton.extended(
-      icon: Icon(icon),
+      icon: icon == null ? null : Icon(icon),
       label: Text(label),
       onPressed: onPressed,
     );

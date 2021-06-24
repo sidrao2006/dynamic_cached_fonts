@@ -19,7 +19,7 @@ final String cacheKey = cacheKeyFromUrl(fontUrl);
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  CacheManager cacheManager;
+  late final CacheManager cacheManager;
 
   setUpAll(() {
     cacheManager = CacheManager(Config(cacheKey));
@@ -30,8 +30,8 @@ void main() {
   tearDown(() => cacheManager.emptyCache());
 
   group('DynamicCachedFonts.load', () {
-    FileInfo font;
-    DynamicCachedFonts cachedFontLoader;
+    FileInfo? font;
+    late DynamicCachedFonts cachedFontLoader;
 
     setUp(() async {
       cachedFontLoader = DynamicCachedFonts(url: fontUrl, fontFamily: fontName);
@@ -44,7 +44,7 @@ void main() {
     });
 
     testWidgets('should load font file with a valid extension', (_) async {
-      final String fontFileName = font.file.basename;
+      final String fontFileName = font!.file.basename;
 
       expect(fontFileName, endsWith('ttf'));
     });
@@ -61,14 +61,14 @@ void main() {
 
       expect(
         downloadedFont.file.readAsBytesSync(),
-        orderedEquals(font.file.readAsBytesSync()),
+        orderedEquals(font!.file.readAsBytesSync()),
       );
     });
   });
 
   group('DynamicCachedFonts.family', () {
-    Iterable<FileInfo> fonts;
-    DynamicCachedFonts cachedFontLoader;
+    Iterable<FileInfo>? fonts;
+    late DynamicCachedFonts cachedFontLoader;
 
     const List<String> fontUrls = <String>[
       firaSansBoldUrl,
@@ -100,7 +100,7 @@ void main() {
       });
 
       final List<Uint8List> fontBytes =
-          fonts.map((FileInfo font) => font.file.readAsBytesSync()).toList();
+          fonts!.map((FileInfo font) => font.file.readAsBytesSync()).toList();
 
       for (int i = 0; i < fontUrls.length; i++) {
         expect(fontBytes[i], orderedEquals(downloadedFontBytes[i]));
@@ -113,8 +113,8 @@ void main() {
   });
 
   group('DynamicCachedFonts.fromFirebase', () {
-    FileInfo font;
-    Reference bucketRef;
+    FileInfo? font;
+    late Reference bucketRef;
 
     setUp(() async {
       await Firebase.initializeApp();
@@ -129,7 +129,7 @@ void main() {
     });
 
     testWidgets('should parse Firebase Bucket URL', (_) async {
-      expect(font.originalUrl, equals(await bucketRef.getDownloadURL()));
+      expect(font!.originalUrl, equals(await bucketRef.getDownloadURL()));
     });
 
     testWidgets('should load font into cache', (_) async {
@@ -138,8 +138,8 @@ void main() {
 
     testWidgets('should load valid font file from Firebase', (_) async {
       expect(
-        font.file.readAsBytesSync(),
-        orderedEquals(await bucketRef.getData()),
+        font!.file.readAsBytesSync(),
+        orderedEquals((await bucketRef.getData())!),
       );
     });
   },
@@ -147,7 +147,7 @@ void main() {
           ThemeData().platform == TargetPlatform.linux);
 
   group('DynamicCachedFonts.cacheFont', () {
-    FileInfo font;
+    FileInfo? font;
 
     setUp(() async {
       await DynamicCachedFonts.cacheFont(fontUrl);
@@ -160,7 +160,7 @@ void main() {
     });
 
     testWidgets('should load font file with a valid extension', (_) async {
-      final String fontFileName = font.file.basename;
+      final String fontFileName = font!.file.basename;
 
       expect(fontFileName, endsWith('ttf'));
     });
@@ -201,9 +201,9 @@ void main() {
   });
 
   group('DynamicCachedFonts.loadCachedFont', () {
-    FontLoader fontLoader;
-    FileInfo font;
-    FileInfo downloadedFont;
+    late FontLoader fontLoader;
+    FileInfo? font;
+    late FileInfo downloadedFont;
 
     setUp(() async {
       fontLoader = FontLoader(fontName);
@@ -224,7 +224,7 @@ void main() {
     testWidgets('should load valid font file', (_) async {
       expect(
         downloadedFont.file.readAsBytesSync(),
-        orderedEquals(font.file.readAsBytesSync()),
+        orderedEquals(font!.file.readAsBytesSync()),
       );
     });
 
@@ -237,9 +237,9 @@ void main() {
   });
 
   group('DynamicCachedFonts.loadCachedFamily', () {
-    FontLoader fontLoader;
-    Iterable<FileInfo> fonts;
-    Iterable<FileInfo> downloadedFonts;
+    late FontLoader fontLoader;
+    late Iterable<FileInfo> fonts;
+    late Iterable<FileInfo> downloadedFonts;
 
     const List<String> fontUrls = <String>[
       firaSansBoldUrl,

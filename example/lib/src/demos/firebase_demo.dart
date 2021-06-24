@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import '../components.dart';
 
 class DynamicCachedFontsDemo4 extends StatefulWidget {
-  const DynamicCachedFontsDemo4({Key key}) : super(key: key);
+  const DynamicCachedFontsDemo4({Key? key}) : super(key: key);
 
   @override
   _DynamicCachedFontsDemo4State createState() => _DynamicCachedFontsDemo4State();

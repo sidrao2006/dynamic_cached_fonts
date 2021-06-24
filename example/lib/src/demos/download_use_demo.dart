@@ -6,7 +6,7 @@ import '../components.dart';
 import 'download_use_delete_demo.dart';
 
 class DynamicCachedFontsDemo2 extends StatelessWidget {
-  const DynamicCachedFontsDemo2({Key key}) : super(key: key);
+  const DynamicCachedFontsDemo2({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

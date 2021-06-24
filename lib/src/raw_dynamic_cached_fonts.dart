@@ -29,13 +29,13 @@ abstract class RawDynamicCachedFonts {
   /// passed to the [CacheManager] used in [cacheManager].
   @visibleForTesting
   static void custom({
-    @required CacheManager cacheManager,
+    required CacheManager cacheManager,
     bool force = false,
   }) {
-    assert(force != null);
-    DynamicCachedFontsCacheManager.customCacheManager != null && force
-        ? DynamicCachedFontsCacheManager.customCacheManager = cacheManager
-        : DynamicCachedFontsCacheManager.customCacheManager ??= cacheManager;
+    if (force)
+      DynamicCachedFontsCacheManager.setCustomCacheManager(cacheManager);
+    else if (DynamicCachedFontsCacheManager.getCustomCacheManager() == null)
+      DynamicCachedFontsCacheManager.setCustomCacheManager(cacheManager);
   }
 
   /// Downloads and caches font from the [url] with the given configuration.
@@ -67,18 +67,14 @@ abstract class RawDynamicCachedFonts {
   ///   _Tip: To log only in debug mode, set [verboseLog]'s value to [kReleaseMode]_.
   static Future<FileInfo> cacheFont(
     String url, {
-    @required
-        int maxCacheObjects,
-    @required
-        Duration cacheStalePeriod,
+    required int maxCacheObjects,
+    required Duration cacheStalePeriod,
     @Deprecated(
       'Use "DynamicCachedFonts.toggleVerboseLogging" instead as it reduces code repetition. '
       'This feature was deprecated after v0.2.0',
     )
         bool verboseLog = false,
   }) async {
-    assert(verboseLog != null);
-
     WidgetsFlutterBinding.ensureInitialized();
 
     final String cacheKey = Utils.sanitizeUrl(url);
@@ -125,13 +121,11 @@ abstract class RawDynamicCachedFonts {
     )
         bool verboseLog = false,
   }) async {
-    assert(verboseLog != null);
-
     WidgetsFlutterBinding.ensureInitialized();
 
     final String cacheKey = Utils.sanitizeUrl(url);
 
-    final FileInfo font =
+    final FileInfo? font =
         await DynamicCachedFontsCacheManager.getCacheManager(cacheKey).getFileFromCache(cacheKey);
 
     return font != null;
@@ -157,25 +151,22 @@ abstract class RawDynamicCachedFonts {
   ///   _Tip: To log only in debug mode, set [verboseLog]'s value to [kReleaseMode]_.
   static Future<FileInfo> loadCachedFont(
     String url, {
-    @required
-        String fontFamily,
+    required String fontFamily,
     @Deprecated(
       'Use "DynamicCachedFonts.toggleVerboseLogging" instead as it reduces code repetition. '
       'This feature was deprecated after v0.2.0',
     )
         bool verboseLog = false,
     @visibleForTesting
-        FontLoader fontLoader,
+        FontLoader? fontLoader,
   }) async {
-    assert(verboseLog != null);
-
     fontLoader ??= FontLoader(fontFamily);
 
     WidgetsFlutterBinding.ensureInitialized();
 
     final String cacheKey = Utils.sanitizeUrl(url);
 
-    final FileInfo font =
+    final FileInfo? font =
         await DynamicCachedFontsCacheManager.getCacheManager(cacheKey).getFileFromCache(cacheKey);
 
     if (font == null) {
@@ -229,38 +220,37 @@ abstract class RawDynamicCachedFonts {
   ///   _Tip: To log only in debug mode, set [verboseLog]'s value to [kReleaseMode]_.
   static Future<Iterable<FileInfo>> loadCachedFamily(
     List<String> urls, {
-    @required
-        String fontFamily,
+    required String fontFamily,
     @Deprecated(
       'Use "DynamicCachedFonts.toggleVerboseLogging" instead as it reduces code repetition. '
       'This feature was deprecated after v0.2.0',
     )
         bool verboseLog = false,
     @visibleForTesting
-        FontLoader fontLoader,
+        FontLoader? fontLoader,
   }) async {
-    assert(verboseLog != null);
-
     fontLoader ??= FontLoader(fontFamily);
 
     WidgetsFlutterBinding.ensureInitialized();
 
-    final Iterable<FileInfo> fontFiles = await Future.wait(
+    final Iterable<FileInfo?> fontFiles = await Future.wait(
       urls.map((String url) async {
         final String cacheKey = Utils.sanitizeUrl(url);
 
-        final FileInfo font = await DynamicCachedFontsCacheManager.getCacheManager(cacheKey)
+        final FileInfo? font = await DynamicCachedFontsCacheManager.getCacheManager(cacheKey)
             .getFileFromCache(cacheKey);
 
         return font;
       }),
     );
 
-    if (!fontFiles.every((FileInfo font) => font != null)) {
+    if (fontFiles.any((FileInfo? font) => font == null))
       throw StateError('Font should already be cached to be loaded');
-    }
 
-    final Iterable<Future<ByteData>> cachedFontBytes = fontFiles.map((FileInfo font) async {
+    // The null-check above ensures that this line simply acts as a cast.
+    final Iterable<FileInfo> nonNullFontFiles = fontFiles.whereType<FileInfo>();
+
+    final Iterable<Future<ByteData>> cachedFontBytes = nonNullFontFiles.map((FileInfo font) async {
       final Uint8List fontBytes = await font.file.readAsBytes();
 
       return ByteData.view(fontBytes.buffer);
@@ -275,7 +265,7 @@ abstract class RawDynamicCachedFonts {
       verboseLog: verboseLog,
     );
 
-    return fontFiles;
+    return nonNullFontFiles;
   }
 
   /// Removes the given [url] can be loaded directly from cache.
