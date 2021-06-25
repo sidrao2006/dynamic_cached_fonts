@@ -31,9 +31,9 @@ jobs:
 
       - name: Check that necessary files have been modified
         env:
-          changelog: ${{ CHANGELOG.md }}
-          version_file: ${{ pubspec.yaml }}
-          example_deps: ${{ example/pubspec.lock }}
+          changelog: CHANGELOG.md
+          version_file: pubspec.yaml
+          example_deps: example/pubspec.lock
           IS_VALID: |
             ${{
               contains(steps.changed-files.outputs.modified_files, changelog) &&
