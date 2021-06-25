@@ -21,7 +21,7 @@ jobs:
         uses: actions/github-script@v4
         with:
           script: |
-            github.rest.pulls
+            github.pulls
               .get({
                 owner: github.context.repo.owner,
                 repo: github.context.repo.repo,
@@ -29,7 +29,7 @@ jobs:
               })
               .then(({ pr }) => {
                 if (pr.title.includes("Revert")) {
-                  github.rest.issues.addLabels({
+                  github.issues.addLabels({
                     owner: github.context.repo.owner,
                     repo: github.context.repo.repo,
                     issue_number: context.pull_request.number,
@@ -57,7 +57,7 @@ jobs:
         with:
           script: |
             if (process.env.IS_VALID ?? false) {
-              github.rest.issues.addLabels({
+              github.issues.addLabels({
                 owner: github.context.repo.owner,
                 repo: github.context.repo.repo,
                 issue_number: context.pull_request.number,
