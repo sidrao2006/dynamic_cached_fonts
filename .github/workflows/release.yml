@@ -22,6 +22,31 @@ jobs:
     steps:
       - name: Checkout repository code
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v8.1
+
+      - name: Check that necessary files have been modified
+        env:
+          changelog: ${{ CHANGELOG.md }}
+          version_file: ${{ pubspec.yaml }}
+          example_deps: ${{ example/pubspec.lock }}
+          IS_VALID: |
+            ${{
+              contains(steps.changed-files.outputs.modified_files, changelog) &&
+              contains(steps.changed-files.outputs.modified_files, version_file) &&
+              contains(steps.changed-files.outputs.modified_files, example_deps)
+            }}
+        run: |
+          if [[ "$IS_VALID" ]]
+          then
+            echo "All necessary files have been modified. Ready to release!"
+          else
+            echo "Please modify $changelog, $version_file and $example_deps to release package"
+          fi
 
       - name: Wait on tests
         uses: lewagon/wait-on-check-action@master
