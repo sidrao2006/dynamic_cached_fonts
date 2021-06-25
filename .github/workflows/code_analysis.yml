@@ -31,7 +31,7 @@ jobs:
 
       - name: Calculate Result
         env:
-          PUB_SCORE_MIN_POINTS: 90
+          PUB_SCORE_MIN_POINTS: 110
           SCORE: ${{ steps.analysis.outputs.total }}
         run: |
           if [[ $SCORE -lt $PUB_SCORE_MIN_POINTS ]]
