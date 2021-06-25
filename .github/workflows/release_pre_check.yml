@@ -1,0 +1,56 @@
+name: Release pre-check
+on:
+  pull_request:
+    types: [labeled]
+
+jobs:
+  release_files_changed_pre_check:
+    name: Release files changed pre-check
+    runs-on: ubuntu-latest
+
+    if: ${{ github.event.label.name == 'release :tada:' }}
+
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v8.1
+
+      - name: Check that necessary files have been modified
+        env:
+          changelog: ${{ CHANGELOG.md }}
+          version_file: ${{ pubspec.yaml }}
+          example_deps: ${{ example/pubspec.lock }}
+          IS_VALID: |
+            ${{
+              contains(steps.changed-files.outputs.modified_files, changelog) &&
+              contains(steps.changed-files.outputs.modified_files, version_file) &&
+              contains(steps.changed-files.outputs.modified_files, example_deps)
+            }}
+        run: |
+          if [[ "$IS_VALID" ]]
+          then
+            echo "All necessary files have been modified. Ready to release!"
+          else
+            echo "Please modify $changelog, $version_file and $example_deps to release package"
+          fi
+
+  publish_to_pub_pre_check:
+    name: Publish to Pub pre-check
+    runs-on: ubuntu-latest
+
+    if: ${{ github.event.label.name == 'release :tada:' }}
+
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v2
+
+      - name: Setup Dart SDK
+        uses: dart-lang/setup-dart@v1
+
+      - name: Run publisher in dry run mode
+        run: dart pub lish --dry-run
