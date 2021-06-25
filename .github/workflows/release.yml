@@ -36,9 +36,9 @@ jobs:
           example_deps: example/pubspec.lock
           IS_VALID: |
             ${{
-              contains(steps.changed-files.outputs.modified_files, changelog) &&
-              contains(steps.changed-files.outputs.modified_files, version_file) &&
-              contains(steps.changed-files.outputs.modified_files, example_deps)
+              contains(steps.changed-files.outputs.modified_files, env.changelog) &&
+              contains(steps.changed-files.outputs.modified_files, env.version_file) &&
+              contains(steps.changed-files.outputs.modified_files, env.example_deps)
             }}
         run: |
           if [[ "$IS_VALID" ]]
