@@ -1,3 +1,8 @@
+# 0.3.0
+
+- Stable null safety release
+- Performance improvements for `canLoadFont`
+
 # 0.2.0
 
 **Dependency Updates**
