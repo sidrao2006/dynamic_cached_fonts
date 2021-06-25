@@ -1,4 +1,6 @@
-example: example/**/*
+example:
+  - any: ['example/**/*']
+    all: ['!CHANGELOG.md']
 
 'infra :building_construction:':
   - .github/workflows/*
@@ -38,7 +40,10 @@ example: example/**/*
   - any: ['**/pubspec*']
     all: ['!CHANGELOG.md']
 
-'release :tada:': CHANGELOG.md
+'release :tada:':
+  # Allows **/CHANGELOG.md, **/pubspec.yaml, **/pubspec.lock
+  # Should allow CHANGELOG.md, pubspec.yaml, example/pubspec.lock
+  - all: ['**/+(CHANGELOG.md|pubspec.+(yaml|lock))']
 
 'test :rotating_light:':
   - example/test_driver/*
