@@ -40,11 +40,6 @@ example:
   - any: ['**/pubspec*']
     all: ['!CHANGELOG.md']
 
-'release :tada:':
-  # Allows **/CHANGELOG.md, **/pubspec.yaml, **/pubspec.lock
-  # Should allow CHANGELOG.md, pubspec.yaml, example/pubspec.lock
-  - all: ['**/+(CHANGELOG.md|pubspec.+(yaml|lock))']
-
 'test :rotating_light:':
   - example/test_driver/*
   - example/integration_test/*
@@ -61,3 +56,5 @@ example:
 'documentation :book:':
   - '**/doc/*'
   - '**/dartdoc_options.yaml'
+
+# 'release :tada:', 'revert :rewind:' - Defined in .github/workflows/labler.yml
