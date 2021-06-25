@@ -16,3 +16,51 @@ jobs:
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
           sync-labels: true
+
+      - name: Add 'revert' label to relevant PRs
+        uses: actions/github-script@v4
+        with:
+          script: |
+            github.pulls
+              .get({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: context.payload.pull_request.number,
+              })
+              .then(({ title }) => {
+                if (title.includes("Revert")) {
+                  github.issues.addLabels({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: context.payload.pull_request.number,
+                    labels: ['revert :rewind:'],
+                  });
+                }
+              });
+
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v8.1
+
+      - name: Add 'release' label to relevant PRs
+        uses: actions/github-script@v4
+        env:
+          changelog: CHANGELOG.md
+          version_file: pubspec.yaml
+          example_deps: example/pubspec.lock
+          IS_VALID: |
+            ${{
+              contains(steps.changed-files.outputs.modified_files, env.changelog) &&
+              contains(steps.changed-files.outputs.modified_files, env.version_file) &&
+              contains(steps.changed-files.outputs.modified_files, env.example_deps)
+            }}
+        with:
+          script: |
+            if (process.env.IS_VALID ?? false) {
+              github.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.pull_request.number,
+                labels: ['release :tada:'],
+              });
+            }
