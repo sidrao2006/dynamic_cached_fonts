@@ -23,15 +23,15 @@ jobs:
           script: |
             github.pulls
               .get({
-                owner: github.context.repo.owner,
-                repo: github.context.repo.repo,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
                 pull_number: context.pull_request.number,
               })
               .then(({ pr }) => {
                 if (pr.title.includes("Revert")) {
                   github.issues.addLabels({
-                    owner: github.context.repo.owner,
-                    repo: github.context.repo.repo,
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
                     issue_number: context.pull_request.number,
                     labels: ['revert :rewind:'],
                   });
@@ -58,8 +58,8 @@ jobs:
           script: |
             if (process.env.IS_VALID ?? false) {
               github.issues.addLabels({
-                owner: github.context.repo.owner,
-                repo: github.context.repo.repo,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
                 issue_number: context.pull_request.number,
                 labels: ['release :tada:'],
               });
