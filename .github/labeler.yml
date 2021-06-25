@@ -1,4 +1,6 @@
-example: example/**/*
+example:
+  - any: ['example/**/*']
+    all: ['!CHANGELOG.md']
 
 'infra :building_construction:':
   - .github/workflows/*
@@ -38,8 +40,6 @@ example: example/**/*
   - any: ['**/pubspec*']
     all: ['!CHANGELOG.md']
 
-'release :tada:': CHANGELOG.md
-
 'test :rotating_light:':
   - example/test_driver/*
   - example/integration_test/*
@@ -56,3 +56,5 @@ example: example/**/*
 'documentation :book:':
   - '**/doc/*'
   - '**/dartdoc_options.yaml'
+
+# 'release :tada:', 'revert :rewind:' - Defined in .github/workflows/labler.yml
