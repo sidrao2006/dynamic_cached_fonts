@@ -27,8 +27,8 @@ jobs:
                 repo: context.repo.repo,
                 pull_number: context.payload.pull_request.number,
               })
-              .then(({ pr }) => {
-                if (pr.title.includes("Revert")) {
+              .then(({ title }) => {
+                if (title.includes("Revert")) {
                   github.issues.addLabels({
                     owner: context.repo.owner,
                     repo: context.repo.repo,
