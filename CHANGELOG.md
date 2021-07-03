@@ -1,3 +1,7 @@
+# 0.3.0
+
+Stable Null safety release
+
 # 0.2.0
 
 **Dependency Updates**
