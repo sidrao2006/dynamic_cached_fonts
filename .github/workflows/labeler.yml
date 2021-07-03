@@ -21,43 +21,12 @@ jobs:
         uses: actions/github-script@v4
         with:
           script: |
-            github.pulls
-              .get({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                pull_number: context.payload.pull_request.number,
-              })
-              .then(({ data: pr }) => {
-                if (pr.title.includes("Revert")) {
-                  github.issues.addLabels({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    issue_number: context.payload.pull_request.number,
-                    labels: ['revert :rewind:'],
-                  });
-                }
-              });
+            const labeler = require('../../dev/ci/labeler.js')
+            await labeler.addRevertLabel({ github, context })
 
       - name: Add 'release' label to relevant PRs
         uses: actions/github-script@v4
         with:
           script: |
-            const requiredFiles = [ 'CHANGELOG.md', 'pubspec.yaml', 'example/pubspec.lock' ]
-
-            const listFilesOptions = github.pulls.listFiles.endpoint.merge({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: context.payload.pull_request.number,
-            });
-
-            const listFilesResponse = await github.paginate(listFilesOptions);
-            const changedFiles = listFilesResponse.map(file => file.filename);
-
-            if ( requiredFiles.every(file => changedFiles.includes(file)) ) {
-              github.issues.addLabels({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: context.payload.pull_request.number,
-                labels: ['release :tada:'],
-              });
-            }
+            const labeler = require('../../dev/ci/labeler.js')
+            await labeler.addReleaseLabel({ github, context })
