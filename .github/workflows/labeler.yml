@@ -44,19 +44,20 @@ jobs:
 
       - name: Add 'release' label to relevant PRs
         uses: actions/github-script@v4
-        env:
-          changelog: CHANGELOG.md
-          version_file: pubspec.yaml
-          example_deps: example/pubspec.lock
-          IS_VALID: |
-            ${{
-              contains(steps.changed-files.outputs.modified_files, env.changelog) &&
-              contains(steps.changed-files.outputs.modified_files, env.version_file) &&
-              contains(steps.changed-files.outputs.modified_files, env.example_deps)
-            }}
         with:
           script: |
-            if (process.env.IS_VALID ?? false) {
+            const requiredFiles = [ 'CHANGELOG.md', 'pubspec.yaml', 'example/pubspec.lock' ]
+
+            const listFilesOptions = github.pulls.listFiles.endpoint.merge({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+            });
+
+            const listFilesResponse = await github.paginate(listFilesOptions);
+            const changedFiles = listFilesResponse.map((f: any) => f.filename);
+
+            if ( requiredFiles.every(file => changedFiles.includes(file)) ) {
               github.issues.addLabels({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
