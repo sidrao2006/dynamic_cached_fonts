@@ -21,12 +21,12 @@ jobs:
         uses: actions/github-script@v4
         with:
           script: |
-            const labeler = require('../../dev/ci/labeler.js')
+            const labeler = require('dev/ci/labeler.js')
             await labeler.addRevertLabel({ github, context })
 
       - name: Add 'release' label to relevant PRs
         uses: actions/github-script@v4
         with:
           script: |
-            const labeler = require('../../dev/ci/labeler.js')
+            const labeler = require('dev/ci/labeler.js')
             await labeler.addReleaseLabel({ github, context })
