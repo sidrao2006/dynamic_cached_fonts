@@ -17,16 +17,19 @@ jobs:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
           sync-labels: true
 
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
       - name: Add 'revert' label to relevant PRs
         uses: actions/github-script@v4
         with:
           script: |
-            const labeler = require('dev/ci/labeler.js')
+            const labeler = require('./dev/ci/labeler.js')
             await labeler.addRevertLabel({ github, context })
 
       - name: Add 'release' label to relevant PRs
         uses: actions/github-script@v4
         with:
           script: |
-            const labeler = require('dev/ci/labeler.js')
+            const labeler = require('./dev/ci/labeler.js')
             await labeler.addReleaseLabel({ github, context })
