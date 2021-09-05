@@ -32,4 +32,8 @@ jobs:
         with:
           script: |
             const labeler = require('./dev/ci/labeler.js')
-            await labeler.addReleaseLabel({ github, context })
+            await labeler.addReleaseLabel({
+              github,
+              context,
+              workflow: 'release_pre_check.yml',
+            })
