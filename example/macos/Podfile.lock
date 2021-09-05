@@ -1,42 +1,42 @@
 PODS:
-  - Firebase/CoreOnly (8.0.0):
-    - FirebaseCore (= 8.0.0)
-  - Firebase/Storage (8.0.0):
+  - Firebase/CoreOnly (8.5.0):
+    - FirebaseCore (= 8.5.0)
+  - Firebase/Storage (8.5.0):
     - Firebase/CoreOnly
-    - FirebaseStorage (~> 8.0.0)
-  - firebase_core (1.2.0):
-    - Firebase/CoreOnly (~> 8.0.0)
+    - FirebaseStorage (~> 8.5.0)
+  - firebase_core (1.5.0):
+    - Firebase/CoreOnly (~> 8.5.0)
     - FlutterMacOS
-  - firebase_storage (8.1.0):
-    - Firebase/CoreOnly (~> 8.0.0)
-    - Firebase/Storage (~> 8.0.0)
+  - firebase_storage (10.0.2):
+    - Firebase/CoreOnly (~> 8.5.0)
+    - Firebase/Storage (~> 8.5.0)
     - firebase_core
     - FlutterMacOS
-  - FirebaseCore (8.0.0):
+  - FirebaseCore (8.5.0):
     - FirebaseCoreDiagnostics (~> 8.0)
     - GoogleUtilities/Environment (~> 7.4)
     - GoogleUtilities/Logger (~> 7.4)
-  - FirebaseCoreDiagnostics (8.1.0):
+  - FirebaseCoreDiagnostics (8.6.0):
     - GoogleDataTransport (~> 9.0)
     - GoogleUtilities/Environment (~> 7.4)
     - GoogleUtilities/Logger (~> 7.4)
     - nanopb (~> 2.30908.0)
-  - FirebaseStorage (8.0.0):
+  - FirebaseStorage (8.5.0):
     - FirebaseCore (~> 8.0)
     - GTMSessionFetcher/Core (~> 1.5)
   - FlutterMacOS (1.0.0)
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
-  - GoogleDataTransport (9.0.1):
+  - GoogleDataTransport (9.1.0):
     - GoogleUtilities/Environment (~> 7.2)
     - nanopb (~> 2.30908.0)
-    - PromisesObjC (~> 1.2)
-  - GoogleUtilities/Environment (7.4.1):
-    - PromisesObjC (~> 1.2)
-  - GoogleUtilities/Logger (7.4.1):
+    - PromisesObjC (< 3.0, >= 1.2)
+  - GoogleUtilities/Environment (7.5.2):
+    - PromisesObjC (< 3.0, >= 1.2)
+  - GoogleUtilities/Logger (7.5.2):
     - GoogleUtilities/Environment
-  - GTMSessionFetcher/Core (1.5.0)
+  - GTMSessionFetcher/Core (1.7.0)
   - nanopb (2.30908.0):
     - nanopb/decode (= 2.30908.0)
     - nanopb/encode (= 2.30908.0)
@@ -44,7 +44,7 @@ PODS:
   - nanopb/encode (2.30908.0)
   - path_provider_macos (0.0.1):
     - FlutterMacOS
-  - PromisesObjC (1.2.12)
+  - PromisesObjC (2.0.0)
   - sqflite (0.0.2):
     - FlutterMacOS
     - FMDB (>= 2.7.5)
@@ -82,20 +82,20 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/sqflite/macos
 
 SPEC CHECKSUMS:
-  Firebase: 73c3e3b216ec1ecbc54d2ffdd4670c65c749edb1
-  firebase_core: 33e2630db43f5a4e1e81f99b44bd26cf61fa2b83
-  firebase_storage: 65681f7b4801d2f3a58f5059fa374cd8ffafc5b0
-  FirebaseCore: 3f09591d51292843e2a46f18358d60bf4e996255
-  FirebaseCoreDiagnostics: 3e249cee3de5c5f9cfd6cc2a19997231286fec11
-  FirebaseStorage: 61bcd27880fa17362f68be67d3683d04bfd7b1c7
+  Firebase: ff8c73105b90e33e1dc6c8e5445d7adc2ccdc7c1
+  firebase_core: 9f72bfd24263ec2b839d63cdf471545873960dc6
+  firebase_storage: 9c9c0946705d1c929416d082340e859d88c96078
+  FirebaseCore: 1c1ca72483b59b17050f5b4cec4fb748425a3901
+  FirebaseCoreDiagnostics: 3721920bde3a9a6d5aa093c1d25e9d3e47f694af
+  FirebaseStorage: 2c176ca64a68b45bddc3c7d4d2c0c839927ad92c
   FlutterMacOS: 57701585bf7de1b3fc2bb61f6378d73bbdea8424
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
-  GoogleDataTransport: 04c3e9a480bbcaa2ec3f5d27f1cdeb6a92f20c8d
-  GoogleUtilities: f8a43108b38a68eebe8b3540e1f4f2d28843ce20
-  GTMSessionFetcher: b3503b20a988c4e20cc189aa798fd18220133f52
+  GoogleDataTransport: 85fd18ff3019bb85d3f2c551d04c481dedf71fc9
+  GoogleUtilities: 8de2a97a17e15b6b98e38e8770e2d129a57c0040
+  GTMSessionFetcher: 43748f93435c2aa068b1cbe39655aaf600652e91
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   path_provider_macos: a0a3fd666cb7cd0448e936fb4abad4052961002b
-  PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
+  PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
   sqflite: a5789cceda41d54d23f31d6de539d65bb14100ea
 
 PODFILE CHECKSUM: c7161fcf45d4fd9025dc0f48a76d6e64e52f8176
