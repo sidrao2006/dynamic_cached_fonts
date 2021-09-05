@@ -13,23 +13,30 @@ exports.addRevertLabel = async ({ github, context }) => {
   });
 }
 
-exports.addReleaseLabel = async ({ github, context }) => {
-  const requiredFiles = ['CHANGELOG.md', 'pubspec.yaml', 'example/pubspec.lock'];
+exports.wereRequiredFilesModified = async ({ github, context, requiredFiles }) => {
+  requiredFiles ||= ['CHANGELOG.md', 'pubspec.yaml', 'example/pubspec.lock'];
 
-  const listFilesOptions = github.pulls.listFiles.endpoint.merge({
-    owner: context.repo.owner,
-    repo: context.repo.repo,
-    pull_number: context.payload.pull_request.number,
-  });
+  const utils = require('utils.js');
 
-  const listFilesResponse = await github.paginate(listFilesOptions);
-  const changedFiles = listFilesResponse.map(file => file.filename);
+  const changedFiles = await utils.getChangedFiles({ github, context });
 
-  if (requiredFiles.every(file => changedFiles.includes(file)))
+  return requiredFiles.every(file => changedFiles.includes(file));
+}
+
+exports.addReleaseLabel = async ({ github, context, workflow }) => {
+  if (await this.wereRequiredFilesModified({ github, context })) {
     await github.issues.addLabels({
       owner: context.repo.owner,
       repo: context.repo.repo,
       issue_number: context.payload.pull_request.number,
       labels: ['release :tada:'],
     });
+
+    await github.actions.createWorkflowDispatch({
+      owner: context.repo.owner,
+      repo: context.repo.repo,
+      workflow_id: workflow,
+      ref: github.ref,
+    });
+  }
 }
