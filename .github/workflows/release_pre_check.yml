@@ -1,50 +1,11 @@
 name: Release pre-check
 on:
-  pull_request:
-    types: [labeled]
+  - workflow_dispatch
 
 jobs:
-  release_files_changed_pre_check:
-    name: Release files changed pre-check
-    runs-on: ubuntu-latest
-
-    if: ${{ github.event.label.name == 'release :tada:' }}
-
-    steps:
-      - name: Checkout repository code
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 2
-
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v8.1
-
-      - name: Check that necessary files have been modified
-        env:
-          changelog: ${{ CHANGELOG.md }}
-          version_file: ${{ pubspec.yaml }}
-          example_deps: ${{ example/pubspec.lock }}
-          IS_VALID: |
-            ${{
-              contains(steps.changed-files.outputs.modified_files, changelog) &&
-              contains(steps.changed-files.outputs.modified_files, version_file) &&
-              contains(steps.changed-files.outputs.modified_files, example_deps)
-            }}
-        run: |
-          if [[ "$IS_VALID" ]]
-          then
-            echo "All necessary files have been modified. Ready to release!"
-          else
-            echo "Please modify $changelog, $version_file and $example_deps to release package"
-          fi
-
   publish_to_pub_pre_check:
     name: Publish to Pub pre-check
     runs-on: ubuntu-latest
-
-    if: ${{ github.event.label.name == 'release :tada:' }}
-
     steps:
       - name: Checkout repository code
         uses: actions/checkout@v2
@@ -53,4 +14,37 @@ jobs:
         uses: dart-lang/setup-dart@v1
 
       - name: Run publisher in dry run mode
-        run: dart pub lish --dry-run
+        run: dart pub lish --dry-run | tee publish.log
+
+      - name: Set output
+        run: echo "::set-output name=logs::$(cat publish.log)"
+
+  post_result:
+    name: Post pre-check result
+    runs-on: ubuntu-latest
+
+    needs: [ publish_to_pub_pre_check ]
+
+    steps:
+      - name: Post pre-check result to check run
+        uses: actions/github-script@v4
+        env:
+          STATUS: ${{ needs.publish_to_pub_pre_check.result == 'success' }}
+          LOGS: ${{ needs.publish_to_pub_pre_check.outputs.logs }}
+        with:
+          script: |
+            const { STATUS, LOGS } = process.env;
+            const resultPoster = require('./dev/ci/resultPoster.js')
+            await resultPoster.postPreCheckResult({
+              github,
+              context,
+              output: STATUS ? {
+               title: 'Publish to Pub',
+               summary: 'Successful action - `dart pub lish --dry-run`! :tada:',
+               conclusion: 'success',
+              } : {
+                title: 'Publish to Pub',
+                summary: 'Output logs for failed action - `dart pub lish --dry-run`',
+                logs: LOGS,
+                conclusion: 'failure',
+            })
