@@ -1,3 +1,9 @@
+# 0.3.1
+
+**Dependency Updates**
+
+- Added support for the latest version of `firebase_storage`. Minimum supported version continues to be v8.0.0
+
 # 0.3.0
 
 Stable Null safety release
