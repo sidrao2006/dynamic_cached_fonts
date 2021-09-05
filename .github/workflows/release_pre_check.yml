@@ -20,31 +20,31 @@ jobs:
         run: echo "::set-output name=logs::$(cat publish.log)"
 
   post_result:
-   name: Post pre-check result
-   runs-on: ubuntu-latest
+    name: Post pre-check result
+    runs-on: ubuntu-latest
 
-   needs: [ publish_to_pub_pre_check ]
+    needs: [ publish_to_pub_pre_check ]
 
-   steps:
-     - name: Post pre-check result to check run
-       uses: actions/github-script@v4
-       env:
-         STATUS: ${{ needs.publish_to_pub_pre_check.result == 'success' }}
-         LOGS: ${{ needs.publish_to_pub_pre_check.outputs.logs }}
-       with:
-         script: |
-           const { STATUS, LOGS } = process.env;
-           const resultPoster = require('./dev/ci/resultPoster.js')
-           await resultPoster.postPreCheckResult({
-             github,
-             context,
-             output: STATUS ? {
-              title: 'Publish to Pub',
-              summary: 'Successful action - `dart pub lish --dry-run`! :tada:',
-              conclusion: 'success',
-             } : {
+    steps:
+      - name: Post pre-check result to check run
+        uses: actions/github-script@v4
+        env:
+          STATUS: ${{ needs.publish_to_pub_pre_check.result == 'success' }}
+          LOGS: ${{ needs.publish_to_pub_pre_check.outputs.logs }}
+        with:
+          script: |
+            const { STATUS, LOGS } = process.env;
+            const resultPoster = require('./dev/ci/resultPoster.js')
+            await resultPoster.postPreCheckResult({
+              github,
+              context,
+              output: STATUS ? {
                title: 'Publish to Pub',
-               summary: 'Output logs for failed action - `dart pub lish --dry-run`',
-               logs: LOGS,
-               conclusion: 'failure',
-           })
+               summary: 'Successful action - `dart pub lish --dry-run`! :tada:',
+               conclusion: 'success',
+              } : {
+                title: 'Publish to Pub',
+                summary: 'Output logs for failed action - `dart pub lish --dry-run`',
+                logs: LOGS,
+                conclusion: 'failure',
+            })
