@@ -1,3 +1,5 @@
+/*eslint-env node*/
+
 exports.postPreCheckResult = ({ github, context, output }) => {
     return github.checks.create({
         owner: context.repo.owner,

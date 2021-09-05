@@ -1,3 +1,5 @@
+/*eslint-env node*/
+
 exports.addRevertLabel = async ({ github, context }) => {
   const { data: pr } = await github.pulls.get({
     owner: context.repo.owner,

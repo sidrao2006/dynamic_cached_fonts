@@ -1,3 +1,5 @@
+/*eslint-env node*/
+
 exports.getChangedFiles = async ({ github, context }) => {
   const listFilesOptions = github.pulls.listFiles.endpoint.merge({
     owner: context.repo.owner,
