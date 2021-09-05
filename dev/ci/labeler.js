@@ -15,9 +15,11 @@ exports.addRevertLabel = async ({ github, context }) => {
   });
 }
 
-exports.wereRequiredFilesModified = async ({ github, context, requiredFiles }) => {
-  requiredFiles ||= ['CHANGELOG.md', 'pubspec.yaml', 'example/pubspec.lock'];
-
+exports.wereRequiredFilesModified = async ({ 
+  github,
+  context,
+  requiredFiles = ['CHANGELOG.md', 'pubspec.yaml', 'example/pubspec.lock']
+}) => {
   const utils = require('utils.js');
 
   const changedFiles = await utils.getChangedFiles({ github, context });
