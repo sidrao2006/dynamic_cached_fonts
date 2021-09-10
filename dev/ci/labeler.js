@@ -20,7 +20,7 @@ exports.wereRequiredFilesModified = async ({
   context,
   requiredFiles = ['CHANGELOG.md', 'pubspec.yaml', 'example/pubspec.lock']
 }) => {
-  const utils = require('utils.js');
+  const utils = require('./utils.js');
 
   const changedFiles = await utils.getChangedFiles({ github, context });
 
