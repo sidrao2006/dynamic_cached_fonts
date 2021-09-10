@@ -1,0 +1,41 @@
+name: Github Pages Example
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'example/web/**'
+      - 'example/pubspec.*'
+      - 'example/lib/**'
+
+jobs:
+  build-and-deploy:
+    name: Build and Deploy Example to Github Pages
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: example
+
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v2
+
+      - name: Setup Flutter SDK
+        uses: subosito/flutter-action@v1
+        with:
+          channel: beta
+
+      - name: Build example for web
+        run: |
+          flutter build web \
+          --base-href /dynamic_cached_fonts/ \
+          --dart-define FIREBASE_STORAGE_FONT_URL=$FIREBASE_STORAGE_FONT_URL \
+          --no-source-maps \
+          --release
+
+      - name: Deploy to Github Pages
+        uses: JamesIves/github-pages-deploy-action@4.1.5
+        with:
+          branch: gh-pages
+          folder: build/web
