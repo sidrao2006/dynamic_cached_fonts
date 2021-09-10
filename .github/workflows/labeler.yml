@@ -17,9 +17,6 @@ jobs:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
           sync-labels: true
 
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
       - name: Add 'revert' label to relevant PRs
         uses: actions/github-script@v4
         with:
