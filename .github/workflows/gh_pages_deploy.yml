@@ -9,6 +9,10 @@ on:
       - 'example/lib/**'
   workflow_dispatch:
 
+concurrency:
+  group: Example Github Pages
+  cancel-in-progress: true
+
 jobs:
   build-and-deploy:
     name: Build and Deploy Example to Github Pages
