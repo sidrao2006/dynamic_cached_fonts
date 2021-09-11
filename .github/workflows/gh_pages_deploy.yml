@@ -12,6 +12,7 @@ on:
 jobs:
   build-and-deploy:
     name: Build and Deploy Example to Github Pages
+    environment: Example Github Pages
     runs-on: ubuntu-latest
 
     permissions:
@@ -31,6 +32,8 @@ jobs:
           channel: beta
 
       - name: Build example for web
+        env:
+          FIREBASE_STORAGE_FONT_URL: ${{ secrets.FIREBASE_STORAGE_FONT_URL }}
         run: |
           flutter build web \
           --base-href /dynamic_cached_fonts/ \
