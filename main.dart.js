@@ -32717,7 +32717,7 @@ bn(){K.NV().aD(0,new S.YU(),t.kf)
 this.bI()},
 P(a,b){return M.BT(E.wG(C.I7),C.vz,new B.iu(new S.YT(b),"Next Example",C.d3,null),C.eh)}}
 S.YU.prototype={
-$1(a){return new X.q_(H.a([""],t.s),"FiraCode",!0).d1(0)},
+$1(a){return new X.q_(H.a(["gs://arcygnus-assets.appspot.com/fonts/7279dff8e91c339ad9b5b81ecdaae93a/FiraCode-Regular.ttf"],t.s),"FiraCode",!0).d1(0)},
 $S:136}
 S.YT.prototype={
 $0(){var s=V.zG(new S.YS(),null,t.Fz)
