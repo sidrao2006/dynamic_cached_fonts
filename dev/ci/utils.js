@@ -1,13 +1,21 @@
 /*eslint-env node*/
 
-exports.getChangedFiles = async ({ github, context }) => {
-  const listFilesOptions = github.pulls.listFiles.endpoint.merge({
+exports.getPRCommitMessages = async ({ github, context }) => {
+  const { data: commits } = await github.pulls.listCommits({
     owner: context.repo.owner,
     repo: context.repo.repo,
     pull_number: context.payload.pull_request.number,
   });
 
-  const listFilesResponse = await github.paginate(listFilesOptions);
+  return commits.map(commit => commit.commit.message);
+}
 
-  return listFilesResponse.map(file => file.filename);
+exports.PRTitleIncludes = async ({ github, context }, title) => {
+  const { data: pr } = await github.pulls.get({
+    owner: context.repo.owner,
+    repo: context.repo.repo,
+    pull_number: context.payload.pull_request.number,
+  });
+
+  return pr.title.includes(title);
 }

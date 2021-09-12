@@ -1,17 +1,18 @@
 /*eslint-env node*/
 
 exports.postPreCheckResult = ({ github, context, output }) => {
+    const { owner, repo } = context.repo;
+    const { title, summary, text, conclusion } = output;
+
     return github.checks.create({
-        owner: context.repo.owner,
-        repo: context.repo.repo,
+        owner, repo,
         name: 'Release Pre-Check',
         head_sha: context.sha,
         status: 'completed',
-        conclusion: output.conclusion,
+        conclusion,
         output: {
-            title: 'Logs for Pre-Check: ' + output.title,
-            summary: output.summary,
-            text: output.logs,
+            title: 'Logs for Pre-Check: ' + title,
+            summary, text
         },
         completed_at: new Date().toISOString(),
     })

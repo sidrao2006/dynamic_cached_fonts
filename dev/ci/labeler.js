@@ -1,45 +1,42 @@
 /*eslint-env node*/
 
 exports.addRevertLabel = async ({ github, context }) => {
-  const { data: pr } = await github.pulls.get({
-    owner: context.repo.owner,
-    repo: context.repo.repo,
-    pull_number: context.payload.pull_request.number,
-  });
+  const utils = require('./utils.js');
+  const { owner, repo } = context.repo;
 
-  if (pr.title.includes("Revert")) github.issues.addLabels({
-    owner: context.repo.owner,
-    repo: context.repo.repo,
-    issue_number: context.payload.pull_request.number,
-    labels: ['revert :rewind:'],
-  });
+  if (utils.PRTitleIncludes({ github, context }, "Revert"))
+    github.issues.addLabels({
+      owner, repo,
+      issue_number: context.payload.pull_request.number,
+      labels: ['revert :rewind:'],
+    });
 }
 
-exports.wereRequiredFilesModified = async ({ 
-  github,
-  context,
-  requiredFiles = ['CHANGELOG.md', 'pubspec.yaml', 'example/pubspec.lock']
-}) => {
+exports.isRelease = async ({ github, context }) => {
   const utils = require('./utils.js');
 
-  const changedFiles = await utils.getChangedFiles({ github, context });
+  const commitMessages = utils.getPRCommitMessages({ github, context });
 
-  return requiredFiles.every(file => changedFiles.includes(file));
+  return utils.PRTitleIncludes({ github, context }, "Release")
+    || commitMessages.some(message =>/^release.*:.*/.test(message));
 }
 
-exports.addReleaseLabel = async ({ github, context, workflow }) => {
-  if (await this.wereRequiredFilesModified({ github, context })) {
+exports.addReleaseLabel = async ({
+  github,
+  context,
+  workflow: workflow_id
+}) => {
+  const { owner, repo } = context.repo;
+
+  if (await this.isRelease({ github, context })) {
     await github.issues.addLabels({
-      owner: context.repo.owner,
-      repo: context.repo.repo,
+      owner, repo,
       issue_number: context.payload.pull_request.number,
       labels: ['release :tada:'],
     });
 
     await github.actions.createWorkflowDispatch({
-      owner: context.repo.owner,
-      repo: context.repo.repo,
-      workflow_id: workflow,
+      owner, repo, workflow_id,
       ref: github.ref,
     });
   }
