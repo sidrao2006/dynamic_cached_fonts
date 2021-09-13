@@ -1,40 +1,27 @@
+# Package development related files
+dev/**
+docker-compose.yml
+doc/**
+CODE_OF_CONDUCT.md
+
 # Miscellaneous
 *.class
 *.log
 *.pyc
 *.swp
-.DS_Store
-.atom/
-.buildlog/
-.history
-.svn/
 
 # IntelliJ related
 *.iml
 *.ipr
 *.iws
-.idea/
-
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
-.vscode/
-.devcontainer/
 
 # Flutter/Dart/Pub related
 **/doc/api/
-.dart_tool/
-.flutter-plugins
-.flutter-plugins-dependencies
-.packages
-.pub-cache/
-.pub/
 build/
-/pubspec.lock
+pubspec.lock
 
 # Android related
 **/android/**/gradle-wrapper.jar
-**/android/.gradle
 **/android/captures/
 **/android/gradlew
 **/android/gradlew.bat
@@ -48,16 +35,11 @@ build/
 **/ios/**/*.pbxuser
 **/ios/**/*.perspectivev3
 **/ios/**/*sync/
-**/ios/**/.sconsign.dblite
-**/ios/**/.tags*
-**/ios/**/.vagrant/
 **/ios/**/DerivedData/
 **/ios/**/Icon?
 **/ios/**/Pods/
-**/ios/**/.symlinks/
 **/ios/**/profile
 **/ios/**/xcuserdata
-**/ios/.generated/
 **/ios/Flutter/App.framework
 **/ios/Flutter/Flutter.framework
 **/ios/Flutter/Flutter.podspec
