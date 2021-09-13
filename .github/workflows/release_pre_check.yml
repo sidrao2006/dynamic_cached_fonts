@@ -47,4 +47,5 @@ jobs:
                 summary: 'Output logs for failed action - `dart pub lish --dry-run`',
                 logs: LOGS,
                 conclusion: 'failure',
+              }
             })
