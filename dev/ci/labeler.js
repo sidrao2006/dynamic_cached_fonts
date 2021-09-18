@@ -4,7 +4,7 @@ exports.addRevertLabel = async ({ github, context }) => {
   const utils = require('./utils.js');
   const { owner, repo } = context.repo;
 
-  if (utils.PRTitleIncludes({ github, context }, "Revert"))
+  if (await utils.PRTitleIncludes({ github, context }, "Revert"))
     github.issues.addLabels({
       owner, repo,
       issue_number: context.payload.pull_request.number,
