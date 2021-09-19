@@ -23,6 +23,9 @@ jobs:
     name: Post pre-check result
     runs-on: ubuntu-latest
 
+    permissions:
+      checks: write
+
     needs: [ publish_to_pub_pre_check ]
 
     steps:
