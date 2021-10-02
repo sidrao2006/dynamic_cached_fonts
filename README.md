@@ -18,7 +18,7 @@ Demo: https://sidrao2006.github.io/dynamic_cached_fonts
 
 ![Demo 3]
 
-## Introduction
+## 👋 Introduction
 
 Dynamic Cached Fonts allows you to dynamically load a font from any url and cache it. This way, you can reduce your bundle size and load the font if and when it's required.
 
@@ -26,11 +26,11 @@ Another advantage of dynamically loading fonts is that you can now easily provid
 
 Caching is an added performance upgrade as the font will be downloaded only once and used multiple times, reducing network and battery usage.
 
-## Get Started
+## 🏃 Get Started
 
 To use the package, add `dynamic_cached_fonts` as a [dependency][install].
 
-## Usage
+## ⚒️ Usage
 
 ### Loading fonts on demand
 
@@ -174,11 +174,11 @@ Have a custom font to load from Firebase Cloud Storage? Go for the `DynamicCache
 
 ![Demo 4]
 
-## Bug Reports and Help
+## 🐛 Bug Reports and Help
 
 If you find a bug, please open an issue on [Github][issue_tracker] or if you need any help, let's discuss on [Github Discussions]!
 
-## Contributing
+## 💁 Contributing
 
 To make things easier, you can use [docker compose] to set up a dev environment.
 Just run `docker compose run linux` to set up a Linux dev environment or run `docker compose run windows` to set up a Linux dev environment.
