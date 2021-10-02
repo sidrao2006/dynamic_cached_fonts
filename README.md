@@ -14,6 +14,8 @@
 
 A customizable dynamic font loader for flutter with caching enabled. Supports Firebase Cloud Storage too!
 
+Demo: https://sidrao2006.github.io/dynamic_cached_fonts
+
 ![Demo 3]
 
 ## 👋 Introduction
