@@ -58,22 +58,10 @@ abstract class RawDynamicCachedFonts {
   ///
   ///   It is used to specify the cache configuration, [Config],
   ///   for [CacheManager].
-  ///
-  /// - The [verboseLog] is a debug property used to specify whether detailed
-  ///   logs should be printed for debugging.
-  ///
-  ///   Defaults to false.
-  ///
-  ///   _Tip: To log only in debug mode, set [verboseLog]'s value to [kReleaseMode]_.
   static Future<FileInfo> cacheFont(
     String url, {
     required int maxCacheObjects,
     required Duration cacheStalePeriod,
-    @Deprecated(
-      'Use "DynamicCachedFonts.toggleVerboseLogging" instead as it reduces code repetition. '
-      'This feature was deprecated after v0.2.0',
-    )
-        bool verboseLog = false,
   }) async {
     WidgetsFlutterBinding.ensureInitialized();
 
@@ -89,14 +77,11 @@ abstract class RawDynamicCachedFonts {
 
     Utils.verifyFileExtension(font.file);
 
-    devLog(
-      <String>[
-        'Font file downloaded\n',
-        'Validity: ${font.validTill}',
-        'Download URL: ${font.originalUrl}',
-      ],
-      verboseLog: verboseLog,
-    );
+    devLog(<String>[
+      'Font file downloaded\n',
+      'Validity: ${font.validTill}',
+      'Download URL: ${font.originalUrl}',
+    ]);
 
     return font;
   }
@@ -106,21 +91,7 @@ abstract class RawDynamicCachedFonts {
   /// - **REQUIRED** The [url] property is used to specify the url
   ///   for the required font. It should be a valid http/https url which points to
   ///   a font file. The [url] should match the url passed to [cacheFont].
-  ///
-  /// - The [verboseLog] is a debug property used to specify whether detailed
-  ///   logs should be printed for debugging.
-  ///
-  ///   Defaults to false.
-  ///
-  ///   _Tip: To log only in debug mode, set [verboseLog]'s value to [kReleaseMode]_.
-  static Future<bool> canLoadFont(
-    String url, {
-    @Deprecated(
-      'Use "DynamicCachedFonts.toggleVerboseLogging" instead as it reduces code repetition. '
-      'This feature was deprecated after v0.2.0',
-    )
-        bool verboseLog = false,
-  }) async {
+  static Future<bool> canLoadFont(String url) async {
     WidgetsFlutterBinding.ensureInitialized();
 
     final String cacheKey = Utils.sanitizeUrl(url);
@@ -142,23 +113,10 @@ abstract class RawDynamicCachedFonts {
   ///
   /// - **REQUIRED** The [fontFamily] property is used to specify the name
   ///   of the font family which is to be used as [TextStyle.fontFamily].
-  ///
-  /// - The [verboseLog] is a debug property used to specify whether detailed
-  ///   logs should be printed for debugging.
-  ///
-  ///   Defaults to false.
-  ///
-  ///   _Tip: To log only in debug mode, set [verboseLog]'s value to [kReleaseMode]_.
   static Future<FileInfo> loadCachedFont(
     String url, {
     required String fontFamily,
-    @Deprecated(
-      'Use "DynamicCachedFonts.toggleVerboseLogging" instead as it reduces code repetition. '
-      'This feature was deprecated after v0.2.0',
-    )
-        bool verboseLog = false,
-    @visibleForTesting
-        FontLoader? fontLoader,
+    @visibleForTesting FontLoader? fontLoader,
   }) async {
     fontLoader ??= FontLoader(fontFamily);
 
@@ -183,14 +141,11 @@ abstract class RawDynamicCachedFonts {
 
     await fontLoader.load();
 
-    devLog(
-      <String>[
-        'Font has been loaded!',
-        'This font file is valid till - ${font.validTill}',
-        'File stat - ${font.file.statSync()}'
-      ],
-      verboseLog: verboseLog,
-    );
+    devLog(<String>[
+      'Font has been loaded!',
+      'This font file is valid till - ${font.validTill}',
+      'File stat - ${font.file.statSync()}'
+    ]);
 
     return font;
   }
@@ -211,23 +166,10 @@ abstract class RawDynamicCachedFonts {
   ///
   /// - **REQUIRED** The [fontFamily] property is used to specify the name
   ///   of the font family which is to be used as [TextStyle.fontFamily].
-  ///
-  /// - The [verboseLog] is a debug property used to specify whether detailed
-  ///   logs should be printed for debugging.
-  ///
-  ///   Defaults to false.
-  ///
-  ///   _Tip: To log only in debug mode, set [verboseLog]'s value to [kReleaseMode]_.
   static Future<Iterable<FileInfo>> loadCachedFamily(
     List<String> urls, {
     required String fontFamily,
-    @Deprecated(
-      'Use "DynamicCachedFonts.toggleVerboseLogging" instead as it reduces code repetition. '
-      'This feature was deprecated after v0.2.0',
-    )
-        bool verboseLog = false,
-    @visibleForTesting
-        FontLoader? fontLoader,
+    @visibleForTesting FontLoader? fontLoader,
   }) async {
     fontLoader ??= FontLoader(fontFamily);
 
@@ -260,10 +202,7 @@ abstract class RawDynamicCachedFonts {
 
     await fontLoader.load();
 
-    devLog(
-      <String>['Font has been loaded!'],
-      verboseLog: verboseLog,
-    );
+    devLog(<String>['Font has been loaded!']);
 
     return nonNullFontFiles;
   }
