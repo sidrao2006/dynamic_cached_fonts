@@ -1,26 +1,26 @@
 PODS:
-  - Firebase/CoreOnly (8.5.0):
-    - FirebaseCore (= 8.5.0)
-  - Firebase/Storage (8.5.0):
+  - Firebase/CoreOnly (8.7.0):
+    - FirebaseCore (= 8.7.0)
+  - Firebase/Storage (8.7.0):
     - Firebase/CoreOnly
-    - FirebaseStorage (~> 8.5.0)
-  - firebase_core (1.5.0):
-    - Firebase/CoreOnly (= 8.5.0)
+    - FirebaseStorage (~> 8.7.0)
+  - firebase_core (1.7.0):
+    - Firebase/CoreOnly (= 8.7.0)
     - Flutter
-  - firebase_storage (10.0.2):
-    - Firebase/Storage (= 8.5.0)
+  - firebase_storage (10.0.4):
+    - Firebase/Storage (= 8.7.0)
     - firebase_core
     - Flutter
-  - FirebaseCore (8.5.0):
+  - FirebaseCore (8.7.0):
     - FirebaseCoreDiagnostics (~> 8.0)
     - GoogleUtilities/Environment (~> 7.4)
     - GoogleUtilities/Logger (~> 7.4)
-  - FirebaseCoreDiagnostics (8.6.0):
+  - FirebaseCoreDiagnostics (8.8.0):
     - GoogleDataTransport (~> 9.0)
     - GoogleUtilities/Environment (~> 7.4)
     - GoogleUtilities/Logger (~> 7.4)
     - nanopb (~> 2.30908.0)
-  - FirebaseStorage (8.5.0):
+  - FirebaseStorage (8.7.0):
     - FirebaseCore (~> 8.0)
     - GTMSessionFetcher/Core (~> 1.5)
   - Flutter (1.0.0)
@@ -86,23 +86,23 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sqflite/ios"
 
 SPEC CHECKSUMS:
-  Firebase: ff8c73105b90e33e1dc6c8e5445d7adc2ccdc7c1
-  firebase_core: 82d486a6231b636aea229bd471bceca82cbe00a6
-  firebase_storage: 4acd6798eb6c3757fc261b2654f7cf0ee1bb3de8
-  FirebaseCore: 1c1ca72483b59b17050f5b4cec4fb748425a3901
-  FirebaseCoreDiagnostics: 3721920bde3a9a6d5aa093c1d25e9d3e47f694af
-  FirebaseStorage: 2c176ca64a68b45bddc3c7d4d2c0c839927ad92c
-  Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
+  Firebase: bc9325d5ee2041524bac78a5213d0e530c651309
+  firebase_core: f5ac1f2726a2bd0468cea0161eddeea3d83d7e3e
+  firebase_storage: 04a381404ffddf5d3d39bf4bdfc517e4a354dfe9
+  FirebaseCore: f4804c1d3f4bbbefc88904d15653038f2c99ddf7
+  FirebaseCoreDiagnostics: fe77f42da6329d6d83d21fd9d621a6b704413bfc
+  FirebaseStorage: 2e6e58fe31fb0061fdce3f156d0ebc964e9de6ba
+  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   GoogleDataTransport: 85fd18ff3019bb85d3f2c551d04c481dedf71fc9
   GoogleUtilities: 8de2a97a17e15b6b98e38e8770e2d129a57c0040
   GTMSessionFetcher: 43748f93435c2aa068b1cbe39655aaf600652e91
-  integration_test: 6eb66a19f7104200dcfdd62bc0077e1b09686e4f
+  integration_test: 7db6d89f336f671dcbc7563ee27a5b08f6f8aee1
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
-  path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
+  path_provider: d1e9807085df1f9cc9318206cd649dc0b76be3de
   PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
 
 PODFILE CHECKSUM: bb2b18762c3191ec4d4f32073d5247e70d1e89b6
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.11.2
