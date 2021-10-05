@@ -1,3 +1,11 @@
+# 0.4.0
+
+**BREAKING CHANGE: `verboseLog`, which was deprecated in v0.2.0, has been removed. `DynamicCachedFonts.toggleVerboseLogging` should be used instead**
+
+> The online demo (i.e, the hosted example app) is now available. Check it out [here][online-demo]!!
+
+[online-demo]: https://sidrao2006.github.io/dynamic_cached_fonts
+
 # 0.3.1
 
 **Dependency Updates**
@@ -16,9 +24,7 @@ Stable Null safety release
 
 **Features/Updates**
 
-- **`verboseLog` is not deprecated in all APIs. `DynamicCachedFonts.toggleVerboseLogging` should be used instead to toggle verbose logging**
-
-> It's likely that support for `verboseLog` will end in v1.0.0.
+- **`verboseLog` is now deprecated in all APIs. `DynamicCachedFonts.toggleVerboseLogging` should be used instead to toggle verbose logging**
 
 - **`loadCachedFont` and `loadCachedFamily` now throws a `StateError` if the font has not been cached**
 - **`UnsupportedError` is thrown if the downloaded file is not a .ttf or .otf font file**
@@ -45,4 +51,4 @@ Stable Null safety release
 
 # 0.0.1
 
-Initial Release (Non null-safe)
+Initial Release
