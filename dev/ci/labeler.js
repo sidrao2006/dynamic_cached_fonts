@@ -37,7 +37,7 @@ exports.addReleaseLabel = async ({
 
     await github.actions.createWorkflowDispatch({
       owner, repo, workflow_id,
-      ref: github.ref,
+      ref: context.ref,
     });
   }
 }
