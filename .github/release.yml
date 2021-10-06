@@ -31,4 +31,4 @@ changelog:
     - title: Repository related Changes 🔧
       labels:
         - 'infra: community'
-        - 'infra: development-experience 🚸'  
+        - 'infra: development-experience 🚸'
