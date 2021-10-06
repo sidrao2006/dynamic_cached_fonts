@@ -42,7 +42,7 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 10
           running-workflow-name: 'Build and Deploy Example to Github Pages'
-          allowed-conclusions: success,skipped
+          allowed-conclusions: success,skipped,canceled,waiting
 
       - name: Build example for web
         env:
