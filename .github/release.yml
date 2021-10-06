@@ -1,10 +1,11 @@
 changelog:
   exclude:
     labels:
-       - duplicate
-       - revert ⏪
-       - release 🎉
-       - 'internal: style 💅'
+      - duplicate
+      - revert ⏪
+      - release 🎉
+      - 'internal: style 💅'
+
   categories:
     - title: Breaking Changes 💥
       labels:
@@ -12,8 +13,8 @@ changelog:
     - title: New Features ✨
       labels:
         - enhancement ✨
-    - title: 
-      labels: Performance Imporvements 🚀
+    - title: Performance Imporvements 🚀
+      labels:
         - performance 🚀
     - title: Bug Fixes 🐛
       labels:
