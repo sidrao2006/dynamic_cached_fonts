@@ -1,0 +1,35 @@
+changelog:
+  exclude:
+    labels:
+      - duplicate
+      - revert ⏪
+      - release 🎉
+      - 'internal: style 💅'
+
+  categories:
+    - title: Breaking Changes 💥
+      labels:
+        - breaking-change 💥
+    - title: New Features ✨
+      labels:
+        - enhancement ✨
+    - title: Performance Imporvements 🚀
+      labels:
+        - performance 🚀
+    - title: Bug Fixes 🐛
+      labels:
+        - bug 🐛
+    - title: Dependency Upgrades 📦
+      labels:
+        - 'internal: dependencies ⬆➕'
+    - title: Documentation Updates 📖
+      labels:
+        - documentation 📖
+
+    - title: CI 👷
+      labels:
+        - 'infra: ci 👷'
+    - title: Repository related Changes 🔧
+      labels:
+        - 'infra: community'
+        - 'infra: development-experience 🚸'
