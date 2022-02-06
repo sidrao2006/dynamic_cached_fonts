@@ -40,6 +40,7 @@ jobs:
           --dart-define FIREBASE_STORAGE_FONT_URL=$FIREBASE_STORAGE_FONT_URL \
           --device-id chrome \
           --browser-name chrome \
+          --headless \
           --release
 
   android_integration_test:
