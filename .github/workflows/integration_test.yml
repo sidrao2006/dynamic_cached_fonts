@@ -25,9 +25,6 @@ jobs:
         with:
           channel: beta
 
-      - name: Setup Chrome Driver
-        uses: nanasess/setup-chromedriver@master
-
       - name: Run integration tests
         env:
           DISPLAY: :99
