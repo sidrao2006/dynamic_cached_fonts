@@ -32,11 +32,11 @@ jobs:
         run: |
           chromedriver --port=4444 &
 
-          flutter driver --driver test_driver/integration_test.dart \
-          --target ./integration_test/dynamic_cached_fonts_example_test.dart \
-          --dart-define FIREBASE_STORAGE_FONT_URL=$FIREBASE_STORAGE_FONT_URL \
-          --device-id web-server \
-          --browser-name chrome \
+          flutter driver --driver test_driver/integration_test.dart `
+          --target ./integration_test/dynamic_cached_fonts_example_test.dart `
+          --dart-define FIREBASE_STORAGE_FONT_URL=$FIREBASE_STORAGE_FONT_URL `
+          --device-id web-server `
+          --browser-name chrome `
           --release
 
   android_integration_test:
