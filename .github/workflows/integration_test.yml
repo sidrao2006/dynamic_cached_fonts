@@ -10,7 +10,7 @@ jobs:
   chrome_integration_test:
     name: Web Integration Test
     environment: Actions Integration Test
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     defaults:
       run:
