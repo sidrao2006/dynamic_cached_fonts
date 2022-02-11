@@ -19,6 +19,9 @@ jobs:
         with:
           channel: beta
 
+      - name: Get dependencies
+        run: flutter pub get
+
       - name: Activate dartdoc
         run: flutter pub global activate dartdoc
 
