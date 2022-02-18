@@ -1,5 +1,3 @@
-// ignore_for_file: deprecated_member_use_from_same_package
-
 /// An asset loader which dynamically loads font from the given url and caches it.
 /// It can be easily fetched from cache and loaded on demand.
 library dynamic_cached_fonts;
