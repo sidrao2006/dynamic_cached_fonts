@@ -10,17 +10,4 @@ on:
 jobs:
   analyze_project:
     name: Analyze Project
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository code
-        uses: actions/checkout@v2
-
-      - name: Setup Flutter SDK
-        uses: subosito/flutter-action@v1.5.3
-
-      - name: Get packages
-        run: flutter pub get
-
-      - name: Analyze Project
-        run: flutter analyze --no-congratulate
+    uses: sidrao2006/workflows/.github/workflows/analyze_flutter_project.yml@v0

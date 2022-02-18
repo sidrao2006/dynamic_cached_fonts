@@ -10,14 +10,4 @@ on:
 jobs:
   verify_formatting:
     name: Verify Formatting
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository code
-        uses: actions/checkout@v2
-
-      - name: Setup Dart SDK
-        uses: dart-lang/setup-dart@v1
-
-      - name: Verify formatting
-        run: dart format --line-length=100 --output=none --set-exit-if-changed .
+    uses: sidrao2006/workflows/.github/workflows/verify_dart_formatting.yml@v0

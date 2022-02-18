@@ -9,36 +9,7 @@ on:
 jobs:
   pana_analyze:
     name: Analyze package with Pana
-    runs-on: ubuntu-latest
+    uses: sidrao2006/workflows/.github/workflows/pana_code_analysis.yml@v0
 
     permissions:
       checks: write
-
-    steps:
-      - name: Checkout repository code
-        uses: actions/checkout@v2
-
-      - name: Setup Dart SDK
-        uses: dart-lang/setup-dart@v1
-
-      - name: Format code for tests
-        run: dart format .
-
-      - name: Analyze package with pana
-        uses: axel-op/dart-package-analyzer@v3
-        id: analysis
-        with:
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Calculate Result
-        env:
-          PUB_SCORE_MIN_POINTS: 120
-          SCORE: ${{ steps.analysis.outputs.total }}
-        run: |
-          if [[ $SCORE -lt $PUB_SCORE_MIN_POINTS ]]
-          then
-            echo "::error::Pub score test failed. Achieved score of $SCORE is less than expected minimum score of $PUB_SCORE_MIN_POINTS"
-            exit 1
-          else
-            echo "Pub score test passed!"
-          fi
