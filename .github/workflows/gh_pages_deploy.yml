@@ -16,46 +16,12 @@ concurrency:
 jobs:
   build-and-deploy:
     name: Build and Deploy Example to Github Pages
-    environment: Example Github Pages
-    runs-on: ubuntu-latest
+    uses: sidrao2006/workflows/.github/workflows/flutter_gh_pages_deploy.yml@v0
+    with:
+      dir: example
+      environment: Example Github Pages
+    secrets:
+      args: --dart-define FIREBASE_STORAGE_FONT_URL=${{ secrets.FIREBASE_STORAGE_FONT_URL }}
 
     permissions:
       contents: write
-
-    defaults:
-      run:
-        working-directory: example
-
-    steps:
-      - name: Checkout repository code
-        uses: actions/checkout@v2
-
-      - name: Setup Flutter SDK
-        uses: subosito/flutter-action@v1
-        with:
-          channel: beta
-
-      - name: Wait on tests
-        uses: lewagon/wait-on-check-action@master
-        with:
-          ref: ${{ github.ref }}
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          wait-interval: 10
-          running-workflow-name: 'Build and Deploy Example to Github Pages'
-          allowed-conclusions: success,skipped,canceled,waiting
-
-      - name: Build example for web
-        env:
-          FIREBASE_STORAGE_FONT_URL: ${{ secrets.FIREBASE_STORAGE_FONT_URL }}
-        run: |
-          flutter build web \
-          --base-href /dynamic_cached_fonts/ \
-          --dart-define FIREBASE_STORAGE_FONT_URL=$FIREBASE_STORAGE_FONT_URL \
-          --no-source-maps \
-          --release
-
-      - name: Deploy to Github Pages
-        uses: JamesIves/github-pages-deploy-action@4.1.5
-        with:
-          branch: gh-pages
-          folder: example/build/web

@@ -5,35 +5,8 @@ on:
 jobs:
   triage:
     name: Add PR labels
-    runs-on: ubuntu-latest
+    uses: sidrao2006/workflows/.github/workflows/pr_labeler.yml@v0
 
     permissions:
       actions: write
       pull-requests: write
-
-    steps:
-      - uses: actions/labeler@v3
-        with:
-          repo-token: "${{ secrets.GITHUB_TOKEN }}"
-          sync-labels: true
-
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Add 'revert' label to relevant PRs
-        uses: actions/github-script@v4
-        with:
-          script: |
-            const labeler = require('./dev/ci/labeler.js')
-            await labeler.addRevertLabel({ github, context })
-
-      - name: Add 'release' label to relevant PRs
-        uses: actions/github-script@v4
-        with:
-          script: |
-            const labeler = require('./dev/ci/labeler.js')
-            await labeler.addReleaseLabel({
-              github,
-              context,
-              workflow: 'release_pre_check.yml',
-            })

@@ -13,60 +13,15 @@ concurrency:
 jobs:
   release:
     name: Release and Publish Package
-    environment: Release
-    runs-on: ubuntu-latest
+    uses: sidrao2006/workflows/.github/workflows/pub_release.yml@v0
+    with:
+      environment: Release
+    secrets:
+      PUB_CREDENTIALS_ACCESS_TOKEN: ${{ secrets.PUB_CREDENTIALS_ACCESS_TOKEN }}
+      PUB_CREDENTIALS_REFRESH_TOKEN: ${{ secrets.PUB_CREDENTIALS_REFRESH_TOKEN }}
+      PUB_CREDENTIALS_ID_TOKEN: ${{ secrets.PUB_CREDENTIALS_ID_TOKEN }}
+      PUB_CREDENTIALS_TOKEN_ENDPOINT: ${{ secrets.PUB_CREDENTIALS_TOKEN_ENDPOINT }}
+      PUB_CREDENTIALS_EXPIRATION: ${{ secrets.PUB_CREDENTIALS_EXPIRATION }}
 
     permissions:
       contents: write
-
-    steps:
-      - name: Checkout repository code
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 2
-
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v8.1
-
-      - name: Check that necessary files have been modified
-        env:
-          changelog: CHANGELOG.md
-          version_file: pubspec.yaml
-          example_deps: example/pubspec.lock
-          IS_VALID: |
-            ${{
-              contains(steps.changed-files.outputs.modified_files, env.changelog) &&
-              contains(steps.changed-files.outputs.modified_files, env.version_file) &&
-              contains(steps.changed-files.outputs.modified_files, env.example_deps)
-            }}
-        run: |
-          if [[ "$IS_VALID" ]]
-          then
-            echo "All necessary files have been modified. Ready to release!"
-          else
-            echo "Please modify $changelog, $version_file and $example_deps to release package"
-          fi
-
-      - name: Wait on tests
-        uses: lewagon/wait-on-check-action@master
-        with:
-          ref: ${{ github.ref }}
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          wait-interval: 10
-          running-workflow-name: 'Release and Publish Package'
-          allowed-conclusions: success,skipped
-
-      - name: Release package
-        if: success()
-        timeout-minutes: 30
-        uses: sidrao2006/release-pub-package@main
-        with:
-          pre-publish-command: flutter format .
-          access-token: ${{ secrets.PUB_CREDENTIALS_ACCESS_TOKEN }}
-          refresh-token: ${{ secrets.PUB_CREDENTIALS_REFRESH_TOKEN }}
-          id-token: ${{ secrets.PUB_CREDENTIALS_ID_TOKEN }}
-          token-endpoint: ${{ secrets.PUB_CREDENTIALS_TOKEN_ENDPOINT }}
-          expiration: ${{ secrets.PUB_CREDENTIALS_EXPIRATION }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

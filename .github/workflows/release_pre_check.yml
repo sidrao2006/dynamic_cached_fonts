@@ -3,55 +3,9 @@ on:
   - workflow_dispatch
 
 jobs:
-  publish_to_pub_pre_check:
-    name: Publish to Pub pre-check
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository code
-        uses: actions/checkout@v2
-
-      - name: Setup Dart SDK
-        uses: dart-lang/setup-dart@v1
-
-      - name: Run publisher in dry run mode
-        run: dart pub lish --dry-run | tee publish.log
-
-      - name: Set output
-        run: echo "::set-output name=logs::$(cat publish.log)"
-
-  post_result:
-    name: Post pre-check result
-    runs-on: ubuntu-latest
+  pub_release_pre_check:
+    name: Pub Release pre-check
+    uses: sidrao2006/workflows/.github/workflows/pub_pre_check.yml@v0
 
     permissions:
       checks: write
-
-    needs: [ publish_to_pub_pre_check ]
-
-    steps:
-      - name: Checkout repository code
-        uses: actions/checkout@v2
-
-      - name: Post pre-check result to check run
-        uses: actions/github-script@v4
-        env:
-          STATUS: ${{ needs.publish_to_pub_pre_check.result == 'success' }}
-          LOGS: ${{ needs.publish_to_pub_pre_check.outputs.logs }}
-        with:
-          script: |
-            const { STATUS, LOGS } = process.env;
-            const resultPoster = require('./dev/ci/resultPoster.js')
-            await resultPoster.postPreCheckResult({
-              github,
-              context,
-              output: STATUS ? {
-               title: 'Publish to Pub',
-               summary: 'Successful action - `dart pub lish --dry-run`! :tada:',
-               conclusion: 'success',
-              } : {
-                title: 'Publish to Pub',
-                summary: 'Output logs for failed action - `dart pub lish --dry-run`',
-                logs: LOGS,
-                conclusion: 'failure',
-              }
-            })
