@@ -9,4 +9,4 @@ on:
 jobs:
   dartdoc_analysis:
     name: Documentation Analysis
-    uses: sidrao2006/workflows/.github/workflows/dartdoc.yml@v0
+    uses: sidrao2006/workflows/.github/workflows/dartdoc.yml@v1

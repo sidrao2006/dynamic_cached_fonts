@@ -9,7 +9,7 @@ on:
 jobs:
   pana_analyze:
     name: Analyze package with Pana
-    uses: sidrao2006/workflows/.github/workflows/pana_code_analysis.yml@v0
+    uses: sidrao2006/workflows/.github/workflows/pana_code_analysis.yml@v1
 
     permissions:
       checks: write

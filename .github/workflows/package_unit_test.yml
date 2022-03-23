@@ -9,4 +9,4 @@ on:
 jobs:
   unit_test:
     name: Unit Test
-    uses: sidrao2006/workflows/.github/workflows/flutter_unit_test.yml@v0
+    uses: sidrao2006/workflows/.github/workflows/flutter_unit_test.yml@v1
