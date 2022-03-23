@@ -13,7 +13,7 @@ concurrency:
 jobs:
   release:
     name: Release and Publish Package
-    uses: sidrao2006/workflows/.github/workflows/pub_release.yml@v0
+    uses: sidrao2006/workflows/.github/workflows/pub_release.yml@v1
     with:
       environment: Release
     secrets:

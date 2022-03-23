@@ -10,4 +10,4 @@ on:
 jobs:
   analyze_project:
     name: Analyze Project
-    uses: sidrao2006/workflows/.github/workflows/analyze_flutter_project.yml@v0
+    uses: sidrao2006/workflows/.github/workflows/analyze_flutter_project.yml@v1

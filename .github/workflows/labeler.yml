@@ -5,7 +5,7 @@ on:
 jobs:
   triage:
     name: Add PR labels
-    uses: sidrao2006/workflows/.github/workflows/pr_labeler.yml@v0
+    uses: sidrao2006/workflows/.github/workflows/pr_labeler.yml@v1
 
     permissions:
       actions: write

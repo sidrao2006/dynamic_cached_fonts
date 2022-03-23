@@ -1,7 +1,7 @@
 /*eslint-env node*/
 
 exports.getPRCommitMessages = async ({ github, context }) => {
-  const { data: commits } = await github.pulls.listCommits({
+  const { data: commits } = await github.rest.pulls.listCommits({
     owner: context.repo.owner,
     repo: context.repo.repo,
     pull_number: context.payload.pull_request.number,
@@ -11,7 +11,7 @@ exports.getPRCommitMessages = async ({ github, context }) => {
 }
 
 exports.PRTitleIncludes = async ({ github, context }, title) => {
-  const { data: pr } = await github.pulls.get({
+  const { data: pr } = await github.rest.pulls.get({
     owner: context.repo.owner,
     repo: context.repo.repo,
     pull_number: context.payload.pull_request.number,
