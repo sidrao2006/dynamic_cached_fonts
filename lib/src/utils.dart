@@ -7,14 +7,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:meta/meta.dart';
 
-/// Signature for `itemCountProgressListener` and `progressListener` callbacks 
+/// Signature for `itemCountProgressListener` and `progressListener` callbacks
 /// that return no data and have the following arguments -
-/// 
+///
 /// - The [progress] argument is a double between 0.0 and 1.0, indicating the
 ///   fraction of items that have been downloaded.
-/// 
+///
 /// - The [totalItems] argument is the total number of items to be downloaded.
-/// 
+///
 /// - The [downloadedItems] argument is the number of items that have been
 ///   downloaded so far.
 typedef ItemCountProgressListener = void Function(
@@ -22,7 +22,7 @@ typedef ItemCountProgressListener = void Function(
 
 /// Signature for `downloadProgressListener` and `progressListener` callbacks
 /// that return no data and has a single argument -
-/// 
+///
 /// - The [progress] argument is a [DownloadProgress] object that contains
 ///   information about the download progress.
 typedef DownloadProgressListener = void Function(DownloadProgress progress);
