@@ -86,6 +86,77 @@ abstract class RawDynamicCachedFonts {
     return font;
   }
 
+  /// Downloads and caches font from the [url] with the given configuration.
+  /// A single [FileInfo] object is returned as a stream and the download
+  /// progress is can be listened to using the [progressListener] callback.
+  ///
+  /// If this method is called multiple times for the same font [url], then the
+  /// cached file is returned with no progress events being emitted to the
+  /// [progressListener] callback.
+  ///
+  /// - **REQUIRED** The [url] property is used to specify the download url
+  ///   for the required font. It should be a valid http/https url which points to
+  ///   a font file.
+  ///   Currently, only OpenType (OTF) and TrueType (TTF) fonts are supported.
+  ///
+  /// - The [maxCacheObjects] property defines how large the cache is allowed to be.
+  ///   If there are more files the files that haven't been used for the longest
+  ///   time will be removed.
+  ///
+  ///   It is used to specify the cache configuration, [Config],
+  ///   for [CacheManager].
+  ///
+  /// - [cacheStalePeriod] is the time duration in which
+  ///   a cache object is considered 'stale'. When a file is cached but
+  ///   not being used for a certain time the file will be deleted
+  ///
+  ///   It is used to specify the cache configuration, [Config],
+  ///   for [CacheManager].
+  ///
+  /// - The [progressListener] property is used to listen to the download progress
+  ///   of the font. It is called with a [DownloadProgress] object which contains
+  ///   information about the download progress.
+  static Stream<FileInfo> cacheFontStream(
+    String url, {
+    required int maxCacheObjects,
+    required Duration cacheStalePeriod,
+    required DownloadProgressListener? progressListener,
+  }) async* {
+    WidgetsFlutterBinding.ensureInitialized();
+
+    final String cacheKey = Utils.sanitizeUrl(url);
+
+    DynamicCachedFontsCacheManager.handleCacheManager(cacheKey, cacheStalePeriod, maxCacheObjects);
+
+    final Stream<FileResponse> stream =
+        DynamicCachedFontsCacheManager.getCacheManager(cacheKey).getFileStream(
+      url,
+      key: cacheKey,
+      withProgress: progressListener != null,
+    );
+
+    await for (final result in stream) {
+      if (result is FileInfo) {
+        Utils.verifyFileExtension(result.file);
+
+        devLog([
+          'Font file downloaded\n',
+          'Validity: ${result.validTill}',
+          'Download URL: ${result.originalUrl}',
+        ]);
+
+        yield result;
+      } else if (result is DownloadProgress) {
+        progressListener?.call(result);
+
+        if (result.progress != null)
+          devLog([
+            'Download progress: ${(result.progress! * 100).toStringAsFixed(1)}% for ${Utils.getFileNameOrUrl(result.originalUrl)}'
+          ]);
+      }
+    }
+  }
+
   /// Checks whether the given [url] can be loaded directly from cache.
   ///
   /// - **REQUIRED** The [url] property is used to specify the url
@@ -196,6 +267,78 @@ abstract class RawDynamicCachedFonts {
     devLog(<String>['Font has been loaded!']);
 
     return fonts;
+  }
+
+  /// Fetches the given [urls] from cache and loads them into the engine to be used.
+  /// A stream of [FileInfo] objects is returned, which emits the font files as they
+  /// are loaded. The total number of files returned corresponds to the number of
+  /// urls provided. The download progress can be listened to using [progressListener].
+  ///
+  /// [urls] should be a series of related font assets,
+  /// each of which defines how to render a specific [FontWeight] and [FontStyle]
+  /// within the family.
+  ///
+  /// Call [canLoadFont] before calling this method to make sure the font is
+  /// available in cache.
+  ///
+  /// - **REQUIRED** The [urls] property is used to specify the urls
+  ///   for the required family. It should be a list of valid http/https urls
+  ///   which point to font files.
+  ///   Every url in [urls] should be loaded into cache by calling [cacheFont] for each.
+  ///
+  /// - **REQUIRED** The [fontFamily] property is used to specify the name
+  ///   of the font family which is to be used as [TextStyle.fontFamily].
+  ///
+  /// - The [progressListener] property is used to listen to the download progress
+  ///   of the font. It gives information about the number of files
+  ///   downloaded and the total number of files to be downloaded.
+  ///   It is called with
+  ///
+  ///   a [double] value which indicates the fraction of items that have been downloaded,
+  ///   an [int] value which indicates the total number of items to be downloaded and,
+  ///   another [int] value which indicates the number of items that have been
+  ///   downloaded so far.
+  static Stream<FileInfo> loadCachedFamilyStream(
+    List<String> urls, {
+    required String fontFamily,
+    required ItemCountProgressListener? progressListener,
+    @visibleForTesting FontLoader? fontLoader,
+  }) async* {
+    fontLoader ??= FontLoader(fontFamily);
+
+    WidgetsFlutterBinding.ensureInitialized();
+
+    for (final String url in urls) {
+      final String cacheKey = Utils.sanitizeUrl(url);
+
+      final FileInfo? font =
+          await DynamicCachedFontsCacheManager.getCacheManager(cacheKey).getFileFromCache(cacheKey);
+
+      if (font == null) throw StateError('Font should already be cached to be loaded');
+
+      final Uint8List fontBytes = await font.file.readAsBytes();
+      final ByteData bytes = ByteData.view(fontBytes.buffer);
+
+      fontLoader.addFont(Future.value(bytes));
+
+      final totalItems = urls.length, downloadedItems = urls.indexOf(url) + 1;
+
+      progressListener?.call(
+        downloadedItems / totalItems,
+        totalItems,
+        downloadedItems,
+      );
+
+      devLog([
+        'Downloaded $downloadedItems of $totalItems fonts (${((downloadedItems / totalItems) * 100).toStringAsFixed(1)}%)'
+      ]);
+
+      yield font;
+    }
+
+    await fontLoader.load();
+
+    devLog(<String>['Font has been loaded!']);
   }
 
   /// Removes the given [url] can be loaded directly from cache.

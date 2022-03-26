@@ -243,7 +243,7 @@ class DynamicCachedFonts {
   bool _loaded;
 
   /// Used to download and load a font into the
-  /// app with the given [url] and cache configuration.
+  /// app with the given [urls] and cache configuration.
   ///
   /// This method can be called in `main()`, `initState()` or on button tap/click
   /// as needed.
@@ -295,6 +295,87 @@ class DynamicCachedFonts {
     }
 
     return fontFiles;
+  }
+
+  /// Used to download and load a font into the app with the given [urls] and
+  /// cache configuration. A stream of [FileInfo] object(s) is returned which
+  /// emits the font files as they are loaded. The total number of files returned
+  /// corresponds to the number of urls provided.
+  ///
+  /// - The [itemCountProgressListener] property is used to listen to the download
+  ///   progress of the fonts. It gives information about the number of files
+  ///   downloaded and the total number of files to be downloaded.
+  ///   It is called with
+  ///
+  ///   a [double] value which indicates the fraction of items that have been downloaded,
+  ///   an [int] value which indicates the total number of items to be downloaded and,
+  ///   another [int] value which indicates the number of items that have been
+  ///   downloaded so far.
+  ///
+  /// - The [downloadProgressListener] property is used to listen to the download
+  ///   progress of the font. It is called with a [DownloadProgress] object which
+  ///   contains information about the download progress.
+  Stream<FileInfo> loadStream({
+    ItemCountProgressListener? itemCountProgressListener,
+    DownloadProgressListener? downloadProgressListener,
+  }) async* {
+    if (_loaded) throw StateError('Font has already been loaded');
+    _loaded = true;
+
+    WidgetsFlutterBinding.ensureInitialized();
+
+    final List<String> downloadUrls = await Future.wait(
+      urls.map(
+        (String url) async => _isFirebaseURL ? await Utils.handleUrl(url) : url,
+      ),
+    );
+
+    final Stream<FileInfo> fontStream = loadCachedFamilyStream(
+      downloadUrls,
+      fontFamily: fontFamily,
+      progressListener: itemCountProgressListener,
+    );
+
+    try {
+      await for (final font in fontStream) {
+        yield font;
+
+        // Checks whether any of the files is invalid.
+        // The validity is determined by parsing headers returned when the file was
+        // requested. The date/time is a file validity guarantee by the source.
+        // This was done to preserve `Cachemanager.getSingleFile`'s behaviour.
+        if (font.validTill.isBefore(DateTime.now())) {
+          devLog([
+            'Font file expired on ${font.validTill}.',
+            'Downloading font from ${font.originalUrl}...',
+          ]);
+          cacheFontStream(
+            font.originalUrl,
+            cacheStalePeriod: cacheStalePeriod,
+            maxCacheObjects: maxCacheObjects,
+            progressListener: downloadProgressListener,
+          ).listen((_) {});
+        }
+      }
+    } catch (_) {
+      devLog(<String>['Font is not in cache.', 'Loading font now...']);
+
+      await Future.wait([
+        for (final String url in downloadUrls)
+          cacheFontStream(
+            url,
+            cacheStalePeriod: cacheStalePeriod,
+            maxCacheObjects: maxCacheObjects,
+            progressListener: downloadProgressListener,
+          ).listen((_) {}).asFuture<void>()
+      ]);
+
+      yield* loadCachedFamilyStream(
+        downloadUrls,
+        fontFamily: fontFamily,
+        progressListener: itemCountProgressListener,
+      );
+    }
   }
 
   /// Accepts [cacheManager] and [force] to provide a custom [CacheManager] for testing.
@@ -360,6 +441,49 @@ class DynamicCachedFonts {
         maxCacheObjects: maxCacheObjects,
       );
 
+  /// Downloads and caches font from the [url] with the given configuration.
+  /// A single [FileInfo] object is returned as a stream and the download
+  /// progress is can be listened to using the [progressListener] callback.
+  ///
+  /// If this method is called multiple times for the same font [url], then the
+  /// cached file is returned with no progress events being emitted to the
+  /// [progressListener] callback.
+  ///
+  /// - **REQUIRED** The [url] property is used to specify the download url
+  ///   for the required font. It should be a valid http/https url which points to
+  ///   a font file.
+  ///   Currently, only OpenType (OTF) and TrueType (TTF) fonts are supported.
+  ///
+  /// - The [maxCacheObjects] property defines how large the cache is allowed to be.
+  ///   If there are more files the files that haven't been used for the longest
+  ///   time will be removed.
+  ///
+  ///   It is used to specify the cache configuration, [Config],
+  ///   for [CacheManager].
+  ///
+  /// - [cacheStalePeriod] is the time duration in which
+  ///   a cache object is considered 'stale'. When a file is cached but
+  ///   not being used for a certain time the file will be deleted
+  ///
+  ///   It is used to specify the cache configuration, [Config],
+  ///   for [CacheManager].
+  ///
+  /// - The [progressListener] property is used to listen to the download progress
+  ///   of the font. It is called with a [DownloadProgress] object which contains
+  ///   information about the download progress.
+  static Stream<FileInfo> cacheFontStream(
+    String url, {
+    Duration cacheStalePeriod = kDefaultCacheStalePeriod,
+    int maxCacheObjects = kDefaultMaxCacheObjects,
+    DownloadProgressListener? progressListener,
+  }) =>
+      RawDynamicCachedFonts.cacheFontStream(
+        url,
+        cacheStalePeriod: cacheStalePeriod,
+        maxCacheObjects: maxCacheObjects,
+        progressListener: progressListener,
+      );
+
   /// Checks whether the given [url] can be loaded directly from cache.
   ///
   /// - **REQUIRED** The [url] property is used to specify the url
@@ -410,6 +534,48 @@ class DynamicCachedFonts {
       RawDynamicCachedFonts.loadCachedFamily(
         urls,
         fontFamily: fontFamily,
+        fontLoader: fontLoader,
+      );
+
+  /// Fetches the given [urls] from cache and loads them into the engine to be used.
+  /// A stream of [FileInfo] objects is returned, which emits the font files as they
+  /// are loaded. The total number of files returned corresponds to the number of
+  /// urls provided. The download progress can be listened to using [progressListener].
+  ///
+  /// [urls] should be a series of related font assets,
+  /// each of which defines how to render a specific [FontWeight] and [FontStyle]
+  /// within the family.
+  ///
+  /// Call [canLoadFont] before calling this method to make sure the font is
+  /// available in cache.
+  ///
+  /// - **REQUIRED** The [urls] property is used to specify the urls
+  ///   for the required family. It should be a list of valid http/https urls
+  ///   which point to font files.
+  ///   Every url in [urls] should be loaded into cache by calling [cacheFont] for each.
+  ///
+  /// - **REQUIRED** The [fontFamily] property is used to specify the name
+  ///   of the font family which is to be used as [TextStyle.fontFamily].
+  ///
+  /// - The [progressListener] property is used to listen to the download progress
+  ///   of the font. It gives information about the number of files
+  ///   downloaded and the total number of files to be downloaded.
+  ///   It is called with
+  ///
+  ///   a [double] value which indicates the fraction of items that have been downloaded,
+  ///   an [int] value which indicates the total number of items to be downloaded and,
+  ///   another [int] value which indicates the number of items that have been
+  ///   downloaded so far.
+  static Stream<FileInfo> loadCachedFamilyStream(
+    List<String> urls, {
+    required String fontFamily,
+    ItemCountProgressListener? progressListener,
+    @visibleForTesting FontLoader? fontLoader,
+  }) =>
+      RawDynamicCachedFonts.loadCachedFamilyStream(
+        urls,
+        fontFamily: fontFamily,
+        progressListener: progressListener,
         fontLoader: fontLoader,
       );
 
