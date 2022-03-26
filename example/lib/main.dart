@@ -9,9 +9,10 @@ void main() {
   DynamicCachedFonts.toggleVerboseLogging(true);
 
   runApp(
-    const MaterialApp(
+    MaterialApp(
       title: 'Dynamic Cached Fonts Demo',
-      home: DynamicCachedFontsDemo1(),
+      home: const DynamicCachedFontsDemo1(),
+      darkTheme: ThemeData.dark(),
     ),
   );
 }
