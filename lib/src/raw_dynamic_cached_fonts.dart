@@ -172,39 +172,32 @@ abstract class RawDynamicCachedFonts {
     @visibleForTesting FontLoader? fontLoader,
   }) async {
     fontLoader ??= FontLoader(fontFamily);
+    final List<FileInfo> fonts = [];
 
     WidgetsFlutterBinding.ensureInitialized();
 
-    final Iterable<FileInfo?> fontFiles = await Future.wait(
-      urls.map((String url) async {
-        final String cacheKey = Utils.sanitizeUrl(url);
+    for (final String url in urls) {
+      final String cacheKey = Utils.sanitizeUrl(url);
 
-        final FileInfo? font = await DynamicCachedFontsCacheManager.getCacheManager(cacheKey)
-            .getFileFromCache(cacheKey);
+      final FileInfo? font =
+          await DynamicCachedFontsCacheManager.getCacheManager(cacheKey).getFileFromCache(cacheKey);
 
-        return font;
-      }),
-    );
+      if (font == null) throw StateError('Font should already be cached to be loaded');
 
-    if (fontFiles.any((FileInfo? font) => font == null))
-      throw StateError('Font should already be cached to be loaded');
+      fonts.add(font);
 
-    // The null-check above ensures that this line simply acts as a cast.
-    final Iterable<FileInfo> nonNullFontFiles = fontFiles.whereType<FileInfo>();
-
-    final Iterable<Future<ByteData>> cachedFontBytes = nonNullFontFiles.map((FileInfo font) async {
       final Uint8List fontBytes = await font.file.readAsBytes();
 
-      return ByteData.view(fontBytes.buffer);
-    });
+      final ByteData cachedFontBytes = ByteData.view(fontBytes.buffer);
 
-    for (final Future<ByteData> bytes in cachedFontBytes) fontLoader.addFont(bytes);
+      fontLoader.addFont(Future<ByteData>.value(cachedFontBytes));
+    }
 
     await fontLoader.load();
 
     devLog(<String>['Font has been loaded!']);
 
-    return nonNullFontFiles;
+    return fonts;
   }
 
   /// Removes the given [url] can be loaded directly from cache.
