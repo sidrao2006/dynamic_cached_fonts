@@ -127,9 +127,7 @@ abstract class RawDynamicCachedFonts {
     final FileInfo? font =
         await DynamicCachedFontsCacheManager.getCacheManager(cacheKey).getFileFromCache(cacheKey);
 
-    if (font == null) {
-      throw StateError('Font should already be cached to be loaded');
-    }
+    if (font == null) throw StateError('Font should already be cached to be loaded');
 
     final Uint8List fontBytes = await font.file.readAsBytes();
 
