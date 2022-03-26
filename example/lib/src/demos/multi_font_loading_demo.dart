@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:dynamic_cached_fonts_example/constants.dart';
 
 import '../components.dart';
+import 'download_use_family_stream_demo.dart';
 
 class DynamicCachedFontsDemo5 extends StatefulWidget {
   const DynamicCachedFontsDemo5({Key? key}) : super(key: key);
@@ -65,11 +66,16 @@ class _DynamicCachedFontsDemo5State extends State<DynamicCachedFontsDemo5> {
           ),
         ],
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: ExtendedButton(
-        icon: Icons.navigate_before,
-        label: 'Previous Example',
-        onPressed: () => Navigator.pop(context),
+        icon: Icons.navigate_next,
+        label: 'Next Example',
+        onPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute<DynamicCachedFontsDemo6>(
+            builder: (_) => const DynamicCachedFontsDemo6(),
+          ),
+        ),
       ),
     );
   }
