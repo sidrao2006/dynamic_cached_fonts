@@ -42,7 +42,7 @@ class _DynamicCachedFontsDemo3State extends State<DynamicCachedFontsDemo3> {
             ],
           ),
           DisplayText(
-            'The text is being displayed in the default flutter font which is ${DefaultTextStyle.of(context).style.fontFamily}. To download $firaMono, click the download button above ☝️.',
+            'The text is being displayed in the default flutter font which is ${DefaultTextStyle.of(context).style.fontFamily}. To download $notoSans, click the download button above ☝️.',
             fontFamily: notoSans,
           ),
         ],
