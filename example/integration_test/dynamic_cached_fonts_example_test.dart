@@ -11,6 +11,8 @@ import 'package:integration_test/integration_test.dart' show IntegrationTestWidg
 
 const String fontUrl = cascadiaCodeUrl,
     fontName = cascadiaCode,
+    altFontUrl = notoSansUrl,
+    altFontName = notoSans,
     firebaseFontUrl = firaCodeUrl,
     firebaseFontName = firaCode;
 
@@ -76,6 +78,13 @@ void main() {
       firaSansThinUrl,
     ];
 
+    const List<String> altFontUrls = <String>[
+      robotoBoldUrl,
+      robotoItalicUrl,
+      robotoRegularUrl,
+      robotoThinUrl,
+    ];
+
     setUp(() async {
       cachedFontLoader = DynamicCachedFonts.family(
         urls: fontUrls,
@@ -114,14 +123,15 @@ void main() {
     });
 
     testWidgets('should emit downloadProgress events', (_) async {
-      await Future.wait(
-        fontUrls.map((url) => cacheManager.removeFile(cacheKeyFromUrl(url))),
-      );
-
       final List<DownloadProgress> progressListener = [];
       final Set<String> downloadedfontUrls = {};
 
-      final Stream<FileInfo> fontStream = cachedFontLoader.loadStream(
+      final altCachedFontLoader = DynamicCachedFonts.family(
+        urls: altFontUrls,
+        fontFamily: roboto,
+      );
+
+      final Stream<FileInfo> fontStream = altCachedFontLoader.loadStream(
         downloadProgressListener: (progress) {
           progressListener.add(progress);
           downloadedfontUrls.add(progress.originalUrl);
@@ -130,7 +140,7 @@ void main() {
 
       await fontStream.listen((_) {}).asFuture();
 
-      expect(downloadedfontUrls, unorderedEquals(fontUrls.toSet()));
+      expect(downloadedfontUrls, unorderedEquals(altFontUrls.toSet()));
       expect(
         progressListener,
         anyElement(
@@ -308,22 +318,20 @@ void main() {
     });
 
     testWidgets('should emit downloadProgress events', (_) async {
-      cacheManager.removeFile(cacheKey);
-
       final List<DownloadProgress> progressListener = [];
-      final Set<String> downloadedfontUrls = {};
+      final Set<String> downloadedfontUrl = {};
 
       final Stream<FileInfo> fontStream = DynamicCachedFonts.cacheFontStream(
-        fontUrl,
+        altFontUrl,
         progressListener: (progress) {
           progressListener.add(progress);
-          downloadedfontUrls.add(progress.originalUrl);
+          downloadedfontUrl.add(progress.originalUrl);
         },
       );
 
       await fontStream.listen((_) {}).asFuture();
 
-      expect(downloadedfontUrls, equals({fontUrl}));
+      expect(downloadedfontUrl, equals({altFontUrl}));
       expect(
         progressListener,
         anyElement(
