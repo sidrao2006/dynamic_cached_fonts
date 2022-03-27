@@ -303,7 +303,8 @@ void main() {
       const String woffUrl =
           'https://cdn.jsdelivr.net/gh/mozilla/Fira@4.202/woff/FiraMono-Regular.woff';
 
-      await expectLater(DynamicCachedFonts.cacheFontStream(woffUrl), emitsError(isUnsupportedError));
+      await expectLater(
+          DynamicCachedFonts.cacheFontStream(woffUrl), emitsError(isUnsupportedError));
     });
 
     testWidgets('should emit downloadProgress events', (_) async {
