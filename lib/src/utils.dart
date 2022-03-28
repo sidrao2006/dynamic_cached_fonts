@@ -210,7 +210,7 @@ class Utils {
     }
   }
 
-  /// Remove reserved characters from url which can cause errors when used as 
+  /// Remove reserved characters from url which can cause errors when used as
   /// storage paths in some operating systems.
   static String sanitizeUrl(String url) => url.replaceAll(RegExp(r'[^A-Za-z0-9._-]'), '');
 
