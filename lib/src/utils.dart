@@ -217,7 +217,8 @@ class Utils {
   /// Returns the file name of the font or the url if the url cannot be parsed.
   static String getFileNameOrUrl(String url) {
     final int index = url.lastIndexOf('/');
+    final int? endIndex = url.contains(RegExp(r'\?|#')) ? url.indexOf(RegExp(r'\?|#')) : null;
     if (index < 0 || index + 1 >= url.length) return url;
-    return url.substring(index + 1);
+    return url.substring(index + 1, endIndex);
   }
 }
