@@ -126,6 +126,20 @@ class DynamicCachedFontsCacheManager {
       );
     }
   }
+
+  /// Clears the list of the [CacheManager]s.
+  @visibleForTesting
+  static void clearCacheManagers() {
+    _cacheManagers.clear();
+
+    _cacheManagers[_defaultCacheKey] = CacheManager(
+      Config(
+        _defaultCacheKey,
+        stalePeriod: kDefaultCacheStalePeriod,
+        maxNrOfCacheObjects: kDefaultMaxCacheObjects,
+      ),
+    );
+  }
 }
 
 class _FontFileExtensionManager {
