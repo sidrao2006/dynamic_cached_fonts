@@ -32,7 +32,7 @@ void main() {
   tearDown(() => cacheManager.emptyCache());
 
   group('DynamicCachedFonts.load', () {
-    FileInfo? font;
+    late FileInfo font;
     late DynamicCachedFonts cachedFontLoader;
 
     setUp(() async {
@@ -41,12 +41,8 @@ void main() {
       font = (await cachedFontLoader.load()).first;
     });
 
-    testWidgets('should load font into cache', (_) async {
-      expect(font, isNotNull);
-    });
-
     testWidgets('should load font file with a valid extension', (_) async {
-      final String fontFileName = font!.file.basename;
+      final String fontFileName = font.file.basename;
 
       expect(fontFileName, endsWith('ttf'));
     });
@@ -63,7 +59,7 @@ void main() {
 
       expect(
         downloadedFont.file.readAsBytesSync(),
-        orderedEquals(font!.file.readAsBytesSync()),
+        orderedEquals(font.file.readAsBytesSync()),
       );
     });
   });
@@ -165,7 +161,10 @@ void main() {
       expect(progressListener, hasLength(equals(fontUrls.length)));
       expect(
         progressListener,
-        everyElement(predicate<List<num>>((event) => event[0] == event[2] / event[1])),
+        everyElement(predicate<List<num>>(
+          (event) => event[0] == event[2] / event[1],
+          'has a progress value equal to the number of downloaded items divided by the total number of items',
+        )),
       );
       expect(progressListener.first, orderedEquals([0.25, fontUrls.length, 1]));
       expect(progressListener.last, orderedEquals([1.0, fontUrls.length, fontUrls.length]));
@@ -173,7 +172,7 @@ void main() {
   });
 
   group('DynamicCachedFonts.family', () {
-    Iterable<FileInfo>? fonts;
+    late Iterable<FileInfo> fonts;
     late DynamicCachedFonts cachedFontLoader;
 
     const List<String> fontUrls = <String>[
@@ -192,10 +191,6 @@ void main() {
       fonts = await cachedFontLoader.load();
     });
 
-    testWidgets('should load all fonts into cache', (_) async {
-      expect(fonts, everyElement(isNotNull));
-    });
-
     testWidgets('should load valid font files', (_) async {
       final List<Uint8List> downloadedFontBytes = await awaitedMap(fontUrls, (String url) async {
         final String generatedCacheKey = cacheKeyFromUrl(url);
@@ -206,7 +201,7 @@ void main() {
       });
 
       final List<Uint8List> fontBytes =
-          fonts!.map((FileInfo font) => font.file.readAsBytesSync()).toList();
+          fonts.map((FileInfo font) => font.file.readAsBytesSync()).toList();
 
       for (int i = 0; i < fontUrls.length; i++) {
         expect(fontBytes[i], orderedEquals(downloadedFontBytes[i]));
@@ -219,7 +214,7 @@ void main() {
   });
 
   group('DynamicCachedFonts.fromFirebase', () {
-    FileInfo? font;
+    late FileInfo font;
     late Reference bucketRef;
 
     setUp(() async {
@@ -235,7 +230,7 @@ void main() {
     });
 
     testWidgets('should parse Firebase Bucket URL', (_) async {
-      expect(font!.originalUrl, equals(await bucketRef.getDownloadURL()));
+      expect(font.originalUrl, equals(await bucketRef.getDownloadURL()));
     });
 
     testWidgets('should load font into cache', (_) async {
@@ -244,7 +239,7 @@ void main() {
 
     testWidgets('should load valid font file from Firebase', (_) async {
       expect(
-        font!.file.readAsBytesSync(),
+        font.file.readAsBytesSync(),
         orderedEquals((await bucketRef.getData())!),
       );
     });
@@ -351,29 +346,28 @@ void main() {
         ));
 
     testWidgets('should return true when font is available in cache', (_) async {
-      expect(
-        await DynamicCachedFonts.canLoadFont(fontUrl),
-        isTrue,
+      await expectLater(
+        DynamicCachedFonts.canLoadFont(fontUrl),
+        completion(isTrue),
       );
     });
 
     testWidgets('should return false when font is not available in cache', (_) async {
+      final FileInfo? font = await cacheManager.getFileFromCache(cacheKey);
+
+      font?.file.deleteSync();
       await cacheManager.removeFile(cacheKey);
 
-      // Temporary hack for file removal
-      Future<void>.delayed(
-        const Duration(milliseconds: 10),
-        () async => expect(
-          await DynamicCachedFonts.canLoadFont(fontUrl),
-          isFalse,
-        ),
+      await expectLater(
+        DynamicCachedFonts.canLoadFont(fontUrl),
+        completion(isFalse),
       );
     });
   });
 
   group('DynamicCachedFonts.loadCachedFont', () {
     late FontLoader fontLoader;
-    FileInfo? font;
+    late FileInfo font;
     late FileInfo downloadedFont;
 
     setUp(() async {
@@ -388,14 +382,10 @@ void main() {
       );
     });
 
-    testWidgets('should load font into cache', (_) async {
-      expect(font, isNotNull);
-    });
-
     testWidgets('should load valid font file', (_) async {
       expect(
         downloadedFont.file.readAsBytesSync(),
-        orderedEquals(font!.file.readAsBytesSync()),
+        orderedEquals(font.file.readAsBytesSync()),
       );
     });
 
@@ -542,13 +532,9 @@ void main() {
 
     await DynamicCachedFonts.removeCachedFont(fontUrl);
 
-    // Temporary hack for file removal
-    Future<void>.delayed(
-      const Duration(milliseconds: 10),
-      () async => expect(
-        await cacheManager.getFileFromCache(cacheKey),
-        isNull,
-      ),
+    await expectLater(
+      cacheManager.getFileFromCache(cacheKey, ignoreMemCache: true),
+      completion(isNull),
     );
   });
 }
