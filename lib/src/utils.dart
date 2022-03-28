@@ -210,9 +210,9 @@ class Utils {
     }
   }
 
-  /// Remove `/` or `:` from url which can cause errors when used as storage paths
-  /// in some operating systems.
-  static String sanitizeUrl(String url) => url.replaceAll(RegExp(r'\/|:'), '');
+  /// Remove reserved characters from url which can cause errors when used as 
+  /// storage paths in some operating systems.
+  static String sanitizeUrl(String url) => url.replaceAll(RegExp(r'[^A-Za-z0-9._-]'), '');
 
   /// Returns the file name of the font or the url if the url cannot be parsed.
   static String getFileNameOrUrl(String url) {
