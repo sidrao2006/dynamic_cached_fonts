@@ -1,6 +1,6 @@
 name: dynamic_cached_fonts
 description: A font loader to download, cache and load web fonts in flutter with support for Firebase Cloud Storage.
-version: 0.4.0
+version: 1.0.0
 repository: https://github.com/sidrao2006/dynamic_cached_fonts
 
 environment:
