@@ -65,7 +65,6 @@ class _DynamicCachedFontsDemo3State extends State<DynamicCachedFontsDemo3> {
   Future<void> handleUseFontPress() async {
     if (await DynamicCachedFonts.canLoadFont(notoSansUrl)) {
       await DynamicCachedFonts.loadCachedFont(notoSansUrl, fontFamily: notoSans);
-      setState(() {});
     } else {
       print('Font not found in cache :(');
       // Font is not in cache...download font or do something else.
