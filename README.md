@@ -102,6 +102,48 @@ DynamicCachedFonts.family(
 
 ![Demo 5]
 
+The package also supports loading the fonts as a `Stream`! The `loadStream` returns a **single subscription stream** which emits the font files.
+
+`loadStream` accepts a callback, `downloadProgressListener`, that is called each time a `DownloadProgress` event is received. This happens only when the font is actually being downloaded from the provided url. Subsequent requests, which are usually served from the cache, do not emit any progress events. If the font file has expired, then the file will be downloaded again for which the progress events will be streamed to `downloadProgressListener`.
+
+When `loadStream` is called with a single font url, then `itemCountProgressListener` will be called only once when the font has been loaded into the engine.
+
+```dart
+final DynamicCachedFonts dynamicCachedFont = DynamicCachedFonts(
+  fontFamily: fontFamilyName,
+  url: fontUrl,
+);
+
+dynamicCachedFont.loadStream(
+  itemCountProgressListener: (double progress, int totalItems, int downloadedItems) {},
+  downloadProgressListener: (DownloadProgress progress) {},
+);
+```
+
+And when `loadStream` is used to load an entire font family, `itemCountProgressListener` will be called once for every font in the family.
+In the example given below, `itemCountProgressListener` will be called 4 times, once after every font has been loaded into the Flutter engine.
+
+```dart
+final DynamicCachedFonts dynamicCachedFont = DynamicCachedFonts.family(
+  urls: <String>[
+    fontFamilyNameBoldUrl,
+    fontFamilyNameItalicUrl,
+    fontFamilyNameRegularUrl,
+    fontFamilyNameThinUrl,
+  ],
+  fontFamily: fontFamilyName,
+);
+
+dynamicCachedFont.loadStream(
+  itemCountProgressListener: (double progress, int totalItems, int downloadedItems) {},
+  downloadProgressListener: (DownloadProgress progress) {},
+);
+```
+
+> Calling `loadStream` more than once throws a `StateError`
+
+![Demo 6]
+
 If you need more control, use the static methods!
 
 #### `cacheFont`
@@ -152,6 +194,44 @@ if(DynamicCachedFonts.canLoadFont(fontUrl)) {
   DynamicCachedFonts.cacheFont(fontUrl);
 }
 ```
+
+#### `cacheFontStream`
+
+`cacheFontStream` is used to download and cache the font. This method is similar to `cacheFont` but returns a **single subscription `Stream`** that emits the progress of the download.
+The download is streamed to the `progressListener` callback which is called each time a `DownloadProgress` event is received. This happens only when the font is actually being downloaded from the provided url. Subsequent requests, which are usually served from the cache, do not emit any progress events. If the font file has expired, then the file will be downloaded again for which the progress events will be streamed to `downloadProgressListener`.
+
+```dart
+DynamicCachedFonts.cacheFontStream(
+  fontUrl,
+  progressListener: (DownloadProgress progress) {},
+);
+```
+
+#### `loadCachedFamilyStream`
+
+Use `canLoadFont` to check whether the font is available in cache.
+
+`loadCachedFamilyStream` is used to load multiple fonts into the Flutter engine, as a single font family. This method is similar to `loadCachedFamily` but returns a stream.
+
+When `loadCachedFamilyStream` is called with a single font url, `progressListener` will be called only once when the font has been loaded into the engine.
+
+And when `loadCachedFamilyStream` is used to load an entire font family, `progressListener` will be called once for every font in the family.
+In the example given below, `progressListener` will be called 4 times, once after every font has been loaded into the Flutter engine.
+
+```dart
+DynamicCachedFonts.loadCachedFamilyStream(
+  <String>[
+    fontFamilyNameBoldUrl,
+    fontFamilyNameItalicUrl,
+    fontFamilyNameRegularUrl,
+    fontFamilyNameThinUrl,
+  ],
+  fontFamily: fontFamilyName,
+  progressListener: (double progress, int totalItems, int downloadedItems) {},
+);
+```
+
+![Demo 7]
 
 #### `removeCachedFont`
 
@@ -206,7 +286,8 @@ To contribute to the package, fork the repository and open a [pull request]!
 [Demo 3]: https://raw.githubusercontent.com/sidrao2006/dynamic_cached_fonts/main/doc/images/demo3.gif
 [Demo 4]: https://raw.githubusercontent.com/sidrao2006/dynamic_cached_fonts/main/doc/images/demo4.gif
 [Demo 5]: https://raw.githubusercontent.com/sidrao2006/dynamic_cached_fonts/main/doc/images/demo5.gif
-
+[Demo 6]: https://raw.githubusercontent.com/sidrao2006/dynamic_cached_fonts/main/doc/images/demo6.gif
+[Demo 7]: https://raw.githubusercontent.com/sidrao2006/dynamic_cached_fonts/main/doc/images/demo7.gif
 
 [install]: https://pub.dev/packages/dynamic_cached_fonts/install
 [issue_tracker]: https://github.com/sidrao2006/dynamic_cached_fonts/issues/new/choose
