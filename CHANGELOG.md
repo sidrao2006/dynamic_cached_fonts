@@ -1,3 +1,19 @@
+# 1.0.0
+
+**Features/Updates**
+
+- Add `DynamicCachedFonts.cacheFontStream` and `DynamicCachedFonts.loadCachedFamilyStream` static methods to cache and load font and return the font files as `Stream`s
+- Add `loadStream` instance method to `DynamicCachedFonts` to load font files as `Stream`s
+
+**Dependency Updates**
+
+- Remove meta from depenencies
+
+**Internal Updates**
+
+- Update `loadCachedFamily`'s implementation
+- Remove all reserved characters from the url to generate safer cache keys
+
 # 0.4.0
 
 **BREAKING CHANGE: `verboseLog`, which was deprecated in v0.2.0, has been removed. `DynamicCachedFonts.toggleVerboseLogging` should be used instead**
