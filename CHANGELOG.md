@@ -5,10 +5,6 @@
 - Add `DynamicCachedFonts.cacheFontStream` and `DynamicCachedFonts.loadCachedFamilyStream` static methods to cache and load font and return the font files as `Stream`s
 - Add `loadStream` instance method to `DynamicCachedFonts` to load font files as `Stream`s
 
-**Dependency Updates**
-
-- Remove meta from depenencies
-
 **Internal Updates**
 
 - Update `loadCachedFamily`'s implementation
