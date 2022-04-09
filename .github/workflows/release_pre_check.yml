@@ -1,6 +1,10 @@
 name: Release pre-check
 on:
-  - workflow_dispatch
+  pull_request_target:
+    types:
+      - synchronize
+      - labeled
+  workflow_dispatch:
 
 jobs:
   pub_release_pre_check:
