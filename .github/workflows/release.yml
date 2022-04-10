@@ -16,6 +16,7 @@ jobs:
     uses: sidrao2006/workflows/.github/workflows/pub_release.yml@v1
     with:
       environment: Release
+      job_name: Release and Publish Package # same as jobs.<job_id>.name
     secrets:
       PUB_CREDENTIALS_ACCESS_TOKEN: ${{ secrets.PUB_CREDENTIALS_ACCESS_TOKEN }}
       PUB_CREDENTIALS_REFRESH_TOKEN: ${{ secrets.PUB_CREDENTIALS_REFRESH_TOKEN }}
