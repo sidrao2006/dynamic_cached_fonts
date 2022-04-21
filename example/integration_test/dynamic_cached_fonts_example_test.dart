@@ -533,11 +533,8 @@ void main() {
     await DynamicCachedFonts.removeCachedFont(fontUrl);
 
     await expectLater(
-      cacheManager.getFileFromCache(cacheKey, ignoreMemCache: true),
-      completion(predicate<FileInfo?>(
-        (font) => font == null || !font.file.existsSync(),
-        'is either null or whose associated file does not exist',
-      )),
+      cacheManager.store.retrieveCacheData(cacheKey, ignoreMemCache: true),
+      completion(isNull),
     );
   });
 }
