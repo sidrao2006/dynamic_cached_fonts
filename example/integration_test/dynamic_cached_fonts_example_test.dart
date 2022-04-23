@@ -534,7 +534,7 @@ void main() {
 
     await expectLater(
       cacheManager.store.retrieveCacheData(cacheKey, ignoreMemCache: true),
-      completion(isNull),
+      completion(predicate((dynamic obj) => obj == null || obj.id == null)),
     );
   });
 }
