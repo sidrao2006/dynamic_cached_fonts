@@ -219,9 +219,7 @@ void main() {
     late Reference bucketRef;
 
     setUp(() async {
-      await Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform
-      );
+      await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
       font = (await DynamicCachedFonts.fromFirebase(
         bucketUrl: firebaseFontUrl,

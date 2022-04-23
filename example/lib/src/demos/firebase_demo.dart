@@ -17,9 +17,7 @@ class DynamicCachedFontsDemo4 extends StatefulWidget {
 class _DynamicCachedFontsDemo4State extends State<DynamicCachedFontsDemo4> {
   @override
   void initState() {
-    Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform
-    ).then(
+    Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform).then(
       (_) => DynamicCachedFonts.fromFirebase(
         bucketUrl: firaCodeUrl,
         fontFamily: firaCode,
