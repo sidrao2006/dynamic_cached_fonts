@@ -1,5 +1,6 @@
 import 'package:dynamic_cached_fonts/dynamic_cached_fonts.dart';
 import 'package:dynamic_cached_fonts_example/constants.dart';
+import 'package:dynamic_cached_fonts_example/firebase_options.dart';
 import 'package:dynamic_cached_fonts_example/src/demos/multi_font_loading_demo.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,9 @@ class DynamicCachedFontsDemo4 extends StatefulWidget {
 class _DynamicCachedFontsDemo4State extends State<DynamicCachedFontsDemo4> {
   @override
   void initState() {
-    Firebase.initializeApp().then(
+    Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform
+    ).then(
       (_) => DynamicCachedFonts.fromFirebase(
         bucketUrl: firaCodeUrl,
         fontFamily: firaCode,

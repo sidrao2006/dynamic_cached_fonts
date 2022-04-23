@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:dynamic_cached_fonts/dynamic_cached_fonts.dart';
 import 'package:dynamic_cached_fonts_example/constants.dart';
+import 'package:dynamic_cached_fonts_example/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart' show Firebase;
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -218,7 +219,9 @@ void main() {
     late Reference bucketRef;
 
     setUp(() async {
-      await Firebase.initializeApp();
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform
+      );
 
       font = (await DynamicCachedFonts.fromFirebase(
         bucketUrl: firebaseFontUrl,

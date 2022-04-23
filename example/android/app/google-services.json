@@ -30,6 +30,13 @@
             {
               "client_id": "980764920917-qpdhk0nhf534aijh3803r66pm4m1nm6j.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "980764920917-08qdrhjipakfo28ua1p26bmdas0ankrc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.aneesh.dynamicCachedFontsExample"
+              }
             }
           ]
         }
