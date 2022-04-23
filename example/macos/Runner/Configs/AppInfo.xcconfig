@@ -11,4 +11,4 @@ PRODUCT_NAME = dynamic_cached_fonts_example
 PRODUCT_BUNDLE_IDENTIFIER = com.aneesh.dynamicCachedFontsExample
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2021 com.aneesh. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2022 com.aneesh. All rights reserved.

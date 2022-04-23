@@ -93,7 +93,7 @@ BEGIN
             VALUE "FileDescription", "An example app to demonstrate the use of dynamic_cached_fonts." "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "dynamic_cached_fonts_example" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2021 com.aneesh. All rights reserved." "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2022 com.aneesh. All rights reserved." "\0"
             VALUE "OriginalFilename", "dynamic_cached_fonts_example.exe" "\0"
             VALUE "ProductName", "dynamic_cached_fonts_example" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
