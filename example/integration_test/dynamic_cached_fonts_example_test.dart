@@ -526,17 +526,6 @@ void main() {
       expect(progressListener.last, orderedEquals([1.0, fontUrls.length, fontUrls.length]));
     });
   });
-
-  testWidgets('DynamicCachedFonts.removeCachedFont should remove the font from cache', (_) async {
-    await cacheManager.downloadFile(fontUrl, key: cacheKey);
-
-    await DynamicCachedFonts.removeCachedFont(fontUrl);
-
-    await expectLater(
-      cacheManager.getFileFromCache(cacheKey, ignoreMemCache: true),
-      completion(isNull),
-    );
-  });
 }
 
 // Helpers
