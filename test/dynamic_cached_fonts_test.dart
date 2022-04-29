@@ -1,6 +1,10 @@
 import 'package:dynamic_cached_fonts/dynamic_cached_fonts.dart';
 import 'package:dynamic_cached_fonts/src/utils.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+import 'package:flutter_cache_manager/src/cache_store.dart';
+
+import 'dynamic_cached_fonts_test.mocks.dart';
 
 void main() {
   const String cacheKey = 'DynamicCachedFontsTest';
@@ -161,5 +165,16 @@ void main() {
     ];
 
     expect(mockUrls.map(Utils.getFileNameOrUrl), orderedEquals(expectedFileNames));
+  });
+
+  test('DynamicCachedFonts.removeCachedFont should remove the font from cache', () async {
+    final cacheManager = MockCacheManager();
+    when(cacheManager.store).thenReturn(CacheStore(Config(cacheKey)));
+
+    DynamicCachedFonts.custom(cacheManager: cacheManager);
+
+    await DynamicCachedFonts.removeCachedFont(mockUrl);
+
+    verify(cacheManager.removeFile(cacheKeyFromUrl(mockUrl))).called(1);
   });
 }
