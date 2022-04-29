@@ -109,6 +109,14 @@ class DynamicCachedFontsCacheManager {
     _cacheManagers[_customCacheKey!] = cacheManager;
   }
 
+  @visibleForTesting
+
+  /// Unsets the custom instance of [CacheManager] in [_cacheManagers].
+  static unsetCustomCacheManager() {
+    _cacheManagers.remove(_customCacheKey);
+    _customCacheKey = null;
+  }
+
   /// Returns a custom [CacheManager], if present, or
   static CacheManager getCacheManager(String cacheKey) =>
       getCustomCacheManager() ?? _cacheManagers[cacheKey] ?? defaultCacheManager;

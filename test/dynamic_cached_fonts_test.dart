@@ -19,6 +19,8 @@ void main() {
     'https://example.com/fontTest7.ttf#test?v=1',
   ];
 
+  tearDown(() => DynamicCachedFontsCacheManager.unsetCustomCacheManager());
+
   test('Default constructor applies default values', () {
     final DynamicCachedFonts fontLoader =
         DynamicCachedFonts(url: mockUrl, fontFamily: mockFontFamily);
@@ -70,14 +72,13 @@ void main() {
     });
 
     test('does not replace the cache manager if force is false', () {
+      final CacheManager cacheManager = CacheManager(Config(cacheKey));
       final CacheManager newCacheManager = CacheManager(Config('$cacheKey-new'));
 
+      DynamicCachedFonts.custom(cacheManager: cacheManager);
       DynamicCachedFonts.custom(cacheManager: newCacheManager);
 
-      expect(
-        DynamicCachedFontsCacheManager.getCustomCacheManager(),
-        isNot(equals(newCacheManager)),
-      );
+      expect(DynamicCachedFontsCacheManager.getCustomCacheManager(), equals(cacheManager));
     });
 
     test('replaces the cache manager if force is true', () {
