@@ -110,6 +110,7 @@ class DynamicCachedFontsCacheManager {
   }
 
   @visibleForTesting
+
   /// Unsets the custom instance of [CacheManager] in [_cacheManagers].
   static unsetCustomCacheManager() {
     _cacheManagers.remove(_customCacheKey);
