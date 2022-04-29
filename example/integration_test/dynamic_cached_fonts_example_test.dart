@@ -532,9 +532,9 @@ void main() {
 
     await DynamicCachedFonts.removeCachedFont(fontUrl);
 
-    await expectLater(
-      cacheManager.store.retrieveCacheData(cacheKey, ignoreMemCache: true),
-      completion(predicate((dynamic obj) => obj == null || obj.id == null)),
+    expect(
+      await cacheManager.store.retrieveCacheData(cacheKey, ignoreMemCache: true),
+      predicate((dynamic obj) => obj == null || obj.id == null),
     );
   });
 }
