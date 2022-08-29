@@ -10,7 +10,7 @@ dependencies:
 
   dynamic_cached_fonts:
     path: ../
-  firebase_core: ^1.0.1
+  firebase_core: ^1.21.1
   async: ^2.8.2
 
 dev_dependencies:
