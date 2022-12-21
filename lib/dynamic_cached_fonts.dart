@@ -2,8 +2,6 @@
 /// It can be easily fetched from cache and loaded on demand.
 library dynamic_cached_fonts;
 
-import 'dart:typed_data';
-
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';

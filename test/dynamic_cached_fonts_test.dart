@@ -1,5 +1,6 @@
 import 'package:dynamic_cached_fonts/dynamic_cached_fonts.dart';
 import 'package:dynamic_cached_fonts/src/utils.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_cache_manager/src/cache_store.dart';
@@ -23,7 +24,8 @@ void main() {
     'https://example.com/fontTest7.ttf#test?v=1',
   ];
 
-  tearDown(() => DynamicCachedFontsCacheManager.unsetCustomCacheManager());
+  setUp(WidgetsFlutterBinding.ensureInitialized);
+  tearDown(DynamicCachedFontsCacheManager.unsetCustomCacheManager);
 
   test('Default constructor applies default values', () {
     final DynamicCachedFonts fontLoader =
@@ -46,7 +48,8 @@ void main() {
   });
 
   group('DynamicCachedFonts.toggleVerboseLogging', () {
-    test('should have logging disabled by default', () => expect(Utils.shouldVerboseLog, isFalse));
+    test('should have logging disabled by default',
+        () => expect(Utils.shouldVerboseLog, isFalse));
 
     test('should enable logging when toggled', () {
       DynamicCachedFonts.toggleVerboseLogging(true);
@@ -64,7 +67,8 @@ void main() {
   group('DynamicCachedFonts.custom', () {
     test(
       'should not have a custom cache manager by default',
-      () => expect(DynamicCachedFontsCacheManager.getCustomCacheManager(), isNull),
+      () => expect(
+          DynamicCachedFontsCacheManager.getCustomCacheManager(), isNull),
     );
 
     test('sets a custom cache manager', () {
@@ -72,25 +76,30 @@ void main() {
 
       DynamicCachedFonts.custom(cacheManager: cacheManager);
 
-      expect(DynamicCachedFontsCacheManager.getCustomCacheManager(), equals(cacheManager));
+      expect(DynamicCachedFontsCacheManager.getCustomCacheManager(),
+          equals(cacheManager));
     });
 
     test('does not replace the cache manager if force is false', () {
       final CacheManager cacheManager = CacheManager(Config(cacheKey));
-      final CacheManager newCacheManager = CacheManager(Config('$cacheKey-new'));
+      final CacheManager newCacheManager =
+          CacheManager(Config('$cacheKey-new'));
 
       DynamicCachedFonts.custom(cacheManager: cacheManager);
       DynamicCachedFonts.custom(cacheManager: newCacheManager);
 
-      expect(DynamicCachedFontsCacheManager.getCustomCacheManager(), equals(cacheManager));
+      expect(DynamicCachedFontsCacheManager.getCustomCacheManager(),
+          equals(cacheManager));
     });
 
     test('replaces the cache manager if force is true', () {
-      final CacheManager newCacheManager = CacheManager(Config('$cacheKey-force'));
+      final CacheManager newCacheManager =
+          CacheManager(Config('$cacheKey-force'));
 
       DynamicCachedFonts.custom(cacheManager: newCacheManager, force: true);
 
-      expect(DynamicCachedFontsCacheManager.getCustomCacheManager(), equals(newCacheManager));
+      expect(DynamicCachedFontsCacheManager.getCustomCacheManager(),
+          equals(newCacheManager));
     });
   });
 
@@ -114,25 +123,32 @@ void main() {
 
     test('uses the correct cache key for the default instance', () {
       const String defaultCacheKey = 'DynamicCachedFontsFontCacheKey';
-      final CacheManager defaultCacheManager = DynamicCachedFontsCacheManager.defaultCacheManager;
+      final CacheManager defaultCacheManager =
+          DynamicCachedFontsCacheManager.defaultCacheManager;
 
       expect(defaultCacheManager.store.storeKey, equals(defaultCacheKey));
     });
 
     test('getCacheManager returns the default cache manager', () {
-      final cacheManager = DynamicCachedFontsCacheManager.getCacheManager(cacheKey);
+      final cacheManager =
+          DynamicCachedFontsCacheManager.getCacheManager(cacheKey);
 
-      expect(cacheManager, equals(DynamicCachedFontsCacheManager.defaultCacheManager));
+      expect(cacheManager,
+          equals(DynamicCachedFontsCacheManager.defaultCacheManager));
     });
 
-    test('handleCacheManager creates a new instance for non-default values', () {
+    test('handleCacheManager creates a new instance for non-default values',
+        () {
       // A new instance of CacheManager is created only if the default values aren't used.
-      DynamicCachedFontsCacheManager.handleCacheManager(cacheKey, const Duration(days: 366), 201);
+      DynamicCachedFontsCacheManager.handleCacheManager(
+          cacheKey, const Duration(days: 366), 201);
 
-      final cacheManager = DynamicCachedFontsCacheManager.getCacheManager(cacheKey);
+      final cacheManager =
+          DynamicCachedFontsCacheManager.getCacheManager(cacheKey);
 
       expect(cacheManager.store.storeKey, equals(cacheKey));
-      expect(cacheManager, isNot(equals(DynamicCachedFontsCacheManager.defaultCacheManager)));
+      expect(cacheManager,
+          isNot(equals(DynamicCachedFontsCacheManager.defaultCacheManager)));
     });
 
     test('custom cache managers can be set and retrieved', () {
@@ -141,14 +157,17 @@ void main() {
       final CacheManager cacheManager = CacheManager(Config(cacheKey));
       DynamicCachedFontsCacheManager.setCustomCacheManager(cacheManager);
 
-      expect(DynamicCachedFontsCacheManager.getCustomCacheManager(), equals(cacheManager));
+      expect(DynamicCachedFontsCacheManager.getCustomCacheManager(),
+          equals(cacheManager));
     });
 
-    test('getCacheManager returns the custom cache manager by default, if set', () {
+    test('getCacheManager returns the custom cache manager by default, if set',
+        () {
       final CacheManager cacheManager = CacheManager(Config(cacheKey));
       DynamicCachedFontsCacheManager.setCustomCacheManager(cacheManager);
 
-      expect(DynamicCachedFontsCacheManager.getCacheManager(cacheKey), equals(cacheManager));
+      expect(DynamicCachedFontsCacheManager.getCacheManager(cacheKey),
+          equals(cacheManager));
     });
   });
 
@@ -164,10 +183,12 @@ void main() {
       'fontTest7.ttf',
     ];
 
-    expect(mockUrls.map(Utils.getFileNameOrUrl), orderedEquals(expectedFileNames));
+    expect(
+        mockUrls.map(Utils.getFileNameOrUrl), orderedEquals(expectedFileNames));
   });
 
-  test('DynamicCachedFonts.removeCachedFont should remove the font from cache', () async {
+  test('DynamicCachedFonts.removeCachedFont should remove the font from cache',
+      () async {
     final cacheManager = MockCacheManager();
     when(cacheManager.store).thenReturn(CacheStore(Config(cacheKey)));
 
