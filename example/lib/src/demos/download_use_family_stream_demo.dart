@@ -9,7 +9,7 @@ class DynamicCachedFontsDemo6 extends StatefulWidget {
   const DynamicCachedFontsDemo6({Key? key}) : super(key: key);
 
   @override
-  _DynamicCachedFontsDemo6State createState() => _DynamicCachedFontsDemo6State();
+  State<DynamicCachedFontsDemo6> createState() => _DynamicCachedFontsDemo6State();
 }
 
 class _DynamicCachedFontsDemo6State extends State<DynamicCachedFontsDemo6> {
