@@ -1,4 +1,4 @@
-part of dynamic_cached_fonts;
+part of '../dynamic_cached_fonts.dart';
 
 /// A more customizable implementation of [DynamicCachedFonts] which uses
 /// multiple static methods to download, cache, load and remove font assets.
