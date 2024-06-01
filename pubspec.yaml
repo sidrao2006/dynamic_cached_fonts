@@ -4,18 +4,18 @@ version: 1.0.0
 repository: https://github.com/sidrao2006/dynamic_cached_fonts
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
+  sdk: '>=2.12.0 <4.0.0'
   flutter: ">=1.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  firebase_storage: ">=8.0.0 <11.0.0"
+  firebase_storage: ">=8.0.0 <12.0.0"
   flutter_cache_manager: ^3.1.2
   meta: ^1.3.0
 
 dev_dependencies:
-  flutter_lints: ^1.0.3
+  flutter_lints: ^4.0.0
   flutter_test:
     sdk: flutter
   mockito: ^5.1.0
