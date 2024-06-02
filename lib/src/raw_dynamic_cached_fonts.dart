@@ -32,9 +32,9 @@ abstract class RawDynamicCachedFonts {
     required CacheManager cacheManager,
     bool force = false,
   }) {
-    if (force)
+    if (force) {
       DynamicCachedFontsCacheManager.setCustomCacheManager(cacheManager);
-    else if (DynamicCachedFontsCacheManager.getCustomCacheManager() == null)
+    } else if (DynamicCachedFontsCacheManager.getCustomCacheManager() == null)
       DynamicCachedFontsCacheManager.setCustomCacheManager(cacheManager);
   }
 
@@ -198,7 +198,9 @@ abstract class RawDynamicCachedFonts {
     final FileInfo? font =
         await DynamicCachedFontsCacheManager.getCacheManager(cacheKey).getFileFromCache(cacheKey);
 
-    if (font == null) throw StateError('Font should already be cached to be loaded');
+    if (font == null) {
+      throw StateError('Font should already be cached to be loaded');
+    }
 
     final Uint8List fontBytes = await font.file.readAsBytes();
 
@@ -251,7 +253,9 @@ abstract class RawDynamicCachedFonts {
       final FileInfo? font =
           await DynamicCachedFontsCacheManager.getCacheManager(cacheKey).getFileFromCache(cacheKey);
 
-      if (font == null) throw StateError('Font should already be cached to be loaded');
+      if (font == null) {
+        throw StateError('Font should already be cached to be loaded');
+      }
 
       fonts.add(font);
 
@@ -314,7 +318,9 @@ abstract class RawDynamicCachedFonts {
       final FileInfo? font =
           await DynamicCachedFontsCacheManager.getCacheManager(cacheKey).getFileFromCache(cacheKey);
 
-      if (font == null) throw StateError('Font should already be cached to be loaded');
+      if (font == null) {
+        throw StateError('Font should already be cached to be loaded');
+      }
 
       final Uint8List fontBytes = await font.file.readAsBytes();
       final ByteData bytes = ByteData.view(fontBytes.buffer);
