@@ -7,7 +7,7 @@
 	<key>classes</key>
 	<dict/>
 	<key>objectVersion</key>
-	<string>50</string>
+	<string>54</string>
 	<key>objects</key>
 	<dict>
 		<key>03B1887C98F81F2E2631C146</key>
@@ -246,12 +246,16 @@
 		</dict>
 		<key>3B06AD1E1E4923F5004D2608</key>
 		<dict>
+			<key>alwaysOutOfDate</key>
+			<string>1</string>
 			<key>buildActionMask</key>
 			<string>2147483647</string>
 			<key>files</key>
 			<array/>
 			<key>inputPaths</key>
-			<array/>
+			<array>
+				<string>${TARGET_BUILD_DIR}/${INFOPLIST_PATH}</string>
+			</array>
 			<key>isa</key>
 			<string>PBXShellScriptBuildPhase</string>
 			<key>name</key>
@@ -751,6 +755,8 @@ echo "SUCCESS" &gt; "${SCRIPT_OUTPUT_FILE_0}"
 		</dict>
 		<key>9740EEB61CF901F6004384FC</key>
 		<dict>
+			<key>alwaysOutOfDate</key>
+			<string>1</string>
 			<key>buildActionMask</key>
 			<string>2147483647</string>
 			<key>files</key>
@@ -813,7 +819,7 @@ echo "SUCCESS" &gt; "${SCRIPT_OUTPUT_FILE_0}"
 			<key>attributes</key>
 			<dict>
 				<key>LastUpgradeCheck</key>
-				<string>1300</string>
+				<string>1510</string>
 				<key>ORGANIZATIONNAME</key>
 				<string></string>
 				<key>TargetAttributes</key>
