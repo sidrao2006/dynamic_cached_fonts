@@ -34,8 +34,9 @@ abstract class RawDynamicCachedFonts {
   }) {
     if (force) {
       DynamicCachedFontsCacheManager.setCustomCacheManager(cacheManager);
-    } else if (DynamicCachedFontsCacheManager.getCustomCacheManager() == null)
+    } else if (DynamicCachedFontsCacheManager.getCustomCacheManager() == null) {
       DynamicCachedFontsCacheManager.setCustomCacheManager(cacheManager);
+    }
   }
 
   /// Downloads and caches font from the [url] with the given configuration.
@@ -149,10 +150,11 @@ abstract class RawDynamicCachedFonts {
       } else if (result is DownloadProgress) {
         progressListener?.call(result);
 
-        if (result.progress != null)
+        if (result.progress != null) {
           devLog([
             'Download progress: ${(result.progress! * 100).toStringAsFixed(1)}% for ${Utils.getFileNameOrUrl(result.originalUrl)}'
           ]);
+        }
       }
     }
   }
