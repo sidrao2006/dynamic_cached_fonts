@@ -82,7 +82,7 @@ void main() {
       robotoThinUrl,
     ];
 
-    setUp(() async {
+    setUp(() {
       cachedFontLoader = DynamicCachedFonts.family(
         urls: fontUrls,
         fontFamily: firaSans,
