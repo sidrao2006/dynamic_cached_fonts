@@ -22,11 +22,11 @@ class MockPathProviderPlatform extends Fake
     implements PathProviderPlatform {
   @override
   Future<String?> getTemporaryPath() async {
-    return '/mocked/temp';
+    return './mocked/temp';
   }
 
   @override
   Future<String?> getApplicationSupportPath() async {
-    return '/mocked/app_support';
+    return './mocked/app_support';
   }
 }
