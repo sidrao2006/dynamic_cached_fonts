@@ -94,7 +94,7 @@ void main() {
 
       final Stream<String> fontFileNameStream = fontStream.map((font) => font.file.basename);
 
-      await expectLater(fontFileNameStream, emitsThrough(endsWith('ttf')));
+      await expectLater(fontFileNameStream, emitsInOrder(List.generate(4, (e) => endsWith('ttf'))));
     });
 
     testWidgets('should allow font to be loaded only once', (_) async {
@@ -142,7 +142,7 @@ void main() {
         progressListener,
         anyElement(
           predicate<DownloadProgress>(
-            (progress) => progress.progress != null && progress.progress! > 0,
+            (progress) => progress.downloaded > 0,
             'has a progress value greater than 0',
           ),
         ),
@@ -332,7 +332,7 @@ void main() {
         progressListener,
         anyElement(
           predicate<DownloadProgress>(
-            (progress) => progress.progress != null && progress.progress! > 0,
+            (progress) => progress.downloaded > 0,
             'has a progress value greater than 0',
           ),
         ),
@@ -479,7 +479,7 @@ void main() {
     testWidgets('should load font files with a valid extension', (_) async {
       final Stream<String> fontFileNameStream = fontStream.map((font) => font.file.basename);
 
-      await expectLater(fontFileNameStream, emitsThrough(endsWith('ttf')));
+      await expectLater(fontFileNameStream, emitsInOrder(List.generate(4, (e) => endsWith('ttf'))));
     });
 
     testWidgets('should load valid font files', (_) async {
