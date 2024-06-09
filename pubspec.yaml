@@ -27,3 +27,4 @@ false_secrets:
   - /example/ios/GoogleService-Info.plist
   - /example/macos/GoogleService-Info.plist
   - /example/web/index.html
+  - /example/lib/firebase_options.dart
