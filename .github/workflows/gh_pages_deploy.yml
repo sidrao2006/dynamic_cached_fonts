@@ -16,7 +16,7 @@ concurrency:
 jobs:
   build-and-deploy:
     name: Build and Deploy Example to Github Pages
-    uses: sidrao2006/workflows/.github/workflows/flutter_gh_pages_deploy.yml@v1
+    uses: sidrao2006/workflows/.github/workflows/flutter_gh_pages_deploy.yml@v2
     with:
       dir: example
       environment: Example Github Pages

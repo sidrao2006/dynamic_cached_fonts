@@ -9,7 +9,7 @@ on:
 jobs:
   chrome_integration_test:
     name: Web Integration Test
-    uses: sidrao2006/workflows/.github/workflows/flutter_web_integration_test.yml@v1
+    uses: sidrao2006/workflows/.github/workflows/flutter_web_integration_test.yml@v2
     with:
       dir: example
       environment: Actions Integration Test
@@ -19,7 +19,7 @@ jobs:
 
   android_integration_test:
     name: Android Integration Test (Firebase Test Lab)
-    uses: sidrao2006/workflows/.github/workflows/flutter_android_integration_test.yml@v1
+    uses: sidrao2006/workflows/.github/workflows/flutter_android_integration_test.yml@v2
     with:
       dir: example
       environment: Test Lab Integration Test
@@ -32,7 +32,7 @@ jobs:
 
   ios_integration_test:
     name: iOS Integration Test
-    uses: sidrao2006/workflows/.github/workflows/flutter_ios_integration_test.yml@v1
+    uses: sidrao2006/workflows/.github/workflows/flutter_ios_integration_test.yml@v2
     with:
       dir: example
       environment: Actions Integration Test
@@ -42,7 +42,7 @@ jobs:
 
   desktop_integration_test:
     name: Desktop Integration Test
-    uses: sidrao2006/workflows/.github/workflows/flutter_desktop_integration_test.yml@v1
+    uses: sidrao2006/workflows/.github/workflows/flutter_desktop_integration_test.yml@v2
     with:
       dir: example
       environment: Actions Integration Test

@@ -10,7 +10,7 @@ class DynamicCachedFontsDemo5 extends StatefulWidget {
   const DynamicCachedFontsDemo5({Key? key}) : super(key: key);
 
   @override
-  _DynamicCachedFontsDemo5State createState() => _DynamicCachedFontsDemo5State();
+  State<DynamicCachedFontsDemo5> createState() => _DynamicCachedFontsDemo5State();
 }
 
 class _DynamicCachedFontsDemo5State extends State<DynamicCachedFontsDemo5> {
@@ -45,24 +45,24 @@ class _DynamicCachedFontsDemo5State extends State<DynamicCachedFontsDemo5> {
             'The text is being displayed in $firaSans bold which is being dynamically loaded cached.',
             fontFamily: firaSans,
             fontWeight: FontWeight.bold,
-            fontSize: Theme.of(context).textTheme.headline6!.fontSize,
+            fontSize: Theme.of(context).textTheme.titleMedium!.fontSize,
           ),
           DisplayText(
             'The text is being displayed in $firaSans italic which is being dynamically loaded cached.',
             fontFamily: firaSans,
             fontStyle: FontStyle.italic,
-            fontSize: Theme.of(context).textTheme.headline6!.fontSize,
+            fontSize: Theme.of(context).textTheme.titleMedium!.fontSize,
           ),
           DisplayText(
             'The text is being displayed in $firaSans regular which is being dynamically loaded cached.',
             fontFamily: firaSans,
-            fontSize: Theme.of(context).textTheme.headline6!.fontSize,
+            fontSize: Theme.of(context).textTheme.titleMedium!.fontSize,
           ),
           DisplayText(
             'The text is being displayed in $firaSans thin which is being dynamically loaded cached.',
             fontFamily: firaSans,
             fontWeight: FontWeight.w100,
-            fontSize: Theme.of(context).textTheme.headline6!.fontSize,
+            fontSize: Theme.of(context).textTheme.titleMedium!.fontSize,
           ),
         ],
       ),

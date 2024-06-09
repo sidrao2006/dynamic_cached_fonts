@@ -10,4 +10,4 @@ on:
 jobs:
   verify_formatting:
     name: Verify Formatting
-    uses: sidrao2006/workflows/.github/workflows/verify_dart_formatting.yml@v1
+    uses: sidrao2006/workflows/.github/workflows/verify_dart_formatting.yml@v2

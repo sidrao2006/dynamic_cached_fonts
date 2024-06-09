@@ -22,7 +22,7 @@ class CustomButton extends StatelessWidget {
           Icon(icon ?? Icons.download_rounded),
           Text(
             title,
-            style: Theme.of(context).textTheme.button,
+            style: Theme.of(context).textTheme.labelLarge,
           )
         ],
       ),

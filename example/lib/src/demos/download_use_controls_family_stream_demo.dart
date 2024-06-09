@@ -10,7 +10,7 @@ class DynamicCachedFontsDemo7 extends StatefulWidget {
   const DynamicCachedFontsDemo7({Key? key}) : super(key: key);
 
   @override
-  _DynamicCachedFontsDemo7State createState() => _DynamicCachedFontsDemo7State();
+  State<DynamicCachedFontsDemo7> createState() => _DynamicCachedFontsDemo7State();
 }
 
 class _DynamicCachedFontsDemo7State extends State<DynamicCachedFontsDemo7> {
@@ -53,24 +53,24 @@ class _DynamicCachedFontsDemo7State extends State<DynamicCachedFontsDemo7> {
           DisplayText(
             'The text is being displayed in the default flutter font which is ${DefaultTextStyle.of(context).style.fontFamily}.',
             fontFamily: '',
-            fontSize: Theme.of(context).textTheme.headline6!.fontSize,
+            fontSize: Theme.of(context).textTheme.titleMedium!.fontSize,
           ),
           DisplayText(
             'To download $mononoki bold, click the download button above ☝️.',
             fontFamily: mononoki,
             fontWeight: FontWeight.bold,
-            fontSize: Theme.of(context).textTheme.headline6!.fontSize,
+            fontSize: Theme.of(context).textTheme.titleMedium!.fontSize,
           ),
           DisplayText(
             'To download $mononoki italic, click the download button above ☝️.',
             fontFamily: mononoki,
             fontStyle: FontStyle.italic,
-            fontSize: Theme.of(context).textTheme.headline6!.fontSize,
+            fontSize: Theme.of(context).textTheme.titleMedium!.fontSize,
           ),
           DisplayText(
             'To download $mononoki, click the download button above ☝️.',
             fontFamily: mononoki,
-            fontSize: Theme.of(context).textTheme.headline6!.fontSize,
+            fontSize: Theme.of(context).textTheme.titleMedium!.fontSize,
           ),
           ...showLoaders()
         ],

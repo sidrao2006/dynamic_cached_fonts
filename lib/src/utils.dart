@@ -1,5 +1,4 @@
 import 'dart:developer' as dev;
-import 'dart:typed_data';
 
 import 'package:flutter_cache_manager/file.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -163,7 +162,9 @@ class _FontFileExtensionManager {
     String fontExtension;
 
     final int index = path.lastIndexOf('.');
-    if (index < 0 || index + 1 >= path.length) fontExtension = '';
+    if (index < 0 || index + 1 >= path.length) {
+      fontExtension = '';
+    }
     fontExtension = path.substring(index + 1).toLowerCase();
 
     final List<int> headerBytes = fileBytes.sublist(0, 5).toList();
@@ -240,7 +241,9 @@ class Utils {
   static String getFileNameOrUrl(String url) {
     final int index = url.lastIndexOf('/');
     final int? endIndex = url.contains(RegExp(r'\?|#')) ? url.indexOf(RegExp(r'\?|#')) : null;
-    if (index < 0 || index + 1 >= url.length) return url;
+    if (index < 0 || index + 1 >= url.length) {
+      return url;
+    }
     return url.substring(index + 1, endIndex);
   }
 }

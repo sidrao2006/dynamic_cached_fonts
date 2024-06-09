@@ -1,5 +1,6 @@
 import 'package:dynamic_cached_fonts/dynamic_cached_fonts.dart';
 import 'package:dynamic_cached_fonts/src/utils.dart';
+import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_cache_manager/src/cache_store.dart';
@@ -23,7 +24,10 @@ void main() {
     'https://example.com/fontTest7.ttf#test?v=1',
   ];
 
+  setUp(TestWidgetsFlutterBinding.ensureInitialized);
   tearDown(() => DynamicCachedFontsCacheManager.unsetCustomCacheManager());
+
+  setUpAll(() => PathProviderPlatform.instance = MockPathProviderPlatform());
 
   test('Default constructor applies default values', () {
     final DynamicCachedFonts fontLoader =
