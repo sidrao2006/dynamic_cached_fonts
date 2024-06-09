@@ -5,7 +5,7 @@ on:
 jobs:
   triage:
     name: Add PR labels
-    uses: sidrao2006/workflows/.github/workflows/pr_labeler.yml@v1
+    uses: sidrao2006/workflows/.github/workflows/pr_labeler.yml@v2
     with:
       revert_label: 'revert :rewind:'
       release_label: 'release :tada:'

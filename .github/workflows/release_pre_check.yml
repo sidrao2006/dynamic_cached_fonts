@@ -10,7 +10,7 @@ jobs:
   pub_release_pre_check:
     name: Pub Release pre-check
     if: contains(github.event.pull_request.labels.*.name, 'release :tada:')
-    uses: sidrao2006/workflows/.github/workflows/pub_pre_check.yml@v1
+    uses: sidrao2006/workflows/.github/workflows/pub_pre_check.yml@v2
 
     permissions:
       checks: write
