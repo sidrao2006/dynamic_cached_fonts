@@ -1,3 +1,14 @@
+# 1.1.0
+
+**Dependency Updates**
+
+- Added support for v11.x of `firebase_storage`. Minimum supported version continues to be v8.0.0
+- Added support for the v3.x of dart sdk. Minimum supported version continues to be v2.12.0
+
+**Internal Updates**
+
+- Add `DynamicCachedFontsCacheManager.unsetCustomCacheManager` method to unset custom cache managers used for testing
+
 # 1.0.0
 
 **Features/Updates**
