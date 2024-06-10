@@ -1,3 +1,10 @@
+# 1.2.0
+
+**Dependency Updates**
+
+- Added support for v12.x of `firebase_storage`. Minimum supported version continues to be v8.0.0
+
+
 # 1.1.0
 
 **Dependency Updates**
