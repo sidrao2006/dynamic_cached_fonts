@@ -609,4 +609,6 @@ class DynamicCachedFonts {
       overrideLoggerConfig: true,
     );
   }
+
+  static Future<void> runMigrationTool() => migrationTool();
 }

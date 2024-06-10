@@ -28,15 +28,13 @@ typedef DownloadProgressListener = void Function(DownloadProgress progress);
 
 /// ### MIGRATION TOOL FOR v2
 ///
-/// Deletes any cache files downloaded using the default cache manager. 
+/// Deletes any cache files downloaded using the default cache manager.
 ///
 /// **WARNING: Any fonts downloaded using v1 of this package ( without a custom
 /// `cacheStalePeriod` or `maxCacheObjects` ) will be deleted.**
 ///
 /// v2 creates separate folders for each font file.
-void migrationTool() => CacheManager(Config('DynamicCachedFontsFontCacheKey'))
-  ..emptyCache()
-  ..dispose();
+Future<void> migrationTool() => CacheManager(Config('DynamicCachedFontsFontCacheKey')).emptyCache();
 
 /// Gets the sanitized url from [url] which is used as `cacheKey` when
 /// downloading, caching or loading.
