@@ -610,5 +610,21 @@ class DynamicCachedFonts {
     );
   }
 
+  /// ### MIGRATION TOOL FOR v2
+  ///
+  /// Deletes any cache files downloaded using the default cache manager.
+  /// v2 creates separate folders for each font file.
+  ///
+  /// **WARNING: Any fonts downloaded using v1 of this package ( without a custom
+  /// `cacheStalePeriod` or `maxCacheObjects` ) will be deleted.**
+  ///
+  /// Can be placed before or after other [DynamicCachedFonts] methods. The tool
+  /// is required to be run only once but multiple executions will have no side
+  /// effects. An empty folder named 'DynamicCachedFontsFontCacheKey' will be
+  /// present in the cache folder after running this tool.
+  /// 
+  /// Sample Usage: Users may add this to the next version of their app and
+  /// remove it in the next version. The purpose is to ensure atleast 1 execution
+  /// of the tool. Subsequent runs will be useless.
   static Future<void> runMigrationTool() => migrationTool();
 }

@@ -26,14 +26,8 @@ typedef ItemCountProgressListener = void Function(
 ///   information about the download progress.
 typedef DownloadProgressListener = void Function(DownloadProgress progress);
 
-/// ### MIGRATION TOOL FOR v2
-///
+/// Migratoin tool for v2
 /// Deletes any cache files downloaded using the default cache manager.
-///
-/// **WARNING: Any fonts downloaded using v1 of this package ( without a custom
-/// `cacheStalePeriod` or `maxCacheObjects` ) will be deleted.**
-///
-/// v2 creates separate folders for each font file.
 Future<void> migrationTool() => CacheManager(Config('DynamicCachedFontsFontCacheKey')).emptyCache();
 
 /// Gets the sanitized url from [url] which is used as `cacheKey` when
