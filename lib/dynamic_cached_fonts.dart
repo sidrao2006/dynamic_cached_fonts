@@ -622,7 +622,7 @@ class DynamicCachedFonts {
   /// is required to be run only once but multiple executions will have no side
   /// effects. An empty folder named 'DynamicCachedFontsFontCacheKey' will be
   /// present in the cache folder after running this tool.
-  /// 
+  ///
   /// Sample Usage: Users may add this to the next version of their app and
   /// remove it in the next version. The purpose is to ensure atleast 1 execution
   /// of the tool. Subsequent runs will be useless.
