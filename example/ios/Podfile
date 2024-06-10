@@ -1,5 +1,5 @@
-# Uncomment this line to define a global platform for your project
-platform :ios, '12.0'
+# firebase_storage https://github.com/firebase/flutterfire/blob/master/packages/firebase_storage/firebase_storage/CHANGELOG.md#1200
+platform :ios, '13.0'
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
