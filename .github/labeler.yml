@@ -1,60 +1,79 @@
 example:
-  - any: ['example/**/*']
-    all: ['!CHANGELOG.md']
+  - changed_files:
+      - any-glob-to-any-file: ["example/**/*"]
+      - all-globs-to-all-files: ["!CHANGELOG.md"]
 
-'infra :building_construction:':
-  - .github/workflows/*
-  - .github/*.yml
-  - dev/ci/*
-  - dev/docker/*
-  - docker-compose.yml
-  - analysis_options.yml
-  - example/analysis_options.yml
-  - dartdoc_options.yml
-  - '**/README.md'
-  - CODE_OF_CONDUCT.md
-  - LICENSE
-  - .github/ISSUE_TEMPLATE/*
-  - .github/PULL_REQUEST_TEMPLATE.md
+"infra :building_construction:":
+  - changed_files:
+      - any-glob-to-any-file:
+          - .github/workflows/*
+          - .github/*.yml
+          - dev/ci/*
+          - dev/docker/*
+          - docker-compose.yml
+          - analysis_options.yml
+          - example/analysis_options.yml
+          - dartdoc_options.yml
+          - "**/README.md"
+          - CODE_OF_CONDUCT.md
+          - LICENSE
+          - .github/ISSUE_TEMPLATE/*
+          - .github/PULL_REQUEST_TEMPLATE.md
 
-'infra: ci :construction_worker:':
-  - .github/workflows/*
-  - .github/*.yml
-  - dev/ci/*
+"infra: ci :construction_worker:":
+  - changed_files:
+      - any-glob-to-any-file:
+          - .github/workflows/*
+          - .github/*.yml
+          - dev/ci/*
 
-'infra: development-experience :children_crossing:':
-  - dev/docker/*
-  - docker-compose.yml
-  - analysis_options.yml
-  - example/analysis_options.yml
-  - dartdoc_options.yml
+"infra: development-experience :children_crossing:":
+  - changed_files:
+      - any-glob-to-any-file:
+          - dev/docker/*
+          - docker-compose.yml
+          - analysis_options.yml
+          - example/analysis_options.yml
+          - dartdoc_options.yml
 
-'infra: community':
-  - '**/README.md'
-  - CODE_OF_CONDUCT.md
-  - LICENSE
-  - .github/ISSUE_TEMPLATE/*
-  - .github/PULL_REQUEST_TEMPLATE.md
+"infra: community":
+  - changed_files:
+      - any-glob-to-any-file:
+          - "**/README.md"
+          - CODE_OF_CONDUCT.md
+          - LICENSE
+          - .github/ISSUE_TEMPLATE/*
+          - .github/PULL_REQUEST_TEMPLATE.md
 
-'internal: dependencies ⬆➕':
-  - any: ['**/pubspec*']
-    all: ['!CHANGELOG.md']
+"internal: dependencies ⬆➕":
+  - changed_files:
+      - any-glob-to-any-file: ["**/pubspec*"]
+      - all-globs-to-all-files: ["!CHANGELOG.md"]
 
-'test :rotating_light:':
-  - example/test_driver/*
-  - example/integration_test/*
-  - test/*
+"test :rotating_light:":
+  - changed_files:
+      - any-glob-to-any-file:
+          - example/test_driver/*
+          - example/integration_test/*
+          - test/*
 
-'test: integration-test':
-  - example/test_driver/*
-  - example/integration_test/*
+"test: integration-test":
+  - changed_files:
+      - any-glob-to-any-file:
+          - example/test_driver/*
+          - example/integration_test/*
 
-'test: unit-test': test/*
+"test: unit-test":
+  - changed_files:
+      - any-glob-to-any-file: [test/*]
 
-'internal: style :nail_care:': '**/analysis_options.yaml'
+"internal: style :nail_care:":
+  - changed_files:
+      - any-glob-to-any-file: ["**/analysis_options.yaml"]
 
-'documentation :book:':
-  - '**/doc/*'
-  - '**/dartdoc_options.yaml'
-
+"documentation :book:":
+  - changed_files:
+      - any-glob-to-any-file:
+          - "**/doc/*"
+          - "**/dartdoc_options.yaml"
 # 'release :tada:', 'revert :rewind:' - Defined in .github/workflows/labler.yml
