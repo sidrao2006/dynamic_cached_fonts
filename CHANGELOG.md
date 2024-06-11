@@ -1,3 +1,18 @@
+# 2.0.0-dev.0
+
+## Breaking Changes and Migration Guide
+
+1. If you have been using the package without modifying `cacheStalePeriod` or `maxCacheObjects`, no changes are required.
+However, any previously cached font files will be ignored and should be deleted by running the migration tool.
+
+2. If you have modified `cacheStalePeriod` or `maxCacheObjects`, you'll have to pass the same values to any method that downloads, caches or loads fonts, otherwise the **provided configuration will be ignored.**
+Any previously cached font files will continue to remain in their respective cache folders and will be used by the package.
+Running the migration tool will have no effect on these font files.
+
+3. A migration tool has been provided -> `DynamicCachedFonts.runMigrationTool()`
+
+For more details, see [#247](https://github.com/sidrao2006/dynamic_cached_fonts/pull/247)
+
 # 1.2.0
 
 **Dependency Updates**
