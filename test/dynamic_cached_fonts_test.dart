@@ -116,27 +116,30 @@ void main() {
   group('DynamicCachedFontsCacheManager', () {
     setUp(() => DynamicCachedFontsCacheManager.clearCacheManagers());
 
-    test('uses the correct cache key for the default instance', () {
-      const String defaultCacheKey = 'DynamicCachedFontsFontCacheKey';
-      final CacheManager defaultCacheManager = DynamicCachedFontsCacheManager.defaultCacheManager;
-
-      expect(defaultCacheManager.store.storeKey, equals(defaultCacheKey));
-    });
-
-    test('getCacheManager returns the default cache manager', () {
-      final cacheManager = DynamicCachedFontsCacheManager.getCacheManager(cacheKey);
-
-      expect(cacheManager, equals(DynamicCachedFontsCacheManager.defaultCacheManager));
-    });
-
-    test('handleCacheManager creates a new instance for non-default values', () {
-      // A new instance of CacheManager is created only if the default values aren't used.
-      DynamicCachedFontsCacheManager.handleCacheManager(cacheKey, const Duration(days: 366), 201);
-
-      final cacheManager = DynamicCachedFontsCacheManager.getCacheManager(cacheKey);
+    test('getCacheManager returns a cache manager which uses cacheKey', () {
+      final cacheManager = DynamicCachedFontsCacheManager.getCacheManager(
+        cacheKey,
+        kDefaultCacheStalePeriod,
+        kDefaultMaxCacheObjects,
+      );
 
       expect(cacheManager.store.storeKey, equals(cacheKey));
-      expect(cacheManager, isNot(equals(DynamicCachedFontsCacheManager.defaultCacheManager)));
+    });
+
+    test('getCacheManager prioritizes first-defined configuration values', () {
+      final defaultCacheManager = DynamicCachedFontsCacheManager.getCacheManager(
+        cacheKey,
+        kDefaultCacheStalePeriod,
+        kDefaultMaxCacheObjects,
+      );
+
+      final cacheManager = DynamicCachedFontsCacheManager.getCacheManager(
+        cacheKey,
+        kDefaultCacheStalePeriod + const Duration(hours: 1),
+        kDefaultMaxCacheObjects + 1,
+      );
+
+      expect(cacheManager, equals(defaultCacheManager));
     });
 
     test('custom cache managers can be set and retrieved', () {
@@ -152,7 +155,14 @@ void main() {
       final CacheManager cacheManager = CacheManager(Config(cacheKey));
       DynamicCachedFontsCacheManager.setCustomCacheManager(cacheManager);
 
-      expect(DynamicCachedFontsCacheManager.getCacheManager(cacheKey), equals(cacheManager));
+      expect(
+        DynamicCachedFontsCacheManager.getCacheManager(
+          cacheKey,
+          kDefaultCacheStalePeriod,
+          kDefaultMaxCacheObjects,
+        ),
+        equals(cacheManager),
+      );
     });
   });
 

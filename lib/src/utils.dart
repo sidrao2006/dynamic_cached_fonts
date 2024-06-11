@@ -26,6 +26,10 @@ typedef ItemCountProgressListener = void Function(
 ///   information about the download progress.
 typedef DownloadProgressListener = void Function(DownloadProgress progress);
 
+/// Migratoin tool for v2
+/// Deletes any cache files downloaded using the default cache manager.
+Future<void> migrationTool() => CacheManager(Config('DynamicCachedFontsFontCacheKey')).emptyCache();
+
 /// Gets the sanitized url from [url] which is used as `cacheKey` when
 /// downloading, caching or loading.
 @visibleForTesting
@@ -60,13 +64,11 @@ void devLog(
 /// This approach prevents the creation of multiple instance of [CacheManager] using
 /// the same [Config.cacheKey].`
 ///
-/// When `cacheStalePeriod` or `maxCacheObjects` is not modified, a default instance
+/// When `cacheStalePeriod` or `maxCacheObjects` is not modified, an instance
 /// of [CacheManager] is created when a font cache/load is requested. This instance
-/// assigns [_defaultCacheKey] to [Config.cacheKey], [kDefaultCacheStalePeriod]
-/// to [Config.stalePeriod] and [kDefaultMaxCacheObjects] to [Config.maxNrOfCacheObjects].
-/// The instance is added to [_cacheManagers] with [_defaultCacheKey] as the key.
-///
-/// The default instance can be easily accessed with [defaultCacheManager].
+/// assigns the provided `cacheKey` to [Config.cacheKey], [kDefaultCacheStalePeriod]
+/// to [Config.stalePeriod] and [kDefaultMaxCacheObjects] to [Config.maxNrOfCacheObjects]
+/// and is added to [_cacheManagers].
 ///
 /// When caching/loading a font, if `cacheStalePeriod` or `maxCacheObjects` is modified
 /// by the caller, a new instance of [CacheManager] is created and added to [_cacheManagers].
@@ -76,32 +78,17 @@ void devLog(
 class DynamicCachedFontsCacheManager {
   DynamicCachedFontsCacheManager._();
 
-  /// The default cache key for cache managers' configurations
-  static const String _defaultCacheKey = 'DynamicCachedFontsFontCacheKey';
-
   /// A map of [CacheManager]s used throughout the package. The key used
   /// will correspond to [Config.cacheKey] of the respective [CacheManager].
-  static final Map<String, CacheManager> _cacheManagers = {
-    _defaultCacheKey: CacheManager(
-      Config(
-        _defaultCacheKey,
-        stalePeriod: kDefaultCacheStalePeriod,
-        maxNrOfCacheObjects: kDefaultMaxCacheObjects,
-      ),
-    ),
-  };
+  static final Map<String, CacheManager> _cacheManagers = {};
 
   static String? _customCacheKey;
-
-  /// The getter for the default instance of [CacheManager] in [_cacheManagers].
-  static CacheManager get defaultCacheManager => _cacheManagers[_defaultCacheKey]!;
 
   /// The getter for the custom instance of [CacheManager] in [_cacheManagers].
   static CacheManager? getCustomCacheManager() => _cacheManagers[_customCacheKey];
 
   /// The setter for the custom instance of [CacheManager] in [_cacheManagers].
-  /// [Config.cacheKey] will be used as the key when adding the instance to
-  /// [_cacheManagers].
+  /// [Config.cacheKey] will be used as the key when adding the instance to [_cacheManagers].
   static setCustomCacheManager(CacheManager cacheManager) {
     _customCacheKey =
         cacheManager.store.storeKey; // This is the same key provided to Config.cacheKey.
@@ -116,37 +103,28 @@ class DynamicCachedFontsCacheManager {
     _customCacheKey = null;
   }
 
-  /// Returns a custom [CacheManager], if present, or
-  static CacheManager getCacheManager(String cacheKey) =>
-      getCustomCacheManager() ?? _cacheManagers[cacheKey] ?? defaultCacheManager;
+  /// Returns a custom [CacheManager], if present, or create, add to [_cacheManagers]
+  /// and return a new instance of [CacheManager] with [cacheKey] as [Config.cacheKey].
+  static CacheManager getCacheManager(
+    String cacheKey,
+    Duration cacheStalePeriod,
+    int maxCacheObjects,
+  ) {
+    final cacheManager = _cacheManagers.putIfAbsent(
+      cacheKey,
+      () => CacheManager(Config(
+        cacheKey,
+        stalePeriod: cacheStalePeriod,
+        maxNrOfCacheObjects: maxCacheObjects,
+      )),
+    );
 
-  /// Creates a new instance of [CacheManager] if the default can't be used.
-  static void handleCacheManager(String cacheKey, Duration cacheStalePeriod, int maxCacheObjects) {
-    if (cacheStalePeriod != kDefaultCacheStalePeriod ||
-        maxCacheObjects != kDefaultMaxCacheObjects) {
-      _cacheManagers[cacheKey] ??= CacheManager(
-        Config(
-          cacheKey,
-          stalePeriod: cacheStalePeriod,
-          maxNrOfCacheObjects: maxCacheObjects,
-        ),
-      );
-    }
+    return getCustomCacheManager() ?? cacheManager;
   }
 
   /// Clears the list of the [CacheManager]s.
   @visibleForTesting
-  static void clearCacheManagers() {
-    _cacheManagers.clear();
-
-    _cacheManagers[_defaultCacheKey] = CacheManager(
-      Config(
-        _defaultCacheKey,
-        stalePeriod: kDefaultCacheStalePeriod,
-        maxNrOfCacheObjects: kDefaultMaxCacheObjects,
-      ),
-    );
-  }
+  static void clearCacheManagers() => _cacheManagers.clear();
 }
 
 class _FontFileExtensionManager {

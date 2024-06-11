@@ -15,6 +15,8 @@ void main() {
       darkTheme: ThemeData.dark(),
     ),
   );
+
+  DynamicCachedFonts.runMigrationTool();
 }
 
 class DynamicCachedFontsDemo1 extends StatefulWidget {
