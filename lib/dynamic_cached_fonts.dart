@@ -263,6 +263,8 @@ class DynamicCachedFonts {
       fontFiles = await loadCachedFamily(
         downloadUrls,
         fontFamily: fontFamily,
+        maxCacheObjects: maxCacheObjects,
+        cacheStalePeriod: cacheStalePeriod,
       );
 
       // Checks whether any of the files is invalid.
@@ -290,6 +292,8 @@ class DynamicCachedFonts {
       fontFiles = await loadCachedFamily(
         downloadUrls,
         fontFamily: fontFamily,
+        maxCacheObjects: maxCacheObjects,
+        cacheStalePeriod: cacheStalePeriod,
       );
     }
 
@@ -333,6 +337,8 @@ class DynamicCachedFonts {
       downloadUrls,
       fontFamily: fontFamily,
       progressListener: itemCountProgressListener,
+      maxCacheObjects: maxCacheObjects,
+      cacheStalePeriod: cacheStalePeriod,
     );
 
     try {
@@ -373,6 +379,8 @@ class DynamicCachedFonts {
         downloadUrls,
         fontFamily: fontFamily,
         progressListener: itemCountProgressListener,
+        maxCacheObjects: maxCacheObjects,
+        cacheStalePeriod: cacheStalePeriod,
       );
     }
   }
@@ -488,7 +496,20 @@ class DynamicCachedFonts {
   /// - **REQUIRED** The [url] property is used to specify the url
   ///   for the required font. It should be a valid http/https url which points to
   ///   a font file. The [url] should match the url passed to [cacheFont].
-  static Future<bool> canLoadFont(String url) => RawDynamicCachedFonts.canLoadFont(url);
+  ///
+  /// - The [maxCacheObjects] property should match the value passed to [cacheFont].
+  ///
+  /// - The [cacheStalePeriod] property should match the value passed to [cacheFont].
+  static Future<bool> canLoadFont(
+    String url, {
+    int maxCacheObjects = kDefaultMaxCacheObjects,
+    Duration cacheStalePeriod = kDefaultCacheStalePeriod,
+  }) =>
+      RawDynamicCachedFonts.canLoadFont(
+        url,
+        maxCacheObjects: maxCacheObjects,
+        cacheStalePeriod: cacheStalePeriod,
+      );
 
   /// Fetches the given [url] from cache and loads it as an asset.
   ///
@@ -498,14 +519,22 @@ class DynamicCachedFonts {
   ///
   /// - **REQUIRED** The [fontFamily] property is used to specify the name
   ///   of the font family which is to be used as [TextStyle.fontFamily].
+  ///
+  /// - The [maxCacheObjects] property should match the value passed to [cacheFont].
+  ///
+  /// - The [cacheStalePeriod] property should match the value passed to [cacheFont].
   static Future<FileInfo> loadCachedFont(
     String url, {
     required String fontFamily,
+    int maxCacheObjects = kDefaultMaxCacheObjects,
+    Duration cacheStalePeriod = kDefaultCacheStalePeriod,
     @visibleForTesting FontLoader? fontLoader,
   }) =>
       RawDynamicCachedFonts.loadCachedFont(
         url,
         fontFamily: fontFamily,
+        maxCacheObjects: maxCacheObjects,
+        cacheStalePeriod: cacheStalePeriod,
         fontLoader: fontLoader,
       );
 
@@ -525,14 +554,22 @@ class DynamicCachedFonts {
   ///
   /// - **REQUIRED** The [fontFamily] property is used to specify the name
   ///   of the font family which is to be used as [TextStyle.fontFamily].
+  ///
+  /// - The [maxCacheObjects] property should match the value passed to [cacheFont].
+  ///
+  /// - The [cacheStalePeriod] property should match the value passed to [cacheFont].
   static Future<Iterable<FileInfo>> loadCachedFamily(
     List<String> urls, {
     required String fontFamily,
+    int maxCacheObjects = kDefaultMaxCacheObjects,
+    Duration cacheStalePeriod = kDefaultCacheStalePeriod,
     @visibleForTesting FontLoader? fontLoader,
   }) =>
       RawDynamicCachedFonts.loadCachedFamily(
         urls,
         fontFamily: fontFamily,
+        maxCacheObjects: maxCacheObjects,
+        cacheStalePeriod: cacheStalePeriod,
         fontLoader: fontLoader,
       );
 
@@ -569,12 +606,16 @@ class DynamicCachedFonts {
     List<String> urls, {
     required String fontFamily,
     ItemCountProgressListener? progressListener,
+    int maxCacheObjects = kDefaultMaxCacheObjects,
+    Duration cacheStalePeriod = kDefaultCacheStalePeriod,
     @visibleForTesting FontLoader? fontLoader,
   }) =>
       RawDynamicCachedFonts.loadCachedFamilyStream(
         urls,
         fontFamily: fontFamily,
         progressListener: progressListener,
+        maxCacheObjects: maxCacheObjects,
+        cacheStalePeriod: cacheStalePeriod,
         fontLoader: fontLoader,
       );
 
@@ -583,8 +624,19 @@ class DynamicCachedFonts {
   /// - **REQUIRED** The [url] property is used to specify the url
   ///   for the required font. It should be a valid http/https url which points to
   ///   a font file. The [url] should match the url passed to [cacheFont].
-  static Future<void> removeCachedFont(String url) => RawDynamicCachedFonts.removeCachedFont(
+  ///
+  /// - The [maxCacheObjects] property should match the value passed to [cacheFont].
+  ///
+  /// - The [cacheStalePeriod] property should match the value passed to [cacheFont].
+  static Future<void> removeCachedFont(
+    String url, {
+    int maxCacheObjects = kDefaultMaxCacheObjects,
+    Duration cacheStalePeriod = kDefaultCacheStalePeriod,
+  }) =>
+      RawDynamicCachedFonts.removeCachedFont(
         url,
+        maxCacheObjects: maxCacheObjects,
+        cacheStalePeriod: cacheStalePeriod,
       );
 
   /// Used to specify whether detailed logs should be printed for debugging.

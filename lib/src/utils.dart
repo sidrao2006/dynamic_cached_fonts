@@ -105,21 +105,22 @@ class DynamicCachedFontsCacheManager {
 
   /// Returns a custom [CacheManager], if present, or create, add to [_cacheManagers]
   /// and return a new instance of [CacheManager] with [cacheKey] as [Config.cacheKey].
-  static CacheManager getCacheManager(String cacheKey) {
-    final cacheManager = _cacheManagers.putIfAbsent(cacheKey, () => CacheManager(Config(cacheKey)));
+  static CacheManager getCacheManager(
+    String cacheKey,
+    Duration cacheStalePeriod,
+    int maxCacheObjects,
+  ) {
+    final cacheManager = _cacheManagers.putIfAbsent(
+      cacheKey,
+      () => CacheManager(Config(
+        cacheKey,
+        stalePeriod: cacheStalePeriod,
+        maxNrOfCacheObjects: maxCacheObjects,
+      )),
+    );
 
     return getCustomCacheManager() ?? cacheManager;
   }
-
-  /// Creates a new instance of [CacheManager] with the given configuration.
-  static void handleCacheManager(String cacheKey, Duration cacheStalePeriod, int maxCacheObjects) =>
-      _cacheManagers[cacheKey] ??= CacheManager(
-        Config(
-          cacheKey,
-          stalePeriod: cacheStalePeriod,
-          maxNrOfCacheObjects: maxCacheObjects,
-        ),
-      );
 
   /// Clears the list of the [CacheManager]s.
   @visibleForTesting

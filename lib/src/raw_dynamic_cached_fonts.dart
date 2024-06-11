@@ -68,10 +68,11 @@ abstract class RawDynamicCachedFonts {
 
     final String cacheKey = Utils.sanitizeUrl(url);
 
-    DynamicCachedFontsCacheManager.handleCacheManager(cacheKey, cacheStalePeriod, maxCacheObjects);
-
-    final FileInfo font =
-        await DynamicCachedFontsCacheManager.getCacheManager(cacheKey).downloadFile(
+    final FileInfo font = await DynamicCachedFontsCacheManager.getCacheManager(
+      cacheKey,
+      cacheStalePeriod,
+      maxCacheObjects,
+    ).downloadFile(
       url,
       key: cacheKey,
     );
@@ -127,10 +128,11 @@ abstract class RawDynamicCachedFonts {
 
     final String cacheKey = Utils.sanitizeUrl(url);
 
-    DynamicCachedFontsCacheManager.handleCacheManager(cacheKey, cacheStalePeriod, maxCacheObjects);
-
-    final Stream<FileResponse> stream =
-        DynamicCachedFontsCacheManager.getCacheManager(cacheKey).getFileStream(
+    final Stream<FileResponse> stream = DynamicCachedFontsCacheManager.getCacheManager(
+      cacheKey,
+      cacheStalePeriod,
+      maxCacheObjects,
+    ).getFileStream(
       url,
       key: cacheKey,
       withProgress: progressListener != null,
@@ -164,13 +166,24 @@ abstract class RawDynamicCachedFonts {
   /// - **REQUIRED** The [url] property is used to specify the url
   ///   for the required font. It should be a valid http/https url which points to
   ///   a font file. The [url] should match the url passed to [cacheFont].
-  static Future<bool> canLoadFont(String url) async {
+  ///
+  /// - The [maxCacheObjects] property should match the value passed to [cacheFont].
+  ///
+  /// - The [cacheStalePeriod] property should match the value passed to [cacheFont].
+  static Future<bool> canLoadFont(
+    String url, {
+    int maxCacheObjects = kDefaultMaxCacheObjects,
+    Duration cacheStalePeriod = kDefaultCacheStalePeriod,
+  }) async {
     WidgetsFlutterBinding.ensureInitialized();
 
     final String cacheKey = Utils.sanitizeUrl(url);
 
-    final FileInfo? font =
-        await DynamicCachedFontsCacheManager.getCacheManager(cacheKey).getFileFromCache(cacheKey);
+    final FileInfo? font = await DynamicCachedFontsCacheManager.getCacheManager(
+      cacheKey,
+      cacheStalePeriod,
+      maxCacheObjects,
+    ).getFileFromCache(cacheKey);
 
     return font != null;
   }
@@ -189,6 +202,8 @@ abstract class RawDynamicCachedFonts {
   static Future<FileInfo> loadCachedFont(
     String url, {
     required String fontFamily,
+    int maxCacheObjects = kDefaultMaxCacheObjects,
+    Duration cacheStalePeriod = kDefaultCacheStalePeriod,
     @visibleForTesting FontLoader? fontLoader,
   }) async {
     fontLoader ??= FontLoader(fontFamily);
@@ -197,8 +212,11 @@ abstract class RawDynamicCachedFonts {
 
     final String cacheKey = Utils.sanitizeUrl(url);
 
-    final FileInfo? font =
-        await DynamicCachedFontsCacheManager.getCacheManager(cacheKey).getFileFromCache(cacheKey);
+    final FileInfo? font = await DynamicCachedFontsCacheManager.getCacheManager(
+      cacheKey,
+      cacheStalePeriod,
+      maxCacheObjects,
+    ).getFileFromCache(cacheKey);
 
     if (font == null) {
       throw StateError('Font should already be cached to be loaded');
@@ -239,9 +257,15 @@ abstract class RawDynamicCachedFonts {
   ///
   /// - **REQUIRED** The [fontFamily] property is used to specify the name
   ///   of the font family which is to be used as [TextStyle.fontFamily].
+  ///
+  /// - The [maxCacheObjects] property should match the value passed to [cacheFont].
+  ///
+  /// - The [cacheStalePeriod] property should match the value passed to [cacheFont].
   static Future<Iterable<FileInfo>> loadCachedFamily(
     List<String> urls, {
     required String fontFamily,
+    int maxCacheObjects = kDefaultMaxCacheObjects,
+    Duration cacheStalePeriod = kDefaultCacheStalePeriod,
     @visibleForTesting FontLoader? fontLoader,
   }) async {
     fontLoader ??= FontLoader(fontFamily);
@@ -252,8 +276,11 @@ abstract class RawDynamicCachedFonts {
     for (final String url in urls) {
       final String cacheKey = Utils.sanitizeUrl(url);
 
-      final FileInfo? font =
-          await DynamicCachedFontsCacheManager.getCacheManager(cacheKey).getFileFromCache(cacheKey);
+      final FileInfo? font = await DynamicCachedFontsCacheManager.getCacheManager(
+        cacheKey,
+        cacheStalePeriod,
+        maxCacheObjects,
+      ).getFileFromCache(cacheKey);
 
       if (font == null) {
         throw StateError('Font should already be cached to be loaded');
@@ -304,10 +331,16 @@ abstract class RawDynamicCachedFonts {
   ///   an [int] value which indicates the total number of items to be downloaded and,
   ///   another [int] value which indicates the number of items that have been
   ///   downloaded so far.
+  ///
+  /// - The [maxCacheObjects] property should match the value passed to [cacheFont].
+  ///
+  /// - The [cacheStalePeriod] property should match the value passed to [cacheFont].
   static Stream<FileInfo> loadCachedFamilyStream(
     List<String> urls, {
     required String fontFamily,
     required ItemCountProgressListener? progressListener,
+    int maxCacheObjects = kDefaultMaxCacheObjects,
+    Duration cacheStalePeriod = kDefaultCacheStalePeriod,
     @visibleForTesting FontLoader? fontLoader,
   }) async* {
     fontLoader ??= FontLoader(fontFamily);
@@ -317,8 +350,11 @@ abstract class RawDynamicCachedFonts {
     for (final String url in urls) {
       final String cacheKey = Utils.sanitizeUrl(url);
 
-      final FileInfo? font =
-          await DynamicCachedFontsCacheManager.getCacheManager(cacheKey).getFileFromCache(cacheKey);
+      final FileInfo? font = await DynamicCachedFontsCacheManager.getCacheManager(
+        cacheKey,
+        cacheStalePeriod,
+        maxCacheObjects,
+      ).getFileFromCache(cacheKey);
 
       if (font == null) {
         throw StateError('Font should already be cached to be loaded');
@@ -357,11 +393,23 @@ abstract class RawDynamicCachedFonts {
   /// - **REQUIRED** The [url] property is used to specify the url
   ///   for the required font. It should be a valid http/https url which points to
   ///   a font file. The [url] should match the url passed to [cacheFont].
-  static Future<void> removeCachedFont(String url) async {
+  ///
+  /// - The [maxCacheObjects] property should match the value passed to [cacheFont].
+  ///
+  /// - The [cacheStalePeriod] property should match the value passed to [cacheFont].
+  static Future<void> removeCachedFont(
+    String url, {
+    int maxCacheObjects = kDefaultMaxCacheObjects,
+    Duration cacheStalePeriod = kDefaultCacheStalePeriod,
+  }) async {
     WidgetsFlutterBinding.ensureInitialized();
 
     final String cacheKey = Utils.sanitizeUrl(url);
 
-    await DynamicCachedFontsCacheManager.getCacheManager(cacheKey).removeFile(cacheKey);
+    await DynamicCachedFontsCacheManager.getCacheManager(
+      cacheKey,
+      cacheStalePeriod,
+      maxCacheObjects,
+    ).removeFile(cacheKey);
   }
 }
