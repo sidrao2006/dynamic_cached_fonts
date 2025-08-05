@@ -9,12 +9,10 @@ import 'dynamic_cached_fonts_test.mocks.dart';
 
 void main() {
   const String cacheKey = 'DynamicCachedFontsTest';
-  const String firebaseMockUrl = 'gs://mockurl.appspot.com/a.ttf';
   const String mockUrl = 'https://example.com/font.ttf';
   const String mockFontFamily = 'FontFamily';
 
   const List<String> mockUrls = [
-    firebaseMockUrl,
     'https://example.com/fontTest1.ttf',
     'https://example.com/fontTest2.ttf?v=1',
     'https://example.com/fontTest3.ttf?v=1&u=2',
@@ -32,17 +30,6 @@ void main() {
   test('Default constructor applies default values', () {
     final DynamicCachedFonts fontLoader =
         DynamicCachedFonts(url: mockUrl, fontFamily: mockFontFamily);
-
-    expect(fontLoader.urls.length, 1);
-    expect(fontLoader.maxCacheObjects, 200);
-    expect(fontLoader.cacheStalePeriod, const Duration(days: 365));
-  });
-
-  test('Firebase constructor applies default values', () {
-    final DynamicCachedFonts fontLoader = DynamicCachedFonts.fromFirebase(
-      bucketUrl: firebaseMockUrl,
-      fontFamily: 'Font',
-    );
 
     expect(fontLoader.urls.length, 1);
     expect(fontLoader.maxCacheObjects, 200);
@@ -100,7 +87,6 @@ void main() {
 
   test('cacheKeyFromUrl', () {
     const List<String> expectedCacheKeys = [
-      'gsmockurl.appspot.coma.ttf',
       'httpsexample.comfontTest1.ttf',
       'httpsexample.comfontTest2.ttfv1',
       'httpsexample.comfontTest3.ttfv1u2',
@@ -168,7 +154,6 @@ void main() {
 
   test('getFileNameOrUrl', () {
     const List<String> expectedFileNames = [
-      'a.ttf',
       'fontTest1.ttf',
       'fontTest2.ttf',
       'fontTest3.ttf',

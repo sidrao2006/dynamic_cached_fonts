@@ -1,7 +1,6 @@
 import 'dart:developer' as dev;
 
 import 'package:flutter_cache_manager/file.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:meta/meta.dart';
@@ -183,22 +182,6 @@ class Utils {
 
   /// A property used to specify whether detailed logs should be printed for debugging.
   static bool shouldVerboseLog = false;
-
-  /// Checks whether the received [url] is a Cloud Storage url or an https url.
-  /// If the url points to a Cloud Storage bucket, then a download url
-  /// is generated using the Firebase SDK.
-  static Future<String> handleUrl(String url) async {
-    final Reference ref = FirebaseStorage.instance.refFromURL(url);
-
-    devLog(<String>[
-      'Created Firebase Storage reference with following values -\n',
-      'Bucket name - ${ref.bucket}',
-      'Object name - ${ref.name}',
-      'Object path - ${ref.fullPath}',
-    ]);
-
-    return ref.getDownloadURL();
-  }
 
   /// Checks whether the [font] has a valid extension which is supported by Flutter.
   static void verifyFileExtension(File font) {

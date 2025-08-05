@@ -16,8 +16,6 @@ part 'src/raw_dynamic_cached_fonts.dart';
 
 /// Allows dynamically loading fonts from the given url.
 ///
-/// Fetching fonts from Firebase Storage is also supported.
-///
 /// For ready to use, simple interface, initialize [DynamicCachedFonts] and call
 /// the [load] method either in you `initState()` or just before `runApp()` itself.
 ///
@@ -102,7 +100,6 @@ class DynamicCachedFonts {
           'url cannot be empty',
         ),
         urls = <String>[url],
-        _isFirebaseURL = false,
         _loaded = false;
 
   /// Allows dynamically loading fonts from the given list of url and caching them.
@@ -152,59 +149,11 @@ class DynamicCachedFonts {
           ),
           'url cannot be empty',
         ),
-        _isFirebaseURL = false,
-        _loaded = false;
-
-  /// Allows dynamically loading fonts from firebase storage with the given
-  /// firebase storage url, and caching them.
-  ///
-  /// _**Firebase app must be initialized before loading the font!!**_
-  ///
-  /// - **REQUIRED** The [bucketUrl] property is used to specify the download url
-  ///   for the required font. It should be a valid Google Cloud Storage (gs://) url
-  ///   which points to a font file.
-  ///   Currently, only OpenType (OTF) and TrueType (TTF) fonts are supported.
-  ///
-  /// - **REQUIRED** The [fontFamily] property is used to specify the name
-  ///   of the font family which is to be used as [TextStyle.fontFamily].
-  ///
-  /// - The [maxCacheObjects] property defines how large the cache is allowed to be.
-  ///   If there are more files the files that haven't been used for the longest
-  ///   time will be removed.
-  ///
-  ///   It is used to specify the cache configuration, [Config],
-  ///   for [CacheManager].
-  ///
-  /// - [cacheStalePeriod] is the time duration in which
-  ///   a cache object is considered 'stale'. When a file is cached but
-  ///   not being used for a certain time the file will be deleted
-  ///
-  ///   Defaults to 365 days.
-  ///
-  ///   It is used to specify the cache configuration, [Config],
-  ///   for [CacheManager].
-  DynamicCachedFonts.fromFirebase({
-    required String bucketUrl,
-    required this.fontFamily,
-    this.maxCacheObjects = kDefaultMaxCacheObjects,
-    this.cacheStalePeriod = kDefaultCacheStalePeriod,
-  })  : assert(
-          fontFamily != '',
-          'fontFamily cannot be empty',
-        ),
-        assert(
-          bucketUrl != '',
-          'bucketUrl cannot be empty',
-        ),
-        urls = <String>[bucketUrl],
-        _isFirebaseURL = true,
         _loaded = false;
 
   /// Used to specify the download url(s) for the required font(s).
   ///
-  /// It should be a valid http/https url or a Google Cloud Storage (gs://) url,
-  /// when using [DynamicCachedFonts.fromFirebase], which points to
-  /// a font file.
+  /// It should be a valid http/https url which points to a font file.
   ///
   /// Currently, only OpenType (OTF) and TrueType (TTF) fonts are supported.
   ///
@@ -234,9 +183,6 @@ class DynamicCachedFonts {
   /// for [CacheManager].
   final Duration cacheStalePeriod;
 
-  /// Determines whether [url] is a firebase storage bucket url.
-  final bool _isFirebaseURL;
-
   /// Checks whether [load] has already been called.
   bool _loaded;
 
@@ -251,11 +197,7 @@ class DynamicCachedFonts {
 
     WidgetsFlutterBinding.ensureInitialized();
 
-    final List<String> downloadUrls = await Future.wait(
-      urls.map(
-        (String url) async => _isFirebaseURL ? await Utils.handleUrl(url) : url,
-      ),
-    );
+    final List<String> downloadUrls = urls;
 
     Iterable<FileInfo> fontFiles;
 
@@ -327,11 +269,7 @@ class DynamicCachedFonts {
 
     WidgetsFlutterBinding.ensureInitialized();
 
-    final List<String> downloadUrls = await Future.wait(
-      urls.map(
-        (String url) async => _isFirebaseURL ? await Utils.handleUrl(url) : url,
-      ),
-    );
+    final List<String> downloadUrls = urls;
 
     final Stream<FileInfo> fontStream = loadCachedFamilyStream(
       downloadUrls,
